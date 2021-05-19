@@ -1,7 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
+      <v-col>
+          asdf
       </v-col>
     </v-row>
   </v-container>
@@ -9,7 +10,7 @@
 
 <script>
   export default {
-    name: 'HelloWorld',
+    name: 'Home',
     data: () => ({
     })
   }
