@@ -1,35 +1,24 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <h1>CryptoDip</h1>
-
-      <v-spacer></v-spacer>
-
-      <!-- <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> -->
-    </v-app-bar>
+    <Header />
 
     <v-main>
       <router-view />
     </v-main>
+
+    <Footer />
   </v-app>
 </template>
 
 <script>
+import Footer from '@/components/Footer.vue'
+import Header from '@/components/Header.vue'
+
 export default {
   name: 'App',
-  data: () => ({
-    //
-  })
+  components: {
+    Footer,
+    Header
+  }
 }
 </script>
