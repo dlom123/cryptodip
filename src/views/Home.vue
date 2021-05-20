@@ -1,7 +1,7 @@
 <template>
   <v-container class="pt-0">
     <v-row class="mt-2">
-      <v-col cols="3" align-self="center">
+      <v-col cols="3" align-self="end">
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
