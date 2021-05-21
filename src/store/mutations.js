@@ -5,7 +5,13 @@ export default {
     setAllCoins: (state, payload) => {
         state.allCoins = payload
     },
-    setCoins: (state, payload) => {
-        state.coins = payload
+    setCoins: (state, coinIds) => {
+        const coins = state.allCoins
+            .filter(coin => coinIds.includes(coin.id))
+        state.coins = coins
+    },
+    updateCoins: (state, payload) => {
+        console.log(state)
+        console.log(payload)
     }
 }

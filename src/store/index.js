@@ -16,7 +16,8 @@ export default new Vuex.Store({
   plugins: [vuexLocalStorage.plugin],
   state: {
     allCoins: [],
-    coins: []
+    coins: [],
+    selectedCoins: []
   },
   mutations,
   actions,
