@@ -14,7 +14,8 @@
         ></v-text-field>
       </v-col>
       <v-col align="right">
-        <v-btn fab dark color="green"
+        <v-btn
+          fab dark outlined color="green"
           class="mr-6"
           :disabled="coins.length === 0"
           @click="getCurrentPrices"
