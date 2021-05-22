@@ -80,11 +80,18 @@
 
           <template v-slot:item.name="{ item }">
               <v-row>
-                <v-col class="pa-8">
-                  <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
-                  <span class="mr-3 text-body-1">{{ item.name }}</span>
-                  <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
-                </v-col>
+                <a
+                  :href="`https://coinmarketcap.com/currencies/${item.name.toLowerCase().split().join('-')}`"
+                  target="_blank"
+                  class="text-decoration-none"
+                  tabindex="-1"
+                >
+                  <v-col class="pa-8">
+                    <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
+                    <span class="mr-3 text-body-1">{{ item.name }}</span>
+                    <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
+                  </v-col>
+                </a>
               </v-row>
           </template>
           <template v-slot:item.qty="{ item }">
