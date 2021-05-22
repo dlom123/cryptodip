@@ -14,6 +14,36 @@ export default {
         state.coins = keepCoins
         state.coins.push(...newCoins)
     },
+    updateCoin: (state, payload) => {
+        state.coins = state.coins.map(coin => {
+            if (coin.id === payload.id) {
+                let costAverage = undefined
+                let newQty = typeof payload.qty !== 'undefined'
+                                ? payload.qty
+                                : coin.qty
+                let newSpent = typeof payload.spent !== 'undefined'
+                                ? payload.spent
+                                : coin.spent
+
+                if (typeof newQty !== 'undefined' && typeof newSpent !== 'undefined') {
+                    costAverage = newSpent / newQty
+                }
+
+                let costAverageDiff = coin.costAverageDiff
+                if (typeof costAverage !== 'undefined' && typeof coin.currentPrice !== 'undefined') {
+                    costAverageDiff = (costAverage - coin.currentPrice) / costAverage * 100
+                }
+
+                return {
+                    ...coin,
+                    ...payload,
+                    costAverage,
+                    costAverageDiff
+                }
+            }
+            return coin
+        })
+    },
     updateCoins: (state, payload) => {
         state.coins = payload
     }

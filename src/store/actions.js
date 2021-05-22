@@ -28,9 +28,11 @@ export default {
         ...coin,
         currentPrice: coinPrice,
         costAverageDiff: (
-          coin.spent > 0
-          ? ((coin.costAverage - coinPrice) / coin.costAverage * 100).toFixed(2)
-          : 0
+          coin.costAverage > 0
+          ? (coin.costAverage - coinPrice) / coin.costAverage * 100
+          : typeof coin.costAverage !== 'undefined'
+            ? 0
+            : coin.costAverage
         )
       }
     })

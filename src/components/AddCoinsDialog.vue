@@ -10,7 +10,7 @@
         v-on="on"
         @click="openDialog"
       >
-        <v-icon>mdi-plus</v-icon>
+        <v-icon>mdi-pencil</v-icon>
       </v-btn>
     </template>
     <v-card>
@@ -27,12 +27,19 @@
             <v-col>
               <v-autocomplete
                 v-model="selectedCoins"
-                :items="allCoins"
-                filled
-                placeholder="Select"
+                placeholder="Choose coins..."
                 item-text="name"
                 item-value="id"
                 multiple
+                autofocus
+                auto-select-first
+                clearable
+                hide-selected
+                outlined
+                :items="allCoins"
+                :filter="coinFilter"
+                :search-input.sync="searchInput"
+                @input="searchInput = null"
               >
                 <template v-slot:selection="data">
                     <v-chip
@@ -69,7 +76,6 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
-          v-if="selectedCoins.length > 0"
           block
           color="primary"
           class="mb-2"
@@ -89,6 +95,7 @@ import { mapMutations, mapState } from "vuex"
 export default {
   name: "AddCoinsDialog",
   data: () => ({
+    searchInput: null,
     selectedCoins: [],
     showDialog: false
   }),
@@ -105,6 +112,14 @@ export default {
     closeDialog() {
       this.showDialog = false
       this.selectedCoins = []
+    },
+    coinFilter(item, queryText) {
+      const textOne = item.name.toLowerCase()
+      const textTwo = item.symbol.toLowerCase()
+      const searchText = queryText.toLowerCase()
+
+      return textOne.indexOf(searchText) > -1
+              || textTwo.indexOf(searchText) > -1
     },
     openDialog() {
       this.selectedCoins = this.coins.map(coin => coin.id)
