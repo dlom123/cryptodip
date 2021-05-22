@@ -172,8 +172,8 @@ export default {
   data: () => ({
     headers: [
       { text: "Name", value: "name" },
-      { text: "HODLS", value: "qty" },
-      { text: "YOLO'D", value: "spent" },
+      { text: "HODLs", value: "qty" },
+      { text: "YOLO'd", value: "spent" },
       { text: "Cost Average", value: "costAverage" },
       { text: "Current Coin Price", value: "currentPrice" },
       { text: "Buy The Dip?", value: "costAverageDiff" },
@@ -183,7 +183,7 @@ export default {
     showAddCoinsDialog: false,
     tooltipText: {
       "costAverage": "Your average price paid per coin",
-      "costAverageBlank": "Fill in HODLS and YOLO'D to calculate cost average",
+      "costAverageBlank": "Fill in HODLs and YOLO'd to calculate cost average",
       "costAverageDiff": "Current Coin Price relative to your Cost Average",
       "costAverageDiffBlank": "Missing Cost Average",
       "currentPrice": "Use the refresh button above to update this (Prices in USD)",

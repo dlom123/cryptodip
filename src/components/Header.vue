@@ -8,12 +8,21 @@
                 </span>
                 <p class="ml-11 text--secondary">See the dip. Buy the dip.</p>
             </v-col>
+            <v-spacer></v-spacer>
+            <v-col align="end">
+                <FaqDialog />
+            </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
+import FaqDialog from '@/components/FaqDialog'
+
 export default {
-    name: 'Header'
+    name: 'Header',
+    components: {
+        FaqDialog
+    }
 }
 </script>
