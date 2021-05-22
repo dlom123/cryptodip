@@ -17,7 +17,8 @@ export default new Vuex.Store({
   state: {
     allCoins: [],
     coins: [],
-    selectedCoins: []
+    selectedCoins: [],
+    tableOptions: {}
   },
   mutations,
   actions,

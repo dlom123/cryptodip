@@ -33,6 +33,8 @@
           :items="coins"
           :search="search"
           :items-per-page="allCoins.length"
+          :options="tableOptions"
+          @update:options="onUpdateTable"
         >
 
           <template v-slot:header.qty="{ header }">
@@ -186,6 +188,7 @@ export default {
     ...mapState([
       'allCoins',
       'coins',
+      'tableOptions'
     ]),
     computeHodl: {
       get() {
@@ -205,6 +208,7 @@ export default {
     ]),
     ...mapMutations([
       'removeCoin',
+      'setTableOptions',
       'updateCoin'
     ]),
     formatDollars(n, isFlexible=false) {
@@ -246,6 +250,9 @@ export default {
         id,
         spent: isNaN(n) ? undefined : n
       })
+    },
+    onUpdateTable(options) {
+      this.setTableOptions(options)
     }
   },
   created() {

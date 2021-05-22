@@ -14,6 +14,9 @@ export default {
         state.coins = keepCoins
         state.coins.push(...newCoins)
     },
+    setTableOptions: (state, payload) => {
+        state.tableOptions = payload
+    },
     updateCoin: (state, payload) => {
         state.coins = state.coins.map(coin => {
             if (coin.id === payload.id) {
