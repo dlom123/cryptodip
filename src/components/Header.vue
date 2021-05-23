@@ -11,6 +11,7 @@
             <v-spacer></v-spacer>
             <v-col align="end">
                 <FaqDialog />
+                <IconLegendDialog />
             </v-col>
         </v-row>
     </v-container>
@@ -18,11 +19,13 @@
 
 <script>
 import FaqDialog from '@/components/FaqDialog'
+import IconLegendDialog from '@/components/IconLegendDialog'
 
 export default {
     name: 'Header',
     components: {
-        FaqDialog
+        FaqDialog,
+        IconLegendDialog
     }
 }
 </script>

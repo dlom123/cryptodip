@@ -7,7 +7,8 @@
     >
         <template v-slot:activator="{ on, attrs }">
         <v-icon
-            small
+            :size="iconSize || 'small'"
+            :color="iconColor"
             v-bind="attrs"
             v-on="on"
         >{{ icon }}</v-icon>
@@ -21,6 +22,8 @@ export default {
     name: "InfoTooltip",
     props: [
         "icon",
+        "iconColor",
+        "iconSize",
         "position",
         "text"
     ],
@@ -36,7 +39,7 @@ export default {
         },
         tooltipPositionLeft() {
             return this.position == "left"
-        },
+        }
     }
 }
 </script>
