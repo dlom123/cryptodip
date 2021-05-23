@@ -1,11 +1,5 @@
 export default {
-    removeCoin: (state, payload) => {
-        state.coins = state.coins.filter(coin => coin.id !== payload.id)
-    },
-    setAllCoins: (state, payload) => {
-        state.allCoins = payload
-    },
-    setCoins: (state, coinIds) => {
+    addCoins: (state, coinIds) => {
         const keepCoins = state.coins.filter(coin => coinIds.includes(coin.id))
         const newCoinIds = coinIds.filter(coinId => 
             !state.coins.map(coin => coin.id).includes(coinId))
@@ -13,6 +7,15 @@ export default {
             .filter(coin => newCoinIds.includes(coin.id))
         state.coins = keepCoins
         state.coins.push(...newCoins)
+    },
+    removeCoin: (state, payload) => {
+        state.coins = state.coins.filter(coin => coin.id !== payload.id)
+    },
+    setAmountToSpend: (state, payload) => {
+        state.amountToSpend = payload
+    },
+    setAllCoins: (state, payload) => {
+        state.allCoins = payload
     },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
@@ -26,6 +29,9 @@ export default {
         state.coins = state.coins.map(coin => {
             coin.badges = []
 
+            let updatedCoin = {
+                ...coin
+            }
             if (coin.id === payload.id) {
                 let costAverage = undefined
                 let newQty = typeof payload.qty !== 'undefined'
@@ -44,7 +50,7 @@ export default {
                     costAverageDiff = (costAverage - coin.currentPrice) / costAverage * 100
                 }
 
-                return {
+                updatedCoin = {
                     ...coin,
                     ...payload,
                     costAverage,
@@ -56,17 +62,19 @@ export default {
             if (state.amountToSpend > 0) {
                 // "Best Bang for the Buck" badge
                 const bangPercent = (
-                    (coin.costAverage - (coin.spent + state.amountToSpend)
-                    / ((state.amountToSpend / coin.currentPrice) + coin.qty))
-                    / coin.costAverage
+                    (updatedCoin.costAverage - (updatedCoin.spent + state.amountToSpend)
+                    / ((state.amountToSpend / updatedCoin.currentPrice) + updatedCoin.qty))
+                    / updatedCoin.costAverage
                 )
-                console.log(`${coin.name} bangPercent: ${bangPercent}`)
                 if (
-                    typeof bangCoin === 'undefined'
-                    || bangPercent > bangCoin.bangPercent
+                    (
+                        typeof bangCoin === 'undefined'
+                        || bangPercent > bangCoin.bangPercent
+                    )
+                    && updatedCoin.costAverageDiff > 0
                 ) {
                     bangCoin = {
-                        id: coin.id,
+                        id: updatedCoin.id,
                         bangPercent
                     }
                 }
@@ -74,33 +82,42 @@ export default {
 
             // "Big Dipper" badge
             if (
-                typeof dipperCoin === 'undefined'
-                || coin.costAverageDiff > dipperCoin.costAverageDiff
+                (
+                    typeof dipperCoin === 'undefined'
+                    || updatedCoin.costAverageDiff > dipperCoin.costAverageDiff
+                )
+                && updatedCoin.costAverageDiff > 0
             ) {
                 dipperCoin = {
-                    id: coin.id,
-                    costAverageDiff: coin.costAverageDiff
+                    id: updatedCoin.id,
+                    costAverageDiff: updatedCoin.costAverageDiff
                 }
             }
 
             // "To the Moon!" badge
             if (
-                typeof moonCoin === 'undefined'
-                || coin.costAverageDiff < moonCoin.costAverageDiff
+                (
+                    typeof moonCoin === 'undefined'
+                    || updatedCoin.costAverageDiff < moonCoin.costAverageDiff
+                )
+                && updatedCoin.costAverageDiff < 0
             ) {
                 moonCoin = {
-                    id: coin.id,
-                    costAverageDiff: coin.costAverageDiff
+                    id: updatedCoin.id,
+                    costAverageDiff: updatedCoin.costAverageDiff
                 }
             }
 
-            return coin
+            return updatedCoin
         })
 
         // assign badges
         state.coins = state.coins.map(coin => {
             // "Best Bang for the Buck" badge
-            if (coin.id === bangCoin.id) {
+            if (
+                typeof bangCoin !== 'undefined'
+                && coin.id === bangCoin.id
+            ) {
                 if (!coin.badges.includes('bang')) {
                     coin.badges.push('bang')
                 }
@@ -111,7 +128,10 @@ export default {
                 }
             }
 
-            if (coin.id === dipperCoin.id) {
+            if (
+                typeof dipperCoin !== 'undefined'
+                && coin.id === dipperCoin.id
+            ) {
                 if (!coin.badges.includes('dipper')) {
                     coin.badges.push('dipper')
                 }
@@ -122,7 +142,10 @@ export default {
                 }
             }
 
-            if (coin.id === moonCoin.id) {
+            if (
+                typeof moonCoin !== 'undefined'
+                && coin.id === moonCoin.id
+            ) {
                 if (!coin.badges.includes('moon')) {
                     coin.badges.push('moon')
                 }
@@ -133,7 +156,6 @@ export default {
                 }
             }
 
-            console.log(coin.name, coin.badges)
             return coin
         })
     },

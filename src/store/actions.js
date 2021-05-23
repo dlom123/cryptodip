@@ -1,4 +1,10 @@
 export default {
+  applyNewAmountToSpend: ({ commit, state }, newAmountToSpend) => {
+    commit('setAmountToSpend', newAmountToSpend)
+    state.coins.forEach(coin => {
+      commit('updateCoin', coin)
+    })
+  },
   getCurrentPrices: async ({ commit, state }) => {
     const searchParams = new URLSearchParams()
     const coinIds = state.coins.map(coin => coin['id'])
@@ -26,18 +32,14 @@ export default {
 
       return {
         ...coin,
-        currentPrice: coinPrice,
-        costAverageDiff: (
-          coin.costAverage > 0
-          ? (coin.costAverage - coinPrice) / coin.costAverage * 100
-          : typeof coin.costAverage !== 'undefined'
-            ? 0
-            : coin.costAverage
-        )
+        currentPrice: coinPrice
       }
     })
 
     commit('updateCoins', updatedCoins)
+    updatedCoins.forEach(updatedCoin => {
+      commit('updateCoin', updatedCoin)
+    })
   },
   syncCoins: async ({ commit }) => {
     try {

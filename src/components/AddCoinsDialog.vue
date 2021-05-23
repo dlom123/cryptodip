@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setCoins'
+      'addCoins'
     ]),
     closeDialog() {
       this.showDialog = false
@@ -128,7 +128,7 @@ export default {
       this.selectedCoins = this.selectedCoins.filter(coinId => coinId !== item.id)
     },
     selectCoins() {
-      this.setCoins(this.selectedCoins)
+      this.addCoins(this.selectedCoins)
       this.showDialog = false
       this.selectedCoins = []
     }

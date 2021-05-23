@@ -102,6 +102,18 @@
                                 <v-expansion-panel class="mb-2">
                                     <v-expansion-panel-header color="primary">
                                         <span class="text-h6 white--text">
+                                            Which currency is the Current Coin Price displayed as?
+                                        </span>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-col class="pt-5">
+                                            The Current Coin Price is displayed in USD.
+                                        </v-col>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel class="mb-2">
+                                    <v-expansion-panel-header color="primary">
+                                        <span class="text-h6 white--text">
                                             What is the "Buy the Dip?" percentage and how is it calculated?
                                         </span>
                                     </v-expansion-panel-header>
@@ -125,6 +137,20 @@
                                     <v-expansion-panel-content>
                                         <v-col class="pt-5">
                                             You like the coin.
+                                        </v-col>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel class="mb-2">
+                                    <v-expansion-panel-header color="primary">
+                                        <span class="text-h6 white--text">
+                                            What is the YOLO input for?
+                                        </span>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-col class="pt-5">
+                                            The YOLO input is used to determine which coin gets the "Best Bang for the Buck" badge
+                                            since the largest Cost Average reduction you can realize depends on the amount
+                                            available to spend on a single coin.
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
