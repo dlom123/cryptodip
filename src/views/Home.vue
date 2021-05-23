@@ -6,12 +6,32 @@
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
-          single-line
           hide-details
           clearable
           outlined
           dense
         ></v-text-field>
+      </v-col>
+      <v-col cols="3" align-self="end">
+        <v-text-field
+          label="YOLO"
+          hide-details
+          clearable
+          outlined
+          dense
+          :value="formatDollars(amountToSpend)"
+          @change="onChangeAmountToSpend"
+        >
+          <template v-slot:append-outer>
+            <InfoTooltip
+              icon="mdi-help-circle"
+              icon-color="grey"
+              position="bottom"
+              icon-size="large"
+              :text="tooltipText['yolo']"
+            />
+          </template>
+        </v-text-field>
       </v-col>
       <v-col align="right">
         <v-btn
@@ -162,7 +182,7 @@
           </template>
           <template v-slot:item.badges="{ item }">
               <InfoTooltip
-                v-if="item.badges.includes('bang')"
+                v-if="item.badges && item.badges.includes('bang')"
                 icon="mdi-currency-usd"
                 icon-size="x-large"
                 icon-color="green"
@@ -170,7 +190,7 @@
                 :text="tooltipText['badges']['bang']"
               />
               <InfoTooltip
-                v-if="item.badges.includes('dipper')"
+                v-if="item.badges && item.badges.includes('dipper')"
                 icon="mdi-star"
                 icon-size="x-large"
                 icon-color="yellow darken-1"
@@ -178,7 +198,7 @@
                 :text="tooltipText['badges']['dipper']"
               />
               <InfoTooltip
-                v-if="item.badges.includes('moon')"
+                v-if="item.badges && item.badges.includes('moon')"
                 icon="mdi-rocket-launch"
                 icon-size="x-large"
                 icon-color="blue"
@@ -229,27 +249,21 @@ export default {
       costAverageDiffBlank: "Missing Cost Average",
       currentPrice: "Use the refresh button above to update this (Prices in USD)",
       spent: "The amount you have spent on this coin in total",
-      qty: "The amount of this coin that you have in total"
+      qty: "The amount of this coin that you have in total",
+      yolo: "The amount available to spend on a single coin"
     }
   }),
   computed: {
     ...mapState([
       'allCoins',
+      'amountToSpend',
       'coins',
       'tableOptions'
-    ]),
-    computeHodl: {
-      get() {
-        const n = this.formatNumber(this.hodl)
-        return !isNaN(n) ? n : ''
-      },
-      set(n) {
-        this.hodl = n.replace(/,/g, "")
-      }
-    }
+    ])
   },
   methods: {
     ...mapActions([
+      'applyNewAmountToSpend',
       'getCoins',
       'getCurrentPrices',
       'syncCoins'
@@ -284,6 +298,15 @@ export default {
           maximumFractionDigits: 8
         })
       }
+    },
+    onChangeAmountToSpend(value) {
+      let n = undefined
+      if (typeof value === 'string') {
+        n = parseFloat(value.replace(',', ''))
+      }
+      this.applyNewAmountToSpend(
+        isNaN(n) ? undefined : n
+      )
     },
     onChangeQty(value, id) {
       const n = parseFloat(value.replace(',', ''))

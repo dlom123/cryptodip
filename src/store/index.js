@@ -16,7 +16,7 @@ export default new Vuex.Store({
   plugins: [vuexLocalStorage.plugin],
   state: {
     allCoins: [],
-    amountToSpend: 1000,
+    amountToSpend: null,
     coins: [],
     selectedCoins: [],
     tableOptions: {}

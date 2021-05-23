@@ -108,7 +108,7 @@ export default {
                 name: "mdi-currency-usd",
                 color: "green",
                 title: "'Best Bang for the Buck' Badge",
-                description: "This icon appears next to the coin whose Cost Average can be reduced the most based on the 'Amount to Spend'"
+                description: "This icon appears next to the coin whose Cost Average can be reduced the most based on the amount available to spend (YOLO)"
             },
         ],
         showIconLegendDialog: false
