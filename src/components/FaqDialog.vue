@@ -35,7 +35,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             <strong>CryptoDip</strong> is an app for identifying opportunities to lower the average cost of your cryptocurrency hodlings &mdash; aka the <em>'dips'</em>.
                                         </v-col>
                                     </v-expansion-panel-content>
@@ -47,7 +47,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             <strong>HODLs</strong> are the total amount that you own of a cryptocurrency.
                                         </v-col>
                                     </v-expansion-panel-content>
@@ -59,7 +59,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             Remember all those times you sporadically threw money in the direction of the loudest corner of the Internet?
                                             <strong>YOLO'd</strong> is the total sum of money you have spent on a cryptocurrency over time to acquire those HODLs.
                                         </v-col>
@@ -72,7 +72,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             <strong>Cost Average</strong> is your average cost per coin.
                                         </v-col>
                                         <v-col>
@@ -84,11 +84,11 @@
                                 <v-expansion-panel class="mb-2">
                                     <v-expansion-panel-header color="primary">
                                         <span class="text-h6 white--text">
-                                            What does Current Coin Price come from?
+                                            Where does Current Coin Price come from?
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             <strong>Current Coin Price</strong> is retrieved from 
                                             <a
                                                 title="CoinMarketCap"
@@ -106,7 +106,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             The <strong>"Buy the Dip?"</strong> percentage reflects the Current Coin Price relative to your Cost Average.
                                             It could highlight an opportunity to lower your Cost Average.
                                         </v-col>
@@ -123,7 +123,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             You like the coin.
                                         </v-col>
                                     </v-expansion-panel-content>
@@ -135,7 +135,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col>
+                                        <v-col class="pt-5">
                                             <a
                                                 title="Reddit SatoshiStreetBets"
                                                 href="https://www.reddit.com/r/SatoshiStreetBets/"

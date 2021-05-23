@@ -29,6 +29,7 @@
       <v-col>
         <v-data-table
           hide-default-footer
+          multi-sort
           :headers="headers"
           :items="coins"
           :search="search"
@@ -37,42 +38,50 @@
           @update:options="onUpdateTable"
         >
 
+          <template v-slot:header.name="{ header }">
+            <span class="mr-1 header-text">{{ header.text }}</span>
+          </template>
           <template v-slot:header.qty="{ header }">
-            {{ header.text }}
+            <span class="mr-1 header-text">{{ header.text }}</span>
             <InfoTooltip
               icon="mdi-help-circle"
+              icon-color="grey"
               position="bottom"
               :text="tooltipText['qty']"
             />
           </template>
           <template v-slot:header.spent="{ header }">
-            {{ header.text }}
+            <span class="mr-1 header-text">{{ header.text }}</span>
             <InfoTooltip
               icon="mdi-help-circle"
+              icon-color="grey"
               position="bottom"
               :text="tooltipText['spent']"
             />
           </template>
           <template v-slot:header.costAverage="{ header }">
-            {{ header.text }}
+            <span class="mr-1 header-text">{{ header.text }}</span>
             <InfoTooltip
               icon="mdi-help-circle"
+              icon-color="grey"
               position="bottom"
               :text="tooltipText['costAverage']"
             />
           </template>
           <template v-slot:header.currentPrice="{ header }">
-            {{ header.text }}
+            <span class="mr-1 header-text">{{ header.text }}</span>
             <InfoTooltip
               icon="mdi-help-circle"
+              icon-color="grey"
               position="bottom"
               :text="tooltipText['currentPrice']"
             />
           </template>
           <template v-slot:header.costAverageDiff="{ header }">
-            {{ header.text }}
+            <span class="mr-1 header-text">{{ header.text }}</span>
             <InfoTooltip
               icon="mdi-help-circle"
+              icon-color="grey"
               position="bottom"
               :text="tooltipText['costAverageDiff']"
             />
@@ -135,7 +144,7 @@
           </template>
           <template v-slot:item.costAverageDiff="{ item }">
             <template v-if="typeof item.costAverageDiff !== 'undefined'">
-              <v-icon v-if="item.costAverageDiff > 0" style="color: limegreen">mdi-arrow-down-bold</v-icon>
+              <v-icon v-if="item.costAverageDiff > 0" color="light-green accent-4">mdi-arrow-down-bold</v-icon>
               <v-icon v-else-if="item.costAverageDiff < 0" style="color: red">mdi-arrow-up-bold</v-icon>
               {{
                 item.costAverageDiff !== 0
@@ -150,6 +159,32 @@
                 :text="tooltipText['costAverageDiffBlank']"
               />
             </template>
+          </template>
+          <template v-slot:item.badges="{ item }">
+              <InfoTooltip
+                v-if="item.badges.includes('bang')"
+                icon="mdi-currency-usd"
+                icon-size="x-large"
+                icon-color="green"
+                position="top"
+                :text="tooltipText['badges']['bang']"
+              />
+              <InfoTooltip
+                v-if="item.badges.includes('dipper')"
+                icon="mdi-star"
+                icon-size="x-large"
+                icon-color="yellow darken-1"
+                position="top"
+                :text="tooltipText['badges']['dipper']"
+              />
+              <InfoTooltip
+                v-if="item.badges.includes('moon')"
+                icon="mdi-rocket-launch"
+                icon-size="x-large"
+                icon-color="blue"
+                position="top"
+                :text="tooltipText['badges']['moon']"
+              />
           </template>
 
         </v-data-table>
@@ -177,18 +212,24 @@ export default {
       { text: "Cost Average", value: "costAverage" },
       { text: "Current Coin Price", value: "currentPrice" },
       { text: "Buy The Dip?", value: "costAverageDiff" },
+      { text: "", value: "badges", sortable: false },
     ],
     hodl: "",
     search: "",
     showAddCoinsDialog: false,
     tooltipText: {
-      "costAverage": "Your average price paid per coin",
-      "costAverageBlank": "Fill in HODLs and YOLO'd to calculate cost average",
-      "costAverageDiff": "Current Coin Price relative to your Cost Average",
-      "costAverageDiffBlank": "Missing Cost Average",
-      "currentPrice": "Use the refresh button above to update this (Prices in USD)",
-      "spent": "The amount you have spent on this coin in total",
-      "qty": "The amount of this coin that you have in total"
+      badges: {
+        "bang": "Best Bang for the Buck",
+        "dipper": "Big Dipper",
+        "moon": "To the Moon!"
+      },
+      costAverage: "Your average price paid per coin",
+      costAverageBlank: "Fill in HODLs and YOLO'd to calculate cost average",
+      costAverageDiff: "Current Coin Price relative to your Cost Average",
+      costAverageDiffBlank: "Missing Cost Average",
+      currentPrice: "Use the refresh button above to update this (Prices in USD)",
+      spent: "The amount you have spent on this coin in total",
+      qty: "The amount of this coin that you have in total"
     }
   }),
   computed: {
