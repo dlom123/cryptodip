@@ -1,18 +1,24 @@
-# cryptodip
+# CryptoDip
 
 ## Project setup
+1. Install dependencies
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
+2. Build `dist` directory (front-end)
 ```
 npm run build
+```
+
+3. Run both the API and front-end with a single command
+```
+# development (hot-reload using nodemon)...
+npm run dev
+
+# ...or production
+npm run server
 ```
 
 ### Lints and fixes files
