@@ -1,6 +1,6 @@
 <template>
   <v-container class="pt-0 mb-8">
-    <v-row class="mt-2">
+    <v-row>
       <v-col cols="3" align-self="end">
         <v-text-field
           v-model="search"
@@ -21,6 +21,8 @@
           dense
           :value="formatDollars(amountToSpend)"
           @change="onChangeAmountToSpend"
+          @input="onInputAmountToSpend"
+          @click:clear="onChangeAmountToSpend"
         >
           <template v-slot:append-outer>
             <InfoTooltip
@@ -49,7 +51,6 @@
       <v-col>
         <v-data-table
           hide-default-footer
-          multi-sort
           :headers="headers"
           :items="coins"
           :search="search"
@@ -230,7 +231,7 @@ export default {
       { text: "HODLs", value: "qty" },
       { text: "YOLO'd", value: "spent" },
       { text: "Cost Average", value: "costAverage" },
-      { text: "Current Coin Price", value: "currentPrice" },
+      { text: "Current Price", value: "currentPrice" },
       { text: "Buy The Dip?", value: "costAverageDiff" },
       { text: "", value: "badges", sortable: false },
     ],
@@ -245,7 +246,7 @@ export default {
       },
       costAverage: "Your average price paid per coin",
       costAverageBlank: "Fill in HODLs and YOLO'd to calculate cost average",
-      costAverageDiff: "Current Coin Price relative to your Cost Average",
+      costAverageDiff: "Current Price relative to your Cost Average",
       costAverageDiffBlank: "Missing Cost Average",
       currentPrice: "Use the refresh button above to update this (Prices in USD)",
       spent: "The amount you have spent on this coin in total",
@@ -275,7 +276,7 @@ export default {
     ]),
     formatDollars(n, isFlexible=false) {
       if (typeof n !== 'undefined' && n !== null) {
-        const nSplit = n.toString().split(".")
+        const nSplit = n.toString().replace(/[$,]/g, '').split(".")
         let numDecimals = n < 1.0 ? 4 : 2
         if (isFlexible && n < 1.0 && nSplit.length > 1) {
           // extend decimal precision for numbers < 0 that
@@ -302,7 +303,7 @@ export default {
     onChangeAmountToSpend(value) {
       let n = undefined
       if (typeof value === 'string') {
-        n = parseFloat(value.replace(',', ''))
+        n = parseFloat(value.replace(/[$,]/g, ''))
       }
       this.applyNewAmountToSpend(
         isNaN(n) ? undefined : n
@@ -321,6 +322,12 @@ export default {
         id,
         spent: isNaN(n) ? undefined : n
       })
+    },
+    onInputAmountToSpend(value) {
+      if (value === '') {
+        // trigger a recalculation as soon as the input is empty
+        this.onChangeAmountToSpend(value)
+      }
     },
     onUpdateTable(options) {
       this.setTableOptions(options)

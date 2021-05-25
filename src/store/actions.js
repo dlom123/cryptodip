@@ -18,7 +18,7 @@ export default {
       console.error('Error:', err)
     }
 
-    // add current coin price and cost average difference
+    // add current price and cost average difference
     // to each coin that was requested
     const updatedCoins = state.coins.map(coin => {
       const coinPriceObj = priceData.find(p => p['id'] === coin['id'])
