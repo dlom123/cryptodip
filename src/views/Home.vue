@@ -19,6 +19,8 @@
           clearable
           outlined
           dense
+          :background-color="amountToSpend ? 'light-green' : ''"
+          class="text-lighten-2"
           :value="formatDollars(amountToSpend)"
           @change="onChangeAmountToSpend"
           @input="onInputAmountToSpend"
@@ -125,32 +127,56 @@
               </v-row>
           </template>
           <template v-slot:item.qty="{ item }">
-            <v-text-field
-              solo
-              dense
-              flat
-              hide-details
-              placeholder="how many hodls?"
-              style="width: 150px"
-              :value="formatNumber(item.qty)"
-              @change="onChangeQty($event, item.id)"
-            ></v-text-field>
+            <v-col class="pa-0">
+              <v-text-field
+                solo
+                dense
+                flat
+                hide-details
+                placeholder="how many hodls?"
+                style="width: 150px"
+                :value="formatNumber(item.qty)"
+                @change="onChangeQty($event, item.id)"
+              ></v-text-field>
+            </v-col>
+            <v-col
+              v-if="amountToSpend"
+              class="py-0 pr-0 pl-3 text-caption green--text"
+            >
+              ({{ formatNumber(yoloHodls(item)) }})
+            </v-col>
           </template>
           <template v-slot:item.spent="{ item }">
-            <v-text-field
-              solo
-              dense
-              flat
-              hide-details
-              placeholder="how much yolo'd?"
-              style="width: 150px"
-              :value="formatDollars(item.spent)"
-              @change="onChangeSpent($event, item.id)"
-            ></v-text-field>
+            <v-col class="pa-0">
+              <v-text-field
+                solo
+                dense
+                flat
+                hide-details
+                placeholder="how much yolo'd?"
+                style="width: 150px"
+                :value="formatDollars(item.spent)"
+                @change="onChangeSpent($event, item.id)"
+              ></v-text-field>
+            </v-col>
+            <v-col
+              v-if="amountToSpend"
+              class="py-0 pr-0 pl-3 text-caption green--text"
+            >
+              ({{ formatDollars(yoloYolod(item)) }})
+            </v-col>
           </template>
           <template v-slot:item.costAverage="{ item }">
             <template v-if="typeof item.costAverage !== 'undefined'">
-              {{ formatDollars(item.costAverage, isFlexible=true) }}
+              <v-col class="pa-0">
+                {{ formatDollars(item.costAverage, isFlexible=true) }}
+              </v-col>
+              <v-col
+                v-if="amountToSpend && item.currentPrice"
+                class="pa-0 text-caption green--text"
+              >
+                ({{ formatDollars(yoloCostAverage(item)) }})
+              </v-col>
             </template>
             <template v-else>
               <InfoTooltip
@@ -331,7 +357,17 @@ export default {
     },
     onUpdateTable(options) {
       this.setTableOptions(options)
-    }
+    },
+    yoloCostAverage(coin) {
+      return this.yoloYolod(coin) / this.yoloHodls(coin)
+    },
+    yoloHodls(coin) {
+      // Returns what your new quantity of the coin would be based on your amount to spend
+      return (this.amountToSpend / coin.currentPrice) + coin.qty
+    },
+    yoloYolod(coin) {
+      return this.amountToSpend + coin.spent
+    },
   },
   created() {
     if (this.allCoins.length === 0) {
