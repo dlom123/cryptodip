@@ -1,4 +1,7 @@
 # CryptoDip
+**CryptoDip** is an app for identifying opportunities to lower the average cost of your cryptocurrency hodlings &mdash; aka the "*dips*".
+
+---
 
 ## Project setup
 1. Install dependencies
