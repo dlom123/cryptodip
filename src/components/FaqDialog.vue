@@ -84,30 +84,30 @@
                                 <v-expansion-panel class="mb-2">
                                     <v-expansion-panel-header color="primary">
                                         <span class="text-h6 white--text">
-                                            Where does Current Coin Price come from?
+                                            Where does Current Price come from?
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                         <v-col class="pt-5">
-                                            <strong>Current Coin Price</strong> is retrieved from 
+                                            <strong>Current Price</strong> is retrieved from 
                                             <a
                                                 title="CoinMarketCap"
                                                 href="https://coinmarketcap.com/"
                                                 target="_blank"
                                             >CoinMarketCap</a>
-                                            when the price refresh button is clicked.
+                                            when the Refresh Current Price button is clicked.
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                                 <v-expansion-panel class="mb-2">
                                     <v-expansion-panel-header color="primary">
                                         <span class="text-h6 white--text">
-                                            Which currency is the Current Coin Price displayed as?
+                                            Which currency is the Current Price displayed as?
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                         <v-col class="pt-5">
-                                            The Current Coin Price is displayed in USD.
+                                            The Current Price is displayed in USD.
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -119,12 +119,12 @@
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                         <v-col class="pt-5">
-                                            The <strong>"Buy the Dip?"</strong> percentage reflects the Current Coin Price relative to your Cost Average.
+                                            The <strong>"Buy the Dip?"</strong> percentage reflects the Current Price relative to your Cost Average.
                                             It could highlight an opportunity to lower your Cost Average.
                                         </v-col>
                                         <v-col>
                                             <p class="text-overline">"Buy the Dip?"</p>
-                                            <code>(Cost Average - Current Coin Price) / Cost Average</code>
+                                            <code>(Cost Average - Current Price) / Cost Average</code>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>

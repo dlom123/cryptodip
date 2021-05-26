@@ -21,6 +21,12 @@ npm run dev
 npm run server
 ```
 
+4. Load the app on the displayed port using your web browser
+
+---
+
+## Other
+
 ### Lints and fixes files
 ```
 npm run lint

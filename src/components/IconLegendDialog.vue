@@ -58,7 +58,7 @@ export default {
             {
                 name: "mdi-refresh",
                 color: "green",
-                title: "Refresh Current Coin Price Button",
+                title: "Refresh Current Price Button",
                 description: "Use this button to retrieve the latest coin prices"
             },
             { divider: true },
@@ -80,28 +80,28 @@ export default {
                 name: "mdi-arrow-down-bold",
                 color: "light-green accent-4",
                 title: "Price Dip",
-                description: "Indicates that the Current Coin Price is lower than the Cost Average by the percentage shown"
+                description: "Indicates that the Current Price is lower than the Cost Average by the percentage shown"
             },
             { divider: true },
             {
                 name: "mdi-arrow-up-bold",
                 color: "red",
                 title: "Price Rise",
-                description: "Indicates that the Current Coin Price is higher than the Cost Average by the percentage shown"
+                description: "Indicates that the Current Price is higher than the Cost Average by the percentage shown"
             },
             { divider: true },
             {
                 name: "mdi-star",
                 color: "yellow darken-1",
                 title: "'Big Dipper' Badge",
-                description: "This icon appears next to the coin whose Current Coin Price is the lowest relative to its Cost Average"
+                description: "This icon appears next to the coin whose Current Price is the lowest relative to its Cost Average"
             },
             { divider: true },
             {
                 name: "mdi-rocket-launch",
                 color: "blue",
                 title: "'To the Moon!' Badge",
-                description: "This icon appears next to the coin whose Current Coin Price is the highest relative to its Cost Average"
+                description: "This icon appears next to the coin whose Current Price is the highest relative to its Cost Average"
             },
             { divider: true },
             {
