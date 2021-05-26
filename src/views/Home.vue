@@ -175,7 +175,7 @@
                 v-if="amountToSpend && item.currentPrice"
                 class="pa-0 text-caption green--text"
               >
-                ({{ formatDollars(yoloCostAverage(item)) }})
+                ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }})
               </v-col>
             </template>
             <template v-else>
@@ -187,7 +187,15 @@
             </template>
           </template>
           <template v-slot:item.currentPrice="{ item }">
-            {{ formatDollars(item.currentPrice, isFlexible=true) }}
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <span
+                  v-bind="attrs"
+                  v-on="on"
+                >{{ formatDollars(item.currentPrice, isFlexible=true) }}</span>
+              </template>
+              <span>{{ item.currentPrice }}</span>
+            </v-tooltip>
           </template>
           <template v-slot:item.costAverageDiff="{ item }">
             <template v-if="typeof item.costAverageDiff !== 'undefined'">
