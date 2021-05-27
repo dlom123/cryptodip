@@ -18,6 +18,7 @@ export default new Vuex.Store({
     allCoins: [],
     amountToSpend: null,
     coins: [],
+    searchValue: null,
     selectedCoins: [],
     tableOptions: {}
   },
