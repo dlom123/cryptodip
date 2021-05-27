@@ -363,7 +363,7 @@ export default {
         const costAverageDiff = coin.costAverageDiff ? coin.costAverageDiff : ""
 
         csv += `${coin.id},${coin.name},${coin.symbol},${coin.qty},${coin.spent}`
-        csv += `${costAverage},${currentPrice},${costAverageDiff}\n`
+        csv += `,${costAverage},${currentPrice},${costAverageDiff}\n`
       })
 
       const anchor = document.createElement('a')
