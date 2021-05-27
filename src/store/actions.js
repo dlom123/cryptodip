@@ -36,7 +36,7 @@ export default {
       }
     })
 
-    commit('updateCoins', updatedCoins)
+    commit('setCoins', updatedCoins)
     updatedCoins.forEach(updatedCoin => {
       commit('updateCoin', updatedCoin)
     })

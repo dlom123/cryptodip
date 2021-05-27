@@ -39,7 +39,7 @@ app.get('/api/sync_coins', async (req, res) => {
                     id: coin.id,
                     name: coin.name,
                     symbol: coin.symbol,
-                    icon: `${process.env.CMC_COIN_IMG_BASE_URL}/${coin.id}.png`
+                    icon: `${process.env.VUE_APP_CMC_COIN_IMG_BASE_URL}/${coin.id}.png`
                 })
             }
         })
@@ -70,7 +70,7 @@ app.get('/api/prices', async (req, res) => {
                     id: coin.id,
                     name: coin.name,
                     symbol: coin.symbol,
-                    icon: `${process.env.CMC_COIN_IMG_BASE_URL}/${coin.id}.png`,
+                    icon: `${process.env.VUE_APP_CMC_COIN_IMG_BASE_URL}/${coin.id}.png`,
                     price: coin['quote']['USD']['price']
                 })
             }

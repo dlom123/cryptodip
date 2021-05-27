@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
     addCoins: (state, coinIds) => {
         const keepCoins = state.coins.filter(coin => coinIds.includes(coin.id))
@@ -16,6 +18,9 @@ export default {
     },
     setAllCoins: (state, payload) => {
         state.allCoins = payload
+    },
+    setCoins: (state, payload) => {
+        state.coins = payload
     },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
@@ -160,6 +165,17 @@ export default {
         })
     },
     updateCoins: (state, payload) => {
-        state.coins = payload
+        payload.forEach(coin => {
+            let existingIndex = state.coins.findIndex(stateCoin => stateCoin.id === coin.id)
+            if (existingIndex > -1) {
+                const updatedCoin = {
+                    ...state.coins[existingIndex],
+                    ...coin
+                }
+                Vue.set(state.coins, existingIndex, updatedCoin)
+            } else {
+                state.coins.push(coin)
+            }
+        })
     }
 }

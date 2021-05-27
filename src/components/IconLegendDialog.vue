@@ -58,8 +58,8 @@ export default {
             {
                 name: "mdi-refresh",
                 color: "green",
-                title: "Refresh Current Price Button",
-                description: "Use this button to retrieve the latest coin prices"
+                title: "Refresh Data Button",
+                description: "Use this button on the home page to retrieve the latest coin prices, or within the Add Coins dialog to retrieve an updated list of all available coins"
             },
             { divider: true },
             {

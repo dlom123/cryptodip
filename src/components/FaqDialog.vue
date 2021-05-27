@@ -157,6 +157,27 @@
                                 <v-expansion-panel class="mb-2">
                                     <v-expansion-panel-header color="primary">
                                         <span class="text-h6 white--text">
+                                            Where is my data stored?
+                                        </span>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-col class="pt-5">
+                                            Everything is stored in your browser's Local Storage. The only data that is ever
+                                            transmitted over the network is the list of available coins and their current
+                                            prices, which both come from
+                                            <a
+                                                title="CoinMarketCap"
+                                                href="https://coinmarketcap.com/"
+                                                target="_blank"
+                                            >CoinMarketCap</a>.
+                                            Your personal coin information is never sent over the network. Clear your Local
+                                            Storage and it's like you were never here!
+                                        </v-col>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel class="mb-2">
+                                    <v-expansion-panel-header color="primary">
+                                        <span class="text-h6 white--text">
                                             Is this financial advice?
                                         </span>
                                     </v-expansion-panel-header>
