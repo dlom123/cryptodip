@@ -16,6 +16,16 @@
     <v-card>
       <v-card-title>
         <span class="headline">Add Coins</span>
+        <v-btn
+          fab dark outlined
+          x-small
+          right
+          color="green"
+          class="ml-4"
+          @click="syncCoins"
+        >
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
         <v-btn text plain x-small absolute right @click="closeDialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -42,18 +52,18 @@
                 @input="searchInput = null"
               >
                 <template v-slot:selection="data">
-                    <v-chip
-                        v-bind="data.attrs"
-                        :input-value="data.selected"
-                        close
-                        @click="data.select"
-                        @click:close="remove(data.item)"
-                    >
-                        <v-avatar left>
-                            <v-img :src="data.item.icon"></v-img>
-                        </v-avatar>
-                        {{ data.item.name }}
-                    </v-chip>
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    close
+                    @click="data.select"
+                    @click:close="remove(data.item)"
+                  >
+                    <v-avatar left>
+                      <v-img :src="data.item.icon"></v-img>
+                    </v-avatar>
+                    {{ data.item.name }}
+                  </v-chip>
                 </template>
                 <template v-slot:item="data">
                   <template v-if="typeof data.item !== 'object'">
@@ -90,7 +100,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex"
+import { mapActions, mapMutations, mapState } from "vuex"
 
 export default {
   name: "AddCoinsDialog",
@@ -106,6 +116,9 @@ export default {
     ]),
   },
   methods: {
+    ...mapActions([
+      'syncCoins'
+    ]),
     ...mapMutations([
       'addCoins'
     ]),
