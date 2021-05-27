@@ -36,7 +36,7 @@
                 </template>
             </v-text-field>
         </v-col>
-        <v-col cols="1" class="pa-0" align="end">
+        <v-col cols="1" class="pa-0" align="end" align-self="center">
             <v-tooltip v-if="this.coins.length > 0" top>
                 <template v-slot:activator="{ on, attrs }">
                     <span
@@ -44,9 +44,9 @@
                         v-on="on"
                     >
                         <v-btn
-                            text
+                            small
                             color="blue"
-                            class="pa-0 mb-n9"
+                            class="pa-0 mr-4 white--text"
                             @click="exportCSV"
                         >
                             <v-icon>mdi-file-download</v-icon>
@@ -56,18 +56,27 @@
                 <span>Export CSV</span>
             </v-tooltip>
         </v-col>
-        <v-col cols="1" class="pa-0">
+        <v-col cols="1" class="pa-0" align-self="center">
             <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                     <span
                         v-bind="attrs"
                         v-on="on"
                     >
+                        <v-btn
+                            small
+                            color="white"
+                            class="pa-0 blue--text"
+                            @click="onClickImportCSV"
+                        >
+                            <v-icon>mdi-file-upload</v-icon>
+                        </v-btn>
                         <v-file-input
                             ref="inputCSV"
                             hide-input
-                            prepend-icon="mdi-file-upload"
+                            hide-details
                             @change="importCSV"
+                            style="display: none"
                         ></v-file-input>
                     </span>
                 </template>
@@ -185,6 +194,9 @@ export default {
         this.applyNewAmountToSpend(
             isNaN(n) ? undefined : n
         )
+    },
+    onClickImportCSV() {
+        this.$refs.inputCSV.$refs.input.click()
     },
     onInputAmountToSpend(value) {
         if (value === '') {
