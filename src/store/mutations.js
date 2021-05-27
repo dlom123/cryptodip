@@ -22,6 +22,9 @@ export default {
     setCoins: (state, payload) => {
         state.coins = payload
     },
+    setSearchValue: (state, payload) => {
+        state.searchValue = payload
+    },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
     },
