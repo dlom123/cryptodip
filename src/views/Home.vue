@@ -125,7 +125,11 @@
               </v-col>
               <v-col
                 v-if="amountToSpend && item.currentPrice"
-                class="pa-0 text-caption green--text"
+                :class="[
+                  'pa-0', 'text-caption',
+                  { 'green--text': item.costAverage > yoloCostAverage(item) },
+                  { 'red--text': item.costAverage < yoloCostAverage(item) }
+                ]"
               >
                 ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }})
               </v-col>
