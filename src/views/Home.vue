@@ -8,7 +8,7 @@
           :headers="headers"
           :items="coins"
           :search="searchValue"
-          :items-per-page="allCoins.length"
+          :items-per-page="Math.max(allCoins.length, coins.length)"
           :options="tableOptions"
           @update:options="onUpdateTable"
         >
