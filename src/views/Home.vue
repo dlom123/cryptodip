@@ -8,7 +8,7 @@
           :headers="headers"
           :items="coins"
           :search="searchValue"
-          :items-per-page="allCoins.length"
+          :items-per-page="Math.max(allCoins.length, coins.length)"
           :options="tableOptions"
           @update:options="onUpdateTable"
         >
@@ -131,7 +131,8 @@
                   { 'red--text': item.costAverage < yoloCostAverage(item) }
                 ]"
               >
-                ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }})
+                ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }},
+                 {{ `${((yoloCostAverage(item) - item.costAverage) / item.costAverage * 100).toFixed(2)}%` }})
               </v-col>
             </template>
             <template v-else>

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { createStore } from 'vuex-extensions'
 import VuexPersist from 'vuex-persist'
 
 import actions from './actions'
@@ -12,7 +13,7 @@ const vuexLocalStorage = new VuexPersist({
   storage: window.localStorage
 })
 
-export default new Vuex.Store({
+export default createStore(Vuex.Store, {
   plugins: [vuexLocalStorage.plugin],
   state: {
     allCoins: [],
