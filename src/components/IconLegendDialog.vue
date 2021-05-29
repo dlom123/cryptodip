@@ -77,6 +77,20 @@ export default {
             },
             { divider: true },
             {
+                name: "mdi-file-download",
+                color: "blue",
+                title: "Export CSV",
+                description: "Download your data in CSV format"
+            },
+            { divider: true },
+            {
+                name: "mdi-file-upload",
+                color: "blue",
+                title: "Import CSV",
+                description: "Upload your data from a CSV file"
+            },
+            { divider: true },
+            {
                 name: "mdi-arrow-down-bold",
                 color: "light-green accent-4",
                 title: "Price Dip",
