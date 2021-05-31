@@ -3,6 +3,7 @@ const app = express()
 const port = 3000
 const dotenv = require("dotenv")
 const axios = require('axios')
+const config = require('./config')
 
 dotenv.config()
 
@@ -31,7 +32,7 @@ app.get('/api/sync_coins', async (req, res) => {
     */
     let coinsResponse = []
     try {
-        const response = await HTTP.get(`${process.env.CMC_API_BASE_URL}/cryptocurrency/map`)
+        const response = await HTTP.get(`${config['CMC']['APIBaseUrl']}/cryptocurrency/map`)
         const coinData = response.data.data
         coinData.forEach(coin => {
             if (coin.is_active) {
@@ -39,7 +40,7 @@ app.get('/api/sync_coins', async (req, res) => {
                     id: coin.id,
                     name: coin.name,
                     symbol: coin.symbol,
-                    icon: `${process.env.VUE_APP_CMC_COIN_IMG_BASE_URL}/${coin.id}.png`
+                    icon: `${config['CMC']['coinImgBaseUrl']}/${coin.id}.png`
                 })
             }
         })
@@ -60,7 +61,7 @@ app.get('/api/prices', async (req, res) => {
 
     let pricesResponse = []
     try {
-        const url = `${process.env.CMC_API_BASE_URL}/cryptocurrency/quotes/latest`
+        const url = `${config['CMC']['APIBaseUrl']}/cryptocurrency/quotes/latest`
         const params = `?id=${coinIds}`
         const response = await HTTP.get(`${url}${params}`)
         const coinData = response.data.data
@@ -70,7 +71,7 @@ app.get('/api/prices', async (req, res) => {
                     id: coin.id,
                     name: coin.name,
                     symbol: coin.symbol,
-                    icon: `${process.env.VUE_APP_CMC_COIN_IMG_BASE_URL}/${coin.id}.png`,
+                    icon: `${config['CMC']['coinImgBaseUrl']}/${coin.id}.png`,
                     price: coin['quote']['USD']['price']
                 })
             }

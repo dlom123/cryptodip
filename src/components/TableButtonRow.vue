@@ -103,6 +103,7 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import AddCoinsDialog from '@/components/AddCoinsDialog.vue'
 import InfoTooltip from '@/components/InfoTooltip.vue'
 import { formatDollars } from '@/utils/functions'
+import config from '@/config'
 
 export default {
   name: 'TableButtonRow',
@@ -175,7 +176,7 @@ export default {
                 id: parseInt(cols[0]),
                 name: cols[1],
                 symbol: cols[2],
-                icon: `${process.env.VUE_APP_CMC_COIN_IMG_BASE_URL}/${cols[0]}.png`,
+                icon: `${config['CMC']['coinImgBaseUrl']}/${cols[0]}.png`,
                 qty: parseFloat(cols[3]),
                 spent: parseFloat(cols[4]),
             }
