@@ -65,7 +65,7 @@
           <template v-slot:item.name="{ item }">
               <v-row>
                 <a
-                  :href="`https://coinmarketcap.com/currencies/${item.name.toLowerCase().split().join('-')}`"
+                  :href="getCoinPageUrl(item)"
                   target="_blank"
                   class="text-decoration-none"
                   tabindex="-1"
@@ -210,6 +210,7 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import InfoTooltip from '@/components/InfoTooltip.vue'
 import TableButtonRow from '@/components/TableButtonRow.vue'
 import { formatDollars, formatNumber } from '@/utils/functions'
+import config from '@/config'
 
 export default {
   name: 'Home',
@@ -261,6 +262,9 @@ export default {
     ]),
     formatDollars,
     formatNumber,
+    getCoinPageUrl(coin) {
+      return `${config['CMC']['coinPageBaseUrl']}/${coin.name.toLowerCase().split().join('-')}`
+    },
     onChangeQty(value, id) {
       const n = parseFloat(value.replace(',', ''))
       this.updateCoin({

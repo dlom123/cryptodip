@@ -1,3 +1,5 @@
+import config from '@/config'
+
 export default {
   applyNewAmountToSpend: ({ commit, state }, newAmountToSpend) => {
     commit('setAmountToSpend', newAmountToSpend)
@@ -12,7 +14,7 @@ export default {
 
     let priceData = []
     try {
-      const response = await fetch(`${process.env.VUE_APP_API_BASE_URL}/prices?${searchParams}`)
+      const response = await fetch(`${config['endpoints']['prices']}?${searchParams}`)
       priceData = await response.json()
     } catch(err) {
       console.error('Error:', err)
@@ -43,7 +45,7 @@ export default {
   },
   syncCoins: async ({ commit }) => {
     try {
-      const response = await fetch(`${process.env.VUE_APP_API_BASE_URL}/sync_coins`)
+      const response = await fetch(`${config['endpoints']['syncCoins']}`)
       var allCoins = await response.json()
     } catch(err) {
       console.error('Error:', err)
