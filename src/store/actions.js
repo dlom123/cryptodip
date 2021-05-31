@@ -1,6 +1,13 @@
 import config from '@/config'
 
 export default {
+  addCoins: ({ commit, state }, coinIds) => {
+    commit('mergeCoins', coinIds)
+    // distribute badges when the coin list is changed
+    state.coins.forEach(c => {
+      commit('updateCoin', c)
+    })
+  },
   applyNewAmountToSpend: ({ commit, state }, newAmountToSpend) => {
     commit('setAmountToSpend', newAmountToSpend)
     state.coins.forEach(coin => {
@@ -42,6 +49,15 @@ export default {
     updatedCoins.forEach(updatedCoin => {
       commit('updateCoin', updatedCoin)
     })
+  },
+  deleteCoin: ({ commit, state}, coin) => {
+    commit('removeCoin', coin)
+    if (coin.badges.length > 0) {
+      // if the removed coin had badges, redistribute badges across remaining coins
+      state.coins.forEach(c => {
+        commit('updateCoin', c)
+      })
+    }
   },
   syncCoins: async ({ commit }) => {
     try {

@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex"
+import { mapActions, mapState } from "vuex"
 
 export default {
   name: "AddCoinsDialog",
@@ -117,10 +117,8 @@ export default {
   },
   methods: {
     ...mapActions([
+      'addCoins',
       'syncCoins'
-    ]),
-    ...mapMutations([
-      'addCoins'
     ]),
     closeDialog() {
       this.showDialog = false
