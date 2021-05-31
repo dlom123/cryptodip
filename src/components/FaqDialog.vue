@@ -148,9 +148,13 @@
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                         <v-col class="pt-5">
-                                            The YOLO input is used to determine which coin gets the "Best Bang for the Buck" badge
-                                            since the largest Cost Average reduction you can realize depends on the amount
-                                            available to spend on a single coin.
+                                            <p>The YOLO input allows you to enter how much you currently have available to spend,
+                                                and the impact that the amount could have on a single coin.</p>
+                                            <p>Once an amount is entered, the potential effect on each column of any listed coin
+                                                is displayed below that column's value.</p>
+                                            <p>The YOLO input is also used to determine which coin gets the "Best Bang for the
+                                                Buck" badge since the largest Cost Average reduction you can realize depends on
+                                                the amount available to spend on a single coin.</p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
