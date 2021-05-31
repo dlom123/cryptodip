@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 export default {
-    addCoins: (state, coinIds) => {
+    mergeCoins: (state, coinIds) => {
         const keepCoins = state.coins.filter(coin => coinIds.includes(coin.id))
         const newCoinIds = coinIds.filter(coinId => 
             !state.coins.map(coin => coin.id).includes(coinId))
