@@ -12,6 +12,23 @@
             <v-col align="end">
                 <FaqDialog />
                 <IconLegendDialog />
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <span
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-btn
+                                color="red"
+                                class="pa-0 ml-4 white--text"
+                                @click="onClickForgetMe"
+                            >
+                                <v-icon>mdi-exit-run</v-icon>
+                            </v-btn>
+                        </span>
+                    </template>
+                    <span>Forget Me</span>
+                </v-tooltip>
             </v-col>
         </v-row>
     </v-container>
@@ -26,6 +43,14 @@ export default {
     components: {
         FaqDialog,
         IconLegendDialog
+    },
+    methods: {
+        onClickForgetMe() {
+            // clear app information from localStorage and reset state to initial values
+            window.localStorage.removeItem('vuex-cryptodip')
+            // store reset functionality enabled by vuex-extensions package
+            this.$store.reset()
+        }
     }
 }
 </script>

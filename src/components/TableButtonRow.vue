@@ -84,25 +84,6 @@
                 <span>Import CSV</span>
             </v-tooltip>
         </v-col>
-        <v-col cols="1" class="pa-0" align="end" align-self="center">
-            <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                    <span
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-btn
-                            color="red"
-                            class="pa-0 mr-4 white--text"
-                            @click="onClickForgetMe"
-                        >
-                            <v-icon>mdi-exit-run</v-icon>
-                        </v-btn>
-                    </span>
-                </template>
-                <span>Forget Me</span>
-            </v-tooltip>
-        </v-col>
         <v-col align="right">
             <v-btn
                 fab dark outlined color="green"
@@ -214,12 +195,6 @@ export default {
         this.applyNewAmountToSpend(
             isNaN(n) ? undefined : n
         )
-    },
-    onClickForgetMe() {
-        // clear app information from localStorage and reset state to initial values
-        window.localStorage.removeItem('vuex-cryptodip')
-        // store reset functionality enabled by vuex-extensions package
-        this.$store.reset()
     },
     onClickImportCSV() {
         this.$refs.inputCSV.$refs.input.click()
