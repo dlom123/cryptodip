@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
 export default {
+    addCoinList: (state, payload) => {
+        state.coinLists.push(payload)
+    },
     mergeCoins: (state, coinIds) => {
         const keepCoins = state.coins.filter(coin => coinIds.includes(coin.id))
         const newCoinIds = coinIds.filter(coinId => 
@@ -13,6 +16,9 @@ export default {
     removeCoin: (state, payload) => {
         state.coins = state.coins.filter(coin => coin.id !== payload.id)
     },
+    removeCoinList: (state, payload) => {
+        state.coinLists = state.coinLists.filter(coinList => coinList.value !== payload.value)
+    },
     setAmountToSpend: (state, payload) => {
         state.amountToSpend = payload
     },
@@ -24,6 +30,9 @@ export default {
     },
     setSearchValue: (state, payload) => {
         state.searchValue = payload
+    },
+    setSelectedCoinList: (state, payload) => {
+        state.selectedCoinList = payload
     },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
