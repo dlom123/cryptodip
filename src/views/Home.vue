@@ -1,10 +1,19 @@
 <template>
   <v-container class="pt-0 mb-8">
     <TableButtonRow />
-    <v-row>
+    <v-row class="mx-0">
+      <v-col class="pb-0">
+        <span class="text-subtitle-2 text--secondary">
+          Showing {{ coins.length }} coin{{ coins.length !== 1 ? 's' : '' }}
+          </span>
+      </v-col>
+    </v-row>
+    <v-row class="mt-0">
       <v-col>
         <v-data-table
           hide-default-footer
+          calculate-widths
+          :show-expand=false
           :headers="headers"
           :items="coins"
           :search="searchValue"
@@ -14,7 +23,7 @@
         >
 
           <template v-slot:header.name="{ header }">
-            <span class="mr-1 header-text">{{ header.text }}</span>
+            <span class="header-text">{{ header.text }}</span>
           </template>
           <template v-slot:header.qty="{ header }">
             <span class="mr-1 header-text">{{ header.text }}</span>
@@ -63,20 +72,20 @@
           </template>
 
           <template v-slot:item.name="{ item }">
-              <v-row>
-                <a
-                  :href="getCoinPageUrl(item)"
-                  target="_blank"
-                  class="text-decoration-none"
-                  tabindex="-1"
-                >
-                  <v-col class="pa-8">
-                    <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
-                    <span class="mr-3 text-body-1">{{ item.name }}</span>
-                    <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
-                  </v-col>
-                </a>
-              </v-row>
+            <v-row>
+              <a
+                :href="getCoinPageUrl(item)"
+                target="_blank"
+                class="text-decoration-none"
+                tabindex="-1"
+              >
+                <v-col class="py-8">
+                  <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
+                  <span class="mr-3 text-body-1">{{ item.name }}</span>
+                  <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
+                </v-col>
+              </a>
+            </v-row>
           </template>
           <template v-slot:item.qty="{ item }">
             <v-col class="pa-0">
@@ -86,7 +95,7 @@
                 flat
                 hide-details
                 placeholder="how many hodls?"
-                style="width: 150px"
+                style="width: 150px;"
                 :value="formatNumber(item.qty)"
                 @change="onChangeQty($event, item.id)"
               ></v-text-field>
@@ -156,13 +165,7 @@
           </template>
           <template v-slot:item.costAverageDiff="{ item }">
             <template v-if="typeof item.costAverageDiff !== 'undefined'">
-              <v-icon v-if="item.costAverageDiff > 0" color="light-green accent-4">mdi-arrow-down-bold</v-icon>
-              <v-icon v-else-if="item.costAverageDiff < 0" style="color: red">mdi-arrow-up-bold</v-icon>
-              {{
-                item.costAverageDiff !== 0
-                ? `${Math.abs(item.costAverageDiff).toFixed(2)}%`
-                : "n/a"
-              }}
+              <BuyTheDip :coin=item />
             </template>
             <template v-else>
               <InfoTooltip
@@ -198,6 +201,17 @@
                 :text="tooltipText['badges']['moon']"
               />
           </template>
+          <template v-slot:item.menu="{ item }">
+            <v-col class="pa-0 col-menu">
+              <CoinActionMenu :coin=item />
+            </v-col>
+          </template>
+
+          <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length">
+              <CoinChart :coin=item />
+            </td>
+          </template>
 
         </v-data-table>
       </v-col>
@@ -207,6 +221,9 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
+import BuyTheDip from '@/components/BuyTheDip.vue'
+import CoinActionMenu from '@/components/CoinActionMenu.vue'
+import CoinChart from '@/components/CoinChart.vue'
 import InfoTooltip from '@/components/InfoTooltip.vue'
 import TableButtonRow from '@/components/TableButtonRow.vue'
 import { formatDollars, formatNumber } from '@/utils/functions'
@@ -215,18 +232,22 @@ import config from '@/config'
 export default {
   name: 'Home',
   components: {
+    BuyTheDip,
+    CoinActionMenu,
+    CoinChart,
     InfoTooltip,
     TableButtonRow
   },
   data: () => ({
     headers: [
-      { text: "Name", value: "name" },
+      { text: "Name", value: "name", width: 230 },
       { text: "HODLs", value: "qty" },
       { text: "YOLO'd", value: "spent" },
       { text: "Cost Average", value: "costAverage" },
       { text: "Current Price", value: "currentPrice" },
-      { text: "Buy The Dip?", value: "costAverageDiff" },
-      { text: "", value: "badges", sortable: false },
+      { text: "Buy The Dip?", value: "costAverageDiff", width: 140 },
+      { text: "", value: "badges", sortable: false, width: 80 },
+      { text: "", value: "menu", sortable: false },
     ],
     tooltipText: {
       badges: {

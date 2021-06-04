@@ -14,6 +14,15 @@ export default {
       commit('updateCoin', coin)
     })
   },
+  deleteCoin: ({ commit, state}, coin) => {
+    commit('removeCoin', coin)
+    if (coin.badges.length > 0) {
+      // if the removed coin had badges, redistribute badges across remaining coins
+      state.coins.forEach(c => {
+        commit('updateCoin', c)
+      })
+    }
+  },
   getCurrentPrices: async ({ commit, state }) => {
     const searchParams = new URLSearchParams()
     const coinIds = state.coins.map(coin => coin['id'])
@@ -49,15 +58,6 @@ export default {
     updatedCoins.forEach(updatedCoin => {
       commit('updateCoin', updatedCoin)
     })
-  },
-  deleteCoin: ({ commit, state}, coin) => {
-    commit('removeCoin', coin)
-    if (coin.badges.length > 0) {
-      // if the removed coin had badges, redistribute badges across remaining coins
-      state.coins.forEach(c => {
-        commit('updateCoin', c)
-      })
-    }
   },
   syncCoins: async ({ commit }) => {
     try {
