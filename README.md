@@ -4,8 +4,7 @@
 ---
 
 ## Requirements
-1. **CoinMarketCap API Key** &mdash; Since all coin data is pulled from the CoinMarketCap API, you will need to obtain an API key
-and place it in a `.env` file in the project's root directory.
+1. **CoinMarketCap API Key** &mdash; Since all coin data is pulled from the CoinMarketCap API, you will need to [obtain an API key](https://coinmarketcap.com/api/) and place it in a `.env` file in the project's root directory.
 
 Example .env file
 ```
