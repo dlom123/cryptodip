@@ -2,10 +2,18 @@
   <v-container class="pt-0 mb-8">
     <TableButtonRow />
     <v-row class="mx-0">
-      <v-col class="pb-0">
+      <v-col cols="2" class="pa-0" align-self="center">
         <span class="text-subtitle-2 text--secondary">
-          Showing {{ coinLists[selectedCoinList].length }} coin{{ coinLists[selectedCoinList].length !== 1 ? 's' : '' }}
-          </span>
+          Showing {{ displayCoins.length }} coin{{ displayCoins.length !== 1 ? 's' : '' }}
+        </span>
+      </v-col>
+      <v-col class="px-0 pt-1">
+        <v-checkbox
+          dense
+          hide-details
+          v-model="showOnlyDips"
+          label="Dips only"
+        ></v-checkbox>
       </v-col>
     </v-row>
     <v-row class="mt-0">
@@ -15,7 +23,7 @@
           calculate-widths
           :show-expand=false
           :headers="headers"
-          :items="coinLists[selectedCoinList]"
+          :items="displayCoins"
           :search="searchValue"
           :items-per-page="Math.max(allCoins.length, coinLists[selectedCoinList].length)"
           :options="tableOptions"
@@ -250,6 +258,7 @@ export default {
       { text: "", value: "badges", sortable: false, filterable: false, width: 80 },
       { text: "", value: "menu", sortable: false, filterable: false },
     ],
+    showOnlyDips: false,
     tooltipText: {
       badges: {
         "bang": "Best Bang for the Buck",
@@ -274,6 +283,12 @@ export default {
       'selectedCoinList',
       'tableOptions'
     ]),
+    displayCoins() {
+      if (this.showOnlyDips) {
+        return this.coinLists[this.selectedCoinList].filter(coin => coin.costAverageDiff > 0)
+      }
+      return this.coinLists[this.selectedCoinList]
+    }
   },
   methods: {
     ...mapActions([
