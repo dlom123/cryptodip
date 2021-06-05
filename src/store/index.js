@@ -18,9 +18,10 @@ export default createStore(Vuex.Store, {
   state: {
     allCoins: [],
     amountToSpend: null,
-    coins: [],
+    coinLists: {},
     searchValue: null,
     selectedCoins: [],
+    selectedCoinList: "Dips",
     tableOptions: {}
   },
   mutations,

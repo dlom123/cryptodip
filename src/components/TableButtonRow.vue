@@ -1,40 +1,18 @@
 <template>
     <v-row>
-        <v-col cols="3" align-self="end">
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                hide-details
-                clearable
-                outlined
+        <v-col cols="2" align-self="end" class="pr-0">
+            <v-combobox
+                ref="selectCoinList"
                 dense
-            ></v-text-field>
-        </v-col>
-        <v-col cols="3" align-self="end">
-            <v-text-field
-                label="YOLO"
-                hide-details
-                clearable
                 outlined
-                dense
-                :background-color="amountToSpend ? 'light-green' : ''"
-                class="text-lighten-2"
-                :value="formatDollars(amountToSpend)"
-                @change="onChangeAmountToSpend"
-                @input="onInputAmountToSpend"
-                @click:clear="onChangeAmountToSpend"
-            >
-                <template v-slot:append-outer>
-                    <InfoTooltip
-                        icon="mdi-help-circle"
-                        icon-color="grey"
-                        position="bottom"
-                        icon-size="large"
-                        :text="tooltipText['yolo']"
-                    />
-                </template>
-            </v-text-field>
+                hide-details
+                label="Coin List"
+                append-icon="mdi-trash-can-outline"
+                :items="sortedCoinLists"
+                :value="selectedCoinList"
+                @change="onChangeCoinList"
+                @click:append="onClickDeleteList"
+            ></v-combobox>
         </v-col>
         <v-col cols="1" class="pa-0" align="end" align-self="center">
             <v-tooltip top>
@@ -44,7 +22,7 @@
                         v-on="on"
                     >
                         <v-btn
-                            :disabled="coins.length === 0"
+                            :disabled="coinLists[selectedCoinList].length === 0"
                             small
                             color="blue"
                             class="pa-0 mr-4 white--text"
@@ -84,11 +62,47 @@
                 <span>Import CSV</span>
             </v-tooltip>
         </v-col>
+        <v-col cols="3" align-self="end">
+            <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                hide-details
+                clearable
+                outlined
+                dense
+            ></v-text-field>
+        </v-col>
+        <v-col cols="3" align-self="end">
+            <v-text-field
+                label="YOLO"
+                hide-details
+                clearable
+                outlined
+                dense
+                :background-color="amountToSpend ? 'light-green' : ''"
+                class="text-lighten-2"
+                :value="formatDollars(amountToSpend)"
+                @change="onChangeAmountToSpend"
+                @input="onInputAmountToSpend"
+                @click:clear="onChangeAmountToSpend"
+            >
+                <template v-slot:append-outer>
+                    <InfoTooltip
+                        icon="mdi-help-circle"
+                        icon-color="grey"
+                        position="bottom"
+                        icon-size="large"
+                        :text="tooltipText['yolo']"
+                    />
+                </template>
+            </v-text-field>
+        </v-col>
         <v-col align="right">
             <v-btn
                 fab dark outlined color="green"
                 class="mr-6"
-                :disabled="coins.length === 0"
+                :disabled="coinLists[selectedCoinList].length === 0"
                 @click="getCurrentPrices"
             >
                 <v-icon>mdi-refresh</v-icon>
@@ -112,15 +126,16 @@ export default {
     InfoTooltip
   },
   data: () => ({
-      tooltipText: {
-          yolo: "The amount available to spend on a single coin"
-      }
+    tooltipText: {
+        yolo: "The amount available to spend on a single coin"
+    }
   }),
   computed: {
     ...mapState([
       'amountToSpend',
-      'coins',
-      'searchValue'
+      'coinLists',
+      'searchValue',
+      'selectedCoinList'
     ]),
     search: {
         get() {
@@ -129,6 +144,11 @@ export default {
         set(newValue) {
             this.setSearchValue(newValue)
         }
+    },
+    sortedCoinLists() {
+        return Object.keys(this.coinLists).sort((a, b) => {
+            return a < b ? -1 : 1
+        })
     }
   },
   methods: {
@@ -137,7 +157,10 @@ export default {
       'getCurrentPrices'
     ]),
     ...mapMutations([
+        'addCoinList',
+        'removeCoinList',
         'setSearchValue',
+        'setSelectedCoinList',
         'updateCoins'
     ]),
     exportCSV() {
@@ -147,10 +170,10 @@ export default {
         const [hour, minute, second] = new Date()
             .toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             .split(/:| /)
-        const filename = `cryptodip${year}${month}${date}${hour}${minute}${second}.csv`
+        const filename = `cryptodip_${this.selectedCoinList.toLowerCase()}_${year}${month}${date}${hour}${minute}${second}.csv`
 
         let csv = "Id,Coin Name,Symbol,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip\n"
-        this.coins.forEach(coin => {
+        this.coinLists[this.selectedCoinList].forEach(coin => {
             const costAverage = coin.costAverage ? coin.costAverage : ""
             const currentPrice = coin.currentPrice ? coin.currentPrice : ""
             const costAverageDiff = coin.costAverageDiff ? coin.costAverageDiff : ""
@@ -196,6 +219,25 @@ export default {
         this.applyNewAmountToSpend(
             isNaN(n) ? undefined : n
         )
+    },
+    onChangeCoinList(item) {
+        const existingItem = Object.keys(this.coinLists).includes(item)
+        if (!existingItem) {
+            this.addCoinList(item)
+            this.setSelectedCoinList(item)
+            this.$refs.selectCoinList.blur()
+        } else {
+            this.setSelectedCoinList(item)
+        }
+    },
+    onClickDeleteList() {
+        this.removeCoinList(this.selectedCoinList)
+        if (Object.keys(this.coinLists).length === 0) {
+            // re-create the default list whenever all lists have been deleted
+            this.addCoinList("Dips")
+        }
+        this.setSelectedCoinList(Object.keys(this.coinLists)[0])
+        this.$refs.selectCoinList.blur()
     },
     onClickImportCSV() {
         this.$refs.inputCSV.$refs.input.click()

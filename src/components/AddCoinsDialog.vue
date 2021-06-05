@@ -112,7 +112,8 @@ export default {
   computed: {
     ...mapState([
       "allCoins",
-      "coins"
+      "coinLists",
+      "selectedCoinList"
     ]),
   },
   methods: {
@@ -133,7 +134,7 @@ export default {
               || textTwo.indexOf(searchText) > -1
     },
     openDialog() {
-      this.selectedCoins = this.coins.map(coin => coin.id)
+      this.selectedCoins = this.coinLists[this.selectedCoinList].map(coin => coin.id)
     },
     remove(item) {
       this.selectedCoins = this.selectedCoins.filter(coinId => coinId !== item.id)
