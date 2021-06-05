@@ -14,7 +14,7 @@ CMC_API_KEY=<your API key>
 
 ---
 
-## Project setup
+## Project Setup
 1. Install dependencies
 
 ```
@@ -38,15 +38,3 @@ npm run server
 ```
 
 4. Browse to the app on the displayed port using your web browser!
-
----
-
-## Other
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
