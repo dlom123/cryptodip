@@ -7,7 +7,7 @@
                 outlined
                 hide-details
                 label="Coin List"
-                :append-icon="coinLists.length > 1 ? 'mdi-trash-can-outline' : ''"
+                append-icon="mdi-trash-can-outline"
                 :items="sortedCoinLists"
                 :value="selectedCoinList"
                 @change="onChangeCoinList"
@@ -22,7 +22,7 @@
                         v-on="on"
                     >
                         <v-btn
-                            :disabled="coins.length === 0"
+                            :disabled="coinLists[selectedCoinList].length === 0"
                             small
                             color="blue"
                             class="pa-0 mr-4 white--text"
@@ -102,7 +102,7 @@
             <v-btn
                 fab dark outlined color="green"
                 class="mr-6"
-                :disabled="coins.length === 0"
+                :disabled="coinLists[selectedCoinList].length === 0"
                 @click="getCurrentPrices"
             >
                 <v-icon>mdi-refresh</v-icon>
@@ -134,7 +134,6 @@ export default {
     ...mapState([
       'amountToSpend',
       'coinLists',
-      'coins',
       'searchValue',
       'selectedCoinList'
     ]),
@@ -147,11 +146,9 @@ export default {
         }
     },
     sortedCoinLists() {
-        const tmpCoinLists = this.coinLists
-        const sortedCoinLists = tmpCoinLists.sort((a, b) => {
-            return a.value < b.value ? -1 : 1
+        return Object.keys(this.coinLists).sort((a, b) => {
+            return a < b ? -1 : 1
         })
-        return sortedCoinLists
     }
   },
   methods: {
@@ -173,10 +170,10 @@ export default {
         const [hour, minute, second] = new Date()
             .toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             .split(/:| /)
-        const filename = `cryptodip_${this.selectedCoinList.value}_${year}${month}${date}${hour}${minute}${second}.csv`
+        const filename = `cryptodip_${this.selectedCoinList.toLowerCase()}_${year}${month}${date}${hour}${minute}${second}.csv`
 
         let csv = "Id,Coin Name,Symbol,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip\n"
-        this.coins.forEach(coin => {
+        this.coinLists[this.selectedCoinList].forEach(coin => {
             const costAverage = coin.costAverage ? coin.costAverage : ""
             const currentPrice = coin.currentPrice ? coin.currentPrice : ""
             const costAverageDiff = coin.costAverageDiff ? coin.costAverageDiff : ""
@@ -224,14 +221,10 @@ export default {
         )
     },
     onChangeCoinList(item) {
-        const existingItem = this.coinLists.find(coinList => item.value === coinList.value)
+        const existingItem = Object.keys(this.coinLists).includes(item)
         if (!existingItem) {
-            const newItem = {
-                text: item,
-                value: item.toLowerCase()
-            }
-            this.addCoinList(newItem)
-            this.setSelectedCoinList(newItem)
+            this.addCoinList(item)
+            this.setSelectedCoinList(item)
             this.$refs.selectCoinList.blur()
         } else {
             this.setSelectedCoinList(item)
@@ -239,7 +232,11 @@ export default {
     },
     onClickDeleteList() {
         this.removeCoinList(this.selectedCoinList)
-        this.setSelectedCoinList(this.coinLists[0])
+        if (Object.keys(this.coinLists).length === 0) {
+            // re-create the default list whenever all lists have been deleted
+            this.addCoinList("Dips")
+        }
+        this.setSelectedCoinList(Object.keys(this.coinLists)[0])
         this.$refs.selectCoinList.blur()
     },
     onClickImportCSV() {

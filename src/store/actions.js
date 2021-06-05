@@ -4,13 +4,13 @@ export default {
   addCoins: ({ commit, state }, coinIds) => {
     commit('mergeCoins', coinIds)
     // distribute badges when the coin list is changed
-    state.coins.forEach(c => {
+    state.coinLists[state.selectedCoinList].forEach(c => {
       commit('updateCoin', c)
     })
   },
   applyNewAmountToSpend: ({ commit, state }, newAmountToSpend) => {
     commit('setAmountToSpend', newAmountToSpend)
-    state.coins.forEach(coin => {
+    state.coinLists[state.selectedCoinList].forEach(coin => {
       commit('updateCoin', coin)
     })
   },
@@ -18,14 +18,14 @@ export default {
     commit('removeCoin', coin)
     if (coin.badges.length > 0) {
       // if the removed coin had badges, redistribute badges across remaining coins
-      state.coins.forEach(c => {
+      state.coinLists[state.selectedCoinList].forEach(c => {
         commit('updateCoin', c)
       })
     }
   },
   getCurrentPrices: async ({ commit, state }) => {
     const searchParams = new URLSearchParams()
-    const coinIds = state.coins.map(coin => coin['id'])
+    const coinIds = state.coinLists[state.selectedCoinList].map(coin => coin['id'])
     searchParams.append('coinIds', coinIds)
 
     let priceData = []
@@ -38,7 +38,7 @@ export default {
 
     // add current price and cost average difference
     // to each coin that was requested
-    const updatedCoins = state.coins.map(coin => {
+    const updatedCoins = state.coinLists[state.selectedCoinList].map(coin => {
       const coinPriceObj = priceData.find(p => p['id'] === coin['id'])
       try {
         var coinPrice = typeof coinPriceObj !== "undefined"

@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import FaqDialog from '@/components/FaqDialog'
 import IconLegendDialog from '@/components/IconLegendDialog'
 
@@ -45,11 +46,16 @@ export default {
         IconLegendDialog
     },
     methods: {
+        ...mapMutations([
+            'addCoinList'
+        ]),
         onClickForgetMe() {
             // clear app information from localStorage and reset state to initial values
             window.localStorage.removeItem('vuex-cryptodip')
             // store reset functionality enabled by vuex-extensions package
             this.$store.reset()
+            // restore the default coin list
+            this.addCoinList("Dips")
         }
     }
 }

@@ -4,7 +4,7 @@
     <v-row class="mx-0">
       <v-col class="pb-0">
         <span class="text-subtitle-2 text--secondary">
-          Showing {{ coins.length }} coin{{ coins.length !== 1 ? 's' : '' }}
+          Showing {{ coinLists[selectedCoinList].length }} coin{{ coinLists[selectedCoinList].length !== 1 ? 's' : '' }}
           </span>
       </v-col>
     </v-row>
@@ -15,10 +15,11 @@
           calculate-widths
           :show-expand=false
           :headers="headers"
-          :items="coins"
+          :items="coinLists[selectedCoinList]"
           :search="searchValue"
-          :items-per-page="Math.max(allCoins.length, coins.length)"
+          :items-per-page="Math.max(allCoins.length, coinLists[selectedCoinList].length)"
           :options="tableOptions"
+          :custom-filter="coinFilter"
           @update:options="onUpdateTable"
         >
 
@@ -241,13 +242,13 @@ export default {
   data: () => ({
     headers: [
       { text: "Name", value: "name", width: 230 },
-      { text: "HODLs", value: "qty" },
-      { text: "YOLO'd", value: "spent" },
-      { text: "Cost Average", value: "costAverage" },
-      { text: "Current Price", value: "currentPrice" },
-      { text: "Buy The Dip?", value: "costAverageDiff", width: 140 },
-      { text: "", value: "badges", sortable: false, width: 80 },
-      { text: "", value: "menu", sortable: false },
+      { text: "HODLs", value: "qty", filterable: false },
+      { text: "YOLO'd", value: "spent", filterable: false },
+      { text: "Cost Average", value: "costAverage", filterable: false },
+      { text: "Current Price", value: "currentPrice", filterable: false },
+      { text: "Buy The Dip?", value: "costAverageDiff", filterable: false, width: 140 },
+      { text: "", value: "badges", sortable: false, filterable: false, width: 80 },
+      { text: "", value: "menu", sortable: false, filterable: false },
     ],
     tooltipText: {
       badges: {
@@ -268,8 +269,9 @@ export default {
     ...mapState([
       'allCoins',
       'amountToSpend',
-      'coins',
+      'coinLists',
       'searchValue',
+      'selectedCoinList',
       'tableOptions'
     ]),
   },
@@ -278,9 +280,16 @@ export default {
       'syncCoins'
     ]),
     ...mapMutations([
+      'addCoinList',
       'setTableOptions',
       'updateCoin',
     ]),
+    coinFilter(value, search, item) {
+      return value !== null
+        && search !== null&& typeof value === 'string'
+        && (value.toLowerCase().indexOf(search.toLowerCase()) !== -1
+          || item.symbol.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+    },
     formatDollars,
     formatNumber,
     getCoinPageUrl(coin) {
@@ -315,6 +324,9 @@ export default {
     },
   },
   created() {
+    if (Object.keys(this.coinLists).length === 0) {
+      this.addCoinList("Dips")
+    }
     if (this.allCoins.length === 0) {
       this.syncCoins()
     }

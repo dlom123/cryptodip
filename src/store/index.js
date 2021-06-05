@@ -13,21 +13,15 @@ const vuexLocalStorage = new VuexPersist({
   storage: window.localStorage
 })
 
-const defaultCoinList = {
-  text: "Dips",
-  value: "dips"
-}
-
 export default createStore(Vuex.Store, {
   plugins: [vuexLocalStorage.plugin],
   state: {
     allCoins: [],
     amountToSpend: null,
-    coinLists: [defaultCoinList],
-    coins: [],
+    coinLists: {},
     searchValue: null,
     selectedCoins: [],
-    selectedCoinList: defaultCoinList,
+    selectedCoinList: "Dips",
     tableOptions: {}
   },
   mutations,

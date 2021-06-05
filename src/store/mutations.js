@@ -2,22 +2,23 @@ import Vue from 'vue'
 
 export default {
     addCoinList: (state, payload) => {
-        state.coinLists.push(payload)
+        Vue.set(state.coinLists, payload, [])
     },
     mergeCoins: (state, coinIds) => {
-        const keepCoins = state.coins.filter(coin => coinIds.includes(coin.id))
+        const coins = state.coinLists[state.selectedCoinList]
+        const keepCoins = coins.filter(coin => coinIds.includes(coin.id))
         const newCoinIds = coinIds.filter(coinId => 
-            !state.coins.map(coin => coin.id).includes(coinId))
+            !coins.map(coin => coin.id).includes(coinId))
         const newCoins = state.allCoins
             .filter(coin => newCoinIds.includes(coin.id))
-        state.coins = keepCoins
-        state.coins.push(...newCoins)
+        state.coinLists[state.selectedCoinList] = keepCoins
+        state.coinLists[state.selectedCoinList].push(...newCoins)
     },
     removeCoin: (state, payload) => {
-        state.coins = state.coins.filter(coin => coin.id !== payload.id)
+        state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].filter(coin => coin.id !== payload.id)
     },
     removeCoinList: (state, payload) => {
-        state.coinLists = state.coinLists.filter(coinList => coinList.value !== payload.value)
+        Vue.delete(state.coinLists, payload)
     },
     setAmountToSpend: (state, payload) => {
         state.amountToSpend = payload
@@ -26,7 +27,7 @@ export default {
         state.allCoins = payload
     },
     setCoins: (state, payload) => {
-        state.coins = payload
+        state.coinLists[state.selectedCoinList] = payload
     },
     setSearchValue: (state, payload) => {
         state.searchValue = payload
@@ -43,7 +44,7 @@ export default {
         let dipperCoin = undefined  // "Big Dipper"
         let moonCoin = undefined  // "To the Moon!"
 
-        state.coins = state.coins.map(coin => {
+        state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
             coin.badges = []
 
             let updatedCoin = {
@@ -129,7 +130,7 @@ export default {
         })
 
         // assign badges
-        state.coins = state.coins.map(coin => {
+        state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
             // "Best Bang for the Buck" badge
             if (
                 typeof bangCoin !== 'undefined'
@@ -178,15 +179,15 @@ export default {
     },
     updateCoins: (state, payload) => {
         payload.forEach(coin => {
-            let existingIndex = state.coins.findIndex(stateCoin => stateCoin.id === coin.id)
+            let existingIndex = state.coinLists[state.selectedCoinList].findIndex(stateCoin => stateCoin.id === coin.id)
             if (existingIndex > -1) {
                 const updatedCoin = {
-                    ...state.coins[existingIndex],
+                    ...state.coinLists[state.selectedCoinList][existingIndex],
                     ...coin
                 }
-                Vue.set(state.coins, existingIndex, updatedCoin)
+                Vue.set(state.coinLists[state.selectedCoinList], existingIndex, updatedCoin)
             } else {
-                state.coins.push(coin)
+                state.coinLists[state.selectedCoinList].push(coin)
             }
         })
     }
