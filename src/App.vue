@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <SystemBar />
     <Header />
 
     <v-main>
@@ -13,12 +14,14 @@
 <script>
 import Footer from '@/components/Footer.vue'
 import Header from '@/components/Header.vue'
+import SystemBar from '@/components/SystemBar.vue'
 
 export default {
   name: 'App',
   components: {
     Footer,
-    Header
+    Header,
+    SystemBar
   }
 }
 </script>

@@ -14,7 +14,7 @@ export default {
       commit('updateCoin', coin)
     })
   },
-  deleteCoin: ({ commit, state}, coin) => {
+  deleteCoin: ({ commit, state }, coin) => {
     commit('removeCoin', coin)
     if (coin.badges.length > 0) {
       // if the removed coin had badges, redistribute badges across remaining coins
@@ -23,16 +23,60 @@ export default {
       })
     }
   },
+  getCmcApiInfo: async ({ commit }, apiKey) => {
+    if (!apiKey) {
+      commit('setCmcApi', {})
+    } else {
+      const headers = {}
+      if (apiKey) {
+        // if a CMC API key has been entered, pass it along to the back-end as a custom header
+        headers['X-CMC-API-Key'] = apiKey
+      }
+      const response = await fetch(
+        `${config['endpoints']['info']}`,
+        {
+          headers
+        }
+      )
+      if (!response.ok) {
+        commit('setCmcApi', {
+          key: apiKey,
+          isValid: false
+        })
+      } else {
+        var data = await response.json()
+
+        commit('updateCmcApi', {
+          key: apiKey,
+          ...data,
+          isValid: true
+        })
+      }
+    }
+  },
   getCurrentPrices: async ({ commit, state }) => {
     const searchParams = new URLSearchParams()
     const coinIds = state.coinLists[state.selectedCoinList].map(coin => coin['id'])
     searchParams.append('coinIds', coinIds)
 
+    const headers = {}
+    if (state.cmcApi.key) {
+      // if a CMC API key has been entered, pass it along to the back-end as a custom header
+      if (state.cmcApi.key) {
+        headers['X-CMC-API-Key'] = state.cmcApi.key
+      }
+    }
+
     let priceData = []
     try {
-      const response = await fetch(`${config['endpoints']['prices']}?${searchParams}`)
+      const response = await fetch(
+        `${config['endpoints']['prices']}?${searchParams}`,
+        {
+          headers
+        }
+      )
       priceData = await response.json()
-    } catch(err) {
+    } catch (err) {
       console.error('Error:', err)
     }
 
@@ -42,8 +86,8 @@ export default {
       const coinPriceObj = priceData.find(p => p['id'] === coin['id'])
       try {
         var coinPrice = typeof coinPriceObj !== "undefined"
-                        ? coinPriceObj['price']
-                        : coin['currentPrice']
+          ? coinPriceObj['price']
+          : coin['currentPrice']
       } catch (err) {
         console.error(err, coin)
       }
@@ -59,11 +103,26 @@ export default {
       commit('updateCoin', updatedCoin)
     })
   },
-  syncCoins: async ({ commit }) => {
+  syncCoins: async ({ commit, dispatch, state }) => {
+    const headers = {}
+    if (state.cmcApi.key) {
+      // if a CMC API key has been entered, pass it along to the back-end as a custom header
+      if (state.cmcApi.key) {
+        headers['X-CMC-API-Key'] = state.cmcApi.key
+      }
+    }
+
     try {
-      const response = await fetch(`${config['endpoints']['syncCoins']}`)
+      const response = await fetch(
+        `${config['endpoints']['syncCoins']}`,
+        {
+          headers
+        }
+      )
       var allCoins = await response.json()
-    } catch(err) {
+      // update API usage data
+      await dispatch('getCmcApiInfo')
+    } catch (err) {
       console.error('Error:', err)
     }
 

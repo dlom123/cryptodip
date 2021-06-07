@@ -26,6 +26,9 @@ export default {
     setAllCoins: (state, payload) => {
         state.allCoins = payload
     },
+    setCmcApi: (state, payload) => {
+        state.cmcApi = payload
+    },
     setCoins: (state, payload) => {
         state.coinLists[state.selectedCoinList] = payload
     },
@@ -37,6 +40,12 @@ export default {
     },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
+    },
+    updateCmcApi: (state, payload) => {
+        state.cmcApi = {
+            ...state.cmcApi,
+            ...payload
+        }
     },
     updateCoin: (state, payload) => {
         // badge coins
