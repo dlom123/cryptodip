@@ -38,6 +38,9 @@ export default {
     setSelectedCoinList: (state, payload) => {
         state.selectedCoinList = payload
     },
+    setShowSnackbar: (state, payload) => {
+        state.showSnackbar = payload
+    },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
     },

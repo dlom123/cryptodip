@@ -23,6 +23,7 @@ export default createStore(Vuex.Store, {
     searchValue: null,
     selectedCoins: [],
     selectedCoinList: "Dips",
+    showSnackbar: false,
     tableOptions: {}
   },
   mutations,
