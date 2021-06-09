@@ -32,6 +32,9 @@ export default {
     setCoins: (state, payload) => {
         state.coinLists[state.selectedCoinList] = payload
     },
+    setHasBackEndApiKey: (state, payload) => {
+        state.hasBackEndApiKey = payload
+    },
     setSearchValue: (state, payload) => {
         state.searchValue = payload
     },
@@ -64,20 +67,19 @@ export default {
             }
             if (coin.id === payload.id) {
                 let costAverage = undefined
-                let newQty = typeof payload.qty !== 'undefined'
+                let newQty = Object.prototype.hasOwnProperty.call(payload, 'qty')
                                 ? payload.qty
                                 : coin.qty
-                let newSpent = typeof payload.spent !== 'undefined'
+                let newSpent = Object.prototype.hasOwnProperty.call(payload, 'spent')
                                 ? payload.spent
                                 : coin.spent
-
                 if (typeof newQty !== 'undefined' && typeof newSpent !== 'undefined') {
-                    costAverage = newSpent / newQty
+                    costAverage = newQty <= 0 ? undefined : newSpent / newQty
                 }
 
-                let costAverageDiff = coin.costAverageDiff
+                let costAverageDiff = undefined
                 if (typeof costAverage !== 'undefined' && typeof coin.currentPrice !== 'undefined') {
-                    costAverageDiff = (costAverage - coin.currentPrice) / costAverage * 100
+                    costAverageDiff = costAverage <= 0 ? undefined : (costAverage - coin.currentPrice) / costAverage * 100
                 }
 
                 updatedCoin = {

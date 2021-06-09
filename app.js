@@ -31,6 +31,10 @@ function getRequestApiKey(req) {
         : process.env.CMC_API_KEY
 }
 
+app.get('/api/has-key', async (req, res) => {
+    return res.json({ "hasKey": !!process.env.CMC_API_KEY })
+})
+
 app.get('/api/info', async (req, res) => {
     const headers = {}
     const apiKey = getRequestApiKey(req)
@@ -97,22 +101,22 @@ app.get('/api/sync_coins', async (req, res) => {
 
     let coinsResponse = []
     await HTTP.get('/cryptocurrency/map', { headers })
-    .then(response => {
-        const coinData = response.data.data
-        coinData.forEach(coin => {
-            if (coin.is_active) {
-                coinsResponse.push({
-                    id: coin.id,
-                    name: coin.name,
-                    symbol: coin.symbol,
-                    icon: `${config['CMC']['coinImgBaseUrl']}/${coin.id}.png`
-                })
-            }
-        })
+        .then(response => {
+            const coinData = response.data.data
+            coinData.forEach(coin => {
+                if (coin.is_active) {
+                    coinsResponse.push({
+                        id: coin.id,
+                        name: coin.name,
+                        symbol: coin.symbol,
+                        icon: `${config['CMC']['coinImgBaseUrl']}/${coin.id}.png`
+                    })
+                }
+            })
 
-        return res.json(coinsResponse)
-    })
-    .catch(error => {
-        return res.status(error.response.status).json({ error: error.message })
-    })
+            return res.json(coinsResponse)
+        })
+        .catch(error => {
+            return res.status(error.response.status).json({ error: error.message })
+        })
 })

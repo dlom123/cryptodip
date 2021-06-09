@@ -1,228 +1,267 @@
 <template>
-  <v-container class="pt-0 mb-8">
-    <TableButtonRow />
-    <v-row class="mx-0">
-      <v-col cols="2" class="pa-0" align-self="center">
-        <span class="text-subtitle-2 text--secondary">
-          Showing {{ displayCoins.length }} coin{{ displayCoins.length !== 1 ? 's' : '' }}
-        </span>
-      </v-col>
-      <v-col class="px-0 pt-1">
-        <v-checkbox
-          dense
-          hide-details
-          v-model="showOnlyDips"
-          label="Dips only"
-        ></v-checkbox>
-      </v-col>
-    </v-row>
-    <v-row class="mt-0">
+  <v-container fluid class="pt-0 mb-8">
+    <v-row>
       <v-col>
-        <v-data-table
-          hide-default-footer
-          calculate-widths
-          :show-expand=false
-          :headers="headers"
-          :items="displayCoins"
-          :search="searchValue"
-          :items-per-page="Math.max(allCoins.length, coinLists[selectedCoinList].length)"
-          :options="tableOptions"
-          :custom-filter="coinFilter"
-          @update:options="onUpdateTable"
-        >
-
-          <template v-slot:header.name="{ header }">
-            <span class="header-text">{{ header.text }}</span>
-          </template>
-          <template v-slot:header.qty="{ header }">
-            <span class="mr-1 header-text">{{ header.text }}</span>
-            <InfoTooltip
-              icon="mdi-help-circle"
-              icon-color="grey"
-              position="bottom"
-              :text="tooltipText['qty']"
-            />
-          </template>
-          <template v-slot:header.spent="{ header }">
-            <span class="mr-1 header-text">{{ header.text }}</span>
-            <InfoTooltip
-              icon="mdi-help-circle"
-              icon-color="grey"
-              position="bottom"
-              :text="tooltipText['spent']"
-            />
-          </template>
-          <template v-slot:header.costAverage="{ header }">
-            <span class="mr-1 header-text">{{ header.text }}</span>
-            <InfoTooltip
-              icon="mdi-help-circle"
-              icon-color="grey"
-              position="bottom"
-              :text="tooltipText['costAverage']"
-            />
-          </template>
-          <template v-slot:header.currentPrice="{ header }">
-            <span class="mr-1 header-text">{{ header.text }}</span>
-            <InfoTooltip
-              icon="mdi-help-circle"
-              icon-color="grey"
-              position="bottom"
-              :text="tooltipText['currentPrice']"
-            />
-          </template>
-          <template v-slot:header.costAverageDiff="{ header }">
-            <span class="mr-1 header-text">{{ header.text }}</span>
-            <InfoTooltip
-              icon="mdi-help-circle"
-              icon-color="grey"
-              position="bottom"
-              :text="tooltipText['costAverageDiff']"
-            />
-          </template>
-
-          <template v-slot:item.name="{ item }">
-            <v-row>
-              <a
-                :href="getCoinPageUrl(item)"
-                target="_blank"
-                class="text-decoration-none"
-                tabindex="-1"
-              >
-                <v-col class="py-8">
-                  <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
-                  <span class="mr-3 text-body-1">{{ item.name }}</span>
-                  <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
-                </v-col>
-              </a>
-            </v-row>
-          </template>
-          <template v-slot:item.qty="{ item }">
-            <v-col class="pa-0">
-              <v-text-field
-                solo
-                dense
-                flat
-                hide-details
-                placeholder="how many hodls?"
-                style="width: 150px;"
-                :value="formatNumber(item.qty)"
-                @change="onChangeQty($event, item.id)"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              v-if="amountToSpend && !isNaN(yoloHodls(item))"
-              class="py-0 pr-0 pl-3 text-caption green--text"
+        <TableButtonRow />
+        <v-row class="mx-0">
+          <v-col cols="2" class="pa-0" align-self="center">
+            <span class="text-subtitle-2 text--secondary">
+              Showing {{ displayCoins.length }} coin{{ displayCoins.length !== 1 ? 's' : '' }}
+            </span>
+          </v-col>
+          <v-col cols="2" class="px-0 pt-1">
+            <v-checkbox
+              dense
+              hide-details
+              v-model="showOnlyDips"
+              label="Dips only"
+            ></v-checkbox>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-data-table
+              hide-default-footer
+              disable-pagination
+              :show-expand=false
+              :headers="headers"
+              :items="displayCoins"
+              :search="searchValue"
+              :items-per-page="Math.max(allCoins.length, coinLists[selectedCoinList].length)"
+              :options="tableOptions"
+              :custom-filter="coinFilter"
+              class="elevation-2"
+              @update:options="onUpdateTable"
             >
-              ({{ formatNumber(yoloHodls(item)) }})
-            </v-col>
-          </template>
-          <template v-slot:item.spent="{ item }">
-            <v-col class="pa-0">
-              <v-text-field
-                solo
-                dense
-                flat
-                hide-details
-                placeholder="how much yolo'd?"
-                style="width: 150px"
-                :value="formatDollars(item.spent)"
-                @change="onChangeSpent($event, item.id)"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              v-if="amountToSpend"
-              class="py-0 pr-0 pl-3 text-caption green--text"
-            >
-              ({{ formatDollars(yoloYolod(item)) }})
-            </v-col>
-          </template>
-          <template v-slot:item.costAverage="{ item }">
-            <template v-if="typeof item.costAverage !== 'undefined'">
-              <v-col class="pa-0">
-                {{ formatDollars(item.costAverage, isFlexible=true) }}
-              </v-col>
-              <v-col
-                v-if="amountToSpend && item.currentPrice"
-                :class="[
-                  'pa-0', 'text-caption',
-                  { 'green--text': item.costAverage > yoloCostAverage(item) },
-                  { 'red--text': item.costAverage < yoloCostAverage(item) }
-                ]"
-              >
-                ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }},
-                 {{ `${((yoloCostAverage(item) - item.costAverage) / item.costAverage * 100).toFixed(2)}%` }})
-              </v-col>
-            </template>
-            <template v-else>
-              <InfoTooltip
-                icon="mdi-help"
-                position="top"
-                :text="tooltipText['costAverageBlank']"
-              />
-            </template>
-          </template>
-          <template v-slot:item.currentPrice="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <span
-                  v-bind="attrs"
-                  v-on="on"
-                >{{ formatDollars(item.currentPrice, isFlexible=true) }}</span>
+
+              <template v-slot:header.name="{ header }">
+                <span class="header-text">{{ header.text }}</span>
               </template>
-              <span>{{ item.currentPrice }}</span>
-            </v-tooltip>
-          </template>
-          <template v-slot:item.costAverageDiff="{ item }">
-            <template v-if="typeof item.costAverageDiff !== 'undefined'">
-              <BuyTheDip :coin=item />
-            </template>
-            <template v-else>
-              <InfoTooltip
-                icon="mdi-help"
-                position="top"
-                :text="tooltipText['costAverageDiffBlank']"
-              />
-            </template>
-          </template>
-          <template v-slot:item.badges="{ item }">
-              <InfoTooltip
-                v-if="item.badges && item.badges.includes('bang')"
-                icon="mdi-currency-usd"
-                icon-size="x-large"
-                icon-color="green"
-                position="top"
-                :text="tooltipText['badges']['bang']"
-              />
-              <InfoTooltip
-                v-if="item.badges && item.badges.includes('dipper')"
-                icon="mdi-star"
-                icon-size="x-large"
-                icon-color="yellow darken-1"
-                position="top"
-                :text="tooltipText['badges']['dipper']"
-              />
-              <InfoTooltip
-                v-if="item.badges && item.badges.includes('moon')"
-                icon="mdi-rocket-launch"
-                icon-size="x-large"
-                icon-color="blue"
-                position="top"
-                :text="tooltipText['badges']['moon']"
-              />
-          </template>
-          <template v-slot:item.menu="{ item }">
-            <v-col class="pa-0 col-menu">
-              <CoinActionMenu :coin=item />
-            </v-col>
-          </template>
+              <template v-slot:header.qty="{ header }">
+                <span class="mr-1 header-text">{{ header.text }}</span>
+                <InfoTooltip
+                  icon="mdi-help-circle"
+                  icon-color="grey"
+                  position="bottom"
+                  :text="tooltipText['qty']"
+                />
+              </template>
+              <template v-slot:header.spent="{ header }">
+                <span class="mr-1 header-text">{{ header.text }}</span>
+                <InfoTooltip
+                  icon="mdi-help-circle"
+                  icon-color="grey"
+                  position="bottom"
+                  :text="tooltipText['spent']"
+                />
+              </template>
+              <template v-slot:header.costAverage="{ header }">
+                <span class="mr-1 header-text">{{ header.text }}</span>
+                <InfoTooltip
+                  icon="mdi-help-circle"
+                  icon-color="grey"
+                  position="bottom"
+                  :text="tooltipText['costAverage']"
+                />
+              </template>
+              <template v-slot:header.currentPrice="{ header }">
+                <span class="mr-1 header-text">{{ header.text }}</span>
+                <InfoTooltip
+                  icon="mdi-help-circle"
+                  icon-color="grey"
+                  position="bottom"
+                  :text="tooltipText['currentPrice']"
+                />
+              </template>
+              <template v-slot:header.costAverageDiff="{ header }">
+                <span class="mr-1 header-text">{{ header.text }}</span>
+                <InfoTooltip
+                  icon="mdi-help-circle"
+                  icon-color="grey"
+                  position="bottom"
+                  :text="tooltipText['costAverageDiff']"
+                />
+              </template>
+              <template v-if="coinLists[selectedCoinList].length" v-slot:header.menu>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      small
+                      color="red"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="onClickClearList"
+                    >
+                      <v-icon color="white">mdi-cancel</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Clear List</span>
+                </v-tooltip>
+              </template>
 
-          <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="headers.length">
-              <CoinChart :coin=item />
-            </td>
-          </template>
+              <template v-slot:item.name="{ item }">
+                <v-row>
+                  <a
+                    :href="getCoinPageUrl(item)"
+                    target="_blank"
+                    class="text-decoration-none"
+                    tabindex="-1"
+                  >
+                    <v-col class="py-8">
+                      <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
+                      <span class="mr-3 text-body-1">{{ item.name }}</span>
+                      <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
+                    </v-col>
+                  </a>
+                </v-row>
+              </template>
+              <template v-slot:item.qty="{ item }">
+                <v-col class="pa-0">
+                  <v-text-field
+                    solo
+                    dense
+                    flat
+                    hide-details
+                    placeholder="how many hodls?"
+                    style="width: 150px;"
+                    :value="formatNumber(item.qty)"
+                    @change="onChangeQty($event, item.id)"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  v-if="amountToSpend && !isNaN(yoloHodls(item))"
+                  class="py-0 pr-0 pl-3 text-caption green--text"
+                >
+                  ({{ formatNumber(yoloHodls(item)) }},
+                  {{ `+${formatNumber(yoloHodls(item) - item.qty, isFlexible=true)}` }})
+                </v-col>
+              </template>
+              <template v-slot:item.spent="{ item }">
+                <v-col class="pa-0">
+                  <v-text-field
+                    solo
+                    dense
+                    flat
+                    hide-details
+                    placeholder="how much yolo'd?"
+                    style="width: 150px"
+                    :value="formatDollars(item.spent)"
+                    @change="onChangeSpent($event, item.id)"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  v-if="amountToSpend && typeof item.spent !== 'undefined'"
+                  class="py-0 pr-0 pl-3 text-caption green--text"
+                >
+                  ({{ formatDollars(yoloYolod(item)) }})
+                </v-col>
+              </template>
+              <template v-slot:item.costAverage="{ item }">
+                <template v-if="
+                  !isNaN(item.costAverage)
+                  && typeof item.costAverage !== 'undefined'
+                ">
+                  <v-col class="pa-0">
+                    {{ formatDollars(item.costAverage, isFlexible=true) }}
+                  </v-col>
+                  <v-col
+                    v-if="amountToSpend && item.currentPrice"
+                    :class="[
+                      'pa-0', 'text-caption',
+                      { 'green--text': item.costAverage > yoloCostAverage(item) },
+                      { 'red--text': item.costAverage < yoloCostAverage(item) }
+                    ]"
+                  >
+                    <span v-if="item.spent > 0">
+                      ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }},
+                       {{ getYoloCostAverageDiffPct(item) }})
+                    </span>
+                    <span v-else>
+                      ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }})
+                    </span>
+                  </v-col>
+                </template>
+                <template v-else>
+                  <InfoTooltip
+                    icon="mdi-help"
+                    position="top"
+                    :text="tooltipText['costAverageBlank']"
+                  />
+                </template>
+              </template>
+              <template v-slot:item.currentPrice="{ item }">
+                <template v-if="typeof item.currentPrice !== 'undefined'">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span
+                        v-bind="attrs"
+                        v-on="on"
+                      >{{ formatDollars(item.currentPrice, isFlexible=true) }}</span>
+                    </template>
+                    <span>{{ item.currentPrice }}</span>
+                  </v-tooltip>
+                </template>
+                <template v-else>
+                  <InfoTooltip
+                    icon="mdi-help"
+                    position="top"
+                    :text="tooltipText['currentPriceBlank']"
+                  />
+                </template>
+              </template>
+              <template v-slot:item.costAverageDiff="{ item }">
+                <template v-if="typeof item.costAverageDiff !== 'undefined'">
+                  <BuyTheDip :coin=item />
+                </template>
+                <template v-else>
+                  <InfoTooltip
+                    icon="mdi-help"
+                    position="top"
+                    :text="tooltipText['costAverageDiffBlank']"
+                  />
+                </template>
+              </template>
+              <template v-slot:item.badges="{ item }">
+                  <InfoTooltip
+                    v-if="item.badges && item.badges.includes('bang')"
+                    icon="mdi-currency-usd"
+                    icon-size="x-large"
+                    icon-color="green"
+                    position="top"
+                    :text="tooltipText['badges']['bang']"
+                  />
+                  <InfoTooltip
+                    v-if="item.badges && item.badges.includes('dipper')"
+                    icon="mdi-star"
+                    icon-size="x-large"
+                    icon-color="yellow darken-1"
+                    position="top"
+                    :text="tooltipText['badges']['dipper']"
+                  />
+                  <InfoTooltip
+                    v-if="item.badges && item.badges.includes('moon')"
+                    icon="mdi-rocket-launch"
+                    icon-size="x-large"
+                    icon-color="blue"
+                    position="top"
+                    :text="tooltipText['badges']['moon']"
+                  />
+              </template>
+              <template v-slot:item.menu="{ item }">
+                <v-col class="pa-0 col-menu">
+                  <CoinActionMenu :coin=item />
+                </v-col>
+              </template>
 
-        </v-data-table>
+              <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                  <CoinChart :coin=item />
+                </td>
+              </template>
+
+            </v-data-table>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -250,13 +289,13 @@ export default {
   data: () => ({
     headers: [
       { text: "Name", value: "name", width: 230 },
-      { text: "HODLs", value: "qty", filterable: false },
-      { text: "YOLO'd", value: "spent", filterable: false },
-      { text: "Cost Average", value: "costAverage", filterable: false },
-      { text: "Current Price", value: "currentPrice", filterable: false },
+      { text: "HODLs", value: "qty", filterable: false, width: 180 },
+      { text: "YOLO'd", value: "spent", filterable: false, width: 180 },
+      { text: "Cost Average", value: "costAverage", filterable: false, width: 180 },
+      { text: "Current Price", value: "currentPrice", filterable: false, width: 140 },
       { text: "Buy The Dip?", value: "costAverageDiff", filterable: false, width: 140 },
       { text: "", value: "badges", sortable: false, filterable: false, width: 80 },
-      { text: "", value: "menu", sortable: false, filterable: false },
+      { text: "", value: "menu", sortable: false, filterable: false, align: "center", width: 70 },
     ],
     showOnlyDips: false,
     tooltipText: {
@@ -270,6 +309,7 @@ export default {
       costAverageDiff: "Current Price relative to your Cost Average",
       costAverageDiffBlank: "Missing Cost Average",
       currentPrice: "Use the refresh button above to update this (Prices in USD)",
+      currentPriceBlank: "Refresh prices to see this",
       spent: "The amount you have spent on this coin in total",
       qty: "The amount of this coin that you have in total"
     }
@@ -296,6 +336,7 @@ export default {
     ]),
     ...mapMutations([
       'addCoinList',
+      'setCoins',
       'setTableOptions',
       'updateCoin',
     ]),
@@ -310,6 +351,10 @@ export default {
     getCoinPageUrl(coin) {
       return `${config['CMC']['coinPageBaseUrl']}/${coin.name.toLowerCase().split().join('-')}`
     },
+    getYoloCostAverageDiffPct(coin) {
+      const diff = ((this.yoloCostAverage(coin) - coin.costAverage) / coin.costAverage * 100).toFixed(2)
+      return diff > 0 ? `+${diff}%` : `${diff}%`
+    },
     onChangeQty(value, id) {
       const n = parseFloat(value.replace(',', ''))
       this.updateCoin({
@@ -323,6 +368,9 @@ export default {
         id,
         spent: isNaN(n) ? undefined : n
       })
+    },
+    onClickClearList() {
+      this.setCoins([])
     },
     onUpdateTable(options) {
       this.setTableOptions(options)

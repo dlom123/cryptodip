@@ -5,7 +5,7 @@
         {{
         coin.costAverageDiff !== 0
         ? `${Math.abs(coin.costAverageDiff).toFixed(2)}%`
-        : "n/a"
+        : undefined
         }}
     </v-col>
 </template>
