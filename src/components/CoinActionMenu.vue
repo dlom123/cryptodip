@@ -9,6 +9,7 @@
                 x-small
                 text
                 plain
+                tabindex="-1"
                 v-bind="attrs"
                 v-on="on"
             >
