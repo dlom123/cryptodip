@@ -174,11 +174,13 @@ export default {
 
         let csv = "Id,Coin Name,Symbol,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip\n"
         this.coinLists[this.selectedCoinList].forEach(coin => {
+            const qty = coin.qty ? coin.qty : ""
+            const spent = coin.spent ? coin.spent : ""
             const costAverage = coin.costAverage ? coin.costAverage : ""
             const currentPrice = coin.currentPrice ? coin.currentPrice : ""
             const costAverageDiff = coin.costAverageDiff ? coin.costAverageDiff : ""
 
-            csv += `${coin.id},${coin.name},${coin.symbol},${coin.qty},${coin.spent}`
+            csv += `${coin.id},${coin.name},${coin.symbol},${qty},${spent}`
             csv += `,${costAverage},${currentPrice},${costAverageDiff}\n`
         })
 
@@ -200,8 +202,8 @@ export default {
                 name: cols[1],
                 symbol: cols[2],
                 icon: `${config['CMC']['coinImgBaseUrl']}/${cols[0]}.png`,
-                qty: parseFloat(cols[3]),
-                spent: parseFloat(cols[4]),
+                qty: cols[3] ? parseFloat(cols[3]) : undefined,
+                spent: cols[4] ? parseFloat(cols[4]) : undefined,
             }
             if (csvCoin.qty && csvCoin.spent) {
                 csvCoin['costAverage'] = csvCoin.spent / csvCoin.qty
