@@ -14,6 +14,11 @@ export default {
       commit('updateCoin', coin)
     })
   },
+  checkBackEndApiKey: async ({ commit }) => {
+    const response = await fetch(`${config['endpoints']['hasKey']}`)
+    const data = await response.json()
+    commit('setHasBackEndApiKey', data['hasKey'])
+  },
   deleteCoin: ({ commit, state }, coin) => {
     commit('removeCoin', coin)
     if (coin.badges.length > 0) {

@@ -1,5 +1,5 @@
 <template>
-    <v-container class="mt-4">
+    <v-container fluid class="mt-4">
         <v-row>
             <v-col>
                 <span class="text-h3 font-weight-bold">

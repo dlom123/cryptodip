@@ -20,6 +20,7 @@ export default createStore(Vuex.Store, {
     amountToSpend: null,
     cmcApi: {},
     coinLists: {},
+    hasBackEndApiKey: false,
     searchValue: null,
     selectedCoins: [],
     selectedCoinList: "Dips",

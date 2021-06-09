@@ -8,6 +8,7 @@ const config = {
         coinImgBaseUrl: 'https://s2.coinmarketcap.com/static/img/coins/64x64'
     },
     endpoints: {
+        hasKey: `${APIBaseUrl}/has-key`,
         info: `${APIBaseUrl}/info`,
         prices: `${APIBaseUrl}/prices`,
         syncCoins: `${APIBaseUrl}/sync_coins`

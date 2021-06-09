@@ -1,4 +1,4 @@
-export function formatDollars(n, isFlexible=false) {
+function getNumDecimals(n, isFlexible=false) {
     if (typeof n !== 'undefined' && n !== null) {
         const nSplit = n.toString().replace(/[$,]/g, '').split(".")
         let numDecimals = n < 1.0 ? 4 : 2
@@ -10,18 +10,27 @@ export function formatDollars(n, isFlexible=false) {
             numDecimals += numLeadingZeros
         }
 
+        return numDecimals
+    }
+}
+
+export function formatDollars(n, isFlexible=false) {
+    if (typeof n !== 'undefined' && n !== null) {
+        const numDecimals = getNumDecimals(n, isFlexible)
+
         return n.toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD',
             maximumFractionDigits: numDecimals
         })
-      }
+    }
 }
 
-export function formatNumber(n) {
+export function formatNumber(n, isFlexible=false) {
     if (typeof n !== 'undefined') {
+        const numDecimals = getNumDecimals(n, isFlexible)
         return parseFloat(n).toLocaleString("en-US", {
-            maximumFractionDigits: 8
+            maximumFractionDigits: numDecimals
         })
     }
 }

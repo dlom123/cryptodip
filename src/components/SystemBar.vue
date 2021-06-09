@@ -1,6 +1,11 @@
 <template>
   <v-system-bar height="50" color="primary" lights-out>
-    <v-col cols="3" class="pa-0">
+    <v-col
+      cols="3"
+      offset-lg="1"
+      offset-xl="2"
+      class="pa-0"
+    >
       <v-text-field
         dense
         outlined
