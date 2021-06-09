@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import FaqDialog from '@/components/FaqDialog'
 import IconLegendDialog from '@/components/IconLegendDialog'
 
@@ -45,17 +45,27 @@ export default {
         FaqDialog,
         IconLegendDialog
     },
+    computed: {
+        ...mapState([
+            'hasBackEndApiKey'
+        ])
+    },
     methods: {
         ...mapMutations([
-            'addCoinList'
+            'addCoinList',
+            'setHasBackEndApiKey'
         ]),
         onClickForgetMe() {
             // clear app information from localStorage and reset state to initial values
             window.localStorage.removeItem('vuex-cryptodip')
+            // preserve setting for displaying API system bar
+            const hasApiKey = this.hasBackEndApiKey
             // store reset functionality enabled by vuex-extensions package
             this.$store.reset()
             // restore the default coin list
             this.addCoinList("Dips")
+            // restore setting for displaying API system bar
+            this.setHasBackEndApiKey(hasApiKey)
         }
     }
 }

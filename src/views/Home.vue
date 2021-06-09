@@ -319,6 +319,7 @@ export default {
       'allCoins',
       'amountToSpend',
       'coinLists',
+      'hasBackEndApiKey',
       'searchValue',
       'selectedCoinList',
       'tableOptions'
@@ -390,7 +391,7 @@ export default {
     if (Object.keys(this.coinLists).length === 0) {
       this.addCoinList("Dips")
     }
-    if (this.allCoins.length === 0) {
+    if (this.allCoins.length === 0 && this.hasBackEndApiKey) {
       this.syncCoins()
     }
   }
