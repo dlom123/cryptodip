@@ -308,8 +308,8 @@ export default {
       costAverageBlank: "Fill in HODLs and YOLO'd to calculate cost average",
       costAverageDiff: "Current Price relative to your Cost Average",
       costAverageDiffBlank: "Missing Cost Average",
-      currentPrice: "Use the refresh button above to update this (Prices in USD)",
-      currentPriceBlank: "Refresh prices to see this",
+      currentPrice: "Use the Refresh Current Price button above to update this (prices in USD)",
+      currentPriceBlank: "Refresh Current Prices to see this",
       spent: "The amount you have spent on this coin in total",
       qty: "The amount of this coin that you have in total"
     }

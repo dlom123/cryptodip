@@ -92,28 +92,28 @@ export default {
                     name: "mdi-refresh",
                     color: "green",
                     title: "Refresh Data Button",
-                    description: "Use this button on the home page to retrieve the latest coin prices, or within the Add Coins dialog to retrieve an updated list of all available coins"
+                    description: "Use this button on the main page to retrieve the latest coin prices, or within the Add Coins dialog to retrieve an updated list of all available coins"
                 },
                 { divider: true },
                 {
                     name: "mdi-pencil-circle",
                     color: "blue",
-                    title: "Edit Coin List Button",
-                    description: "Use this button to add and remove coins from your list"
+                    title: "Add Coins Button",
+                    description: "Use this button to add and remove coins from a list"
                 },
                 { divider: true },
                 {
                     name: "mdi-file-download",
                     color: "blue",
                     title: "Export CSV Button",
-                    description: "Download your data in CSV format"
+                    description: "Download coin list data in CSV format"
                 },
                 { divider: true },
                 {
                     name: "mdi-file-upload",
                     color: "blue",
                     title: "Import CSV Button",
-                    description: "Upload your data from a CSV file"
+                    description: "Upload coin list data from a CSV file"
                 },
                 { divider: true },
                 {
