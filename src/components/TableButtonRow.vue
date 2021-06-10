@@ -99,14 +99,21 @@
             </v-text-field>
         </v-col>
         <v-col align="right">
-            <v-btn
-                fab dark outlined color="green"
-                class="mr-6"
-                :disabled="coinLists[selectedCoinList].length === 0"
-                @click="getCurrentPrices"
-            >
-                <v-icon>mdi-refresh</v-icon>
-            </v-btn>
+            <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        fab dark outlined color="green"
+                        class="mr-6"
+                        v-bind="attrs"
+                        v-on="on"
+                        :disabled="coinLists[selectedCoinList].length === 0"
+                        @click="getCurrentPrices"
+                    >
+                        <v-icon>mdi-refresh</v-icon>
+                    </v-btn>
+                </template>
+                <span>Refresh Current Price</span>
+            </v-tooltip>
             <AddCoinsDialog />
         </v-col>
     </v-row>
@@ -126,6 +133,7 @@ export default {
     InfoTooltip
   },
   data: () => ({
+    showAddCoinsDialog: false,
     tooltipText: {
         yolo: "The amount available to spend on a single coin"
     }

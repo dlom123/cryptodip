@@ -4,14 +4,20 @@
     persistent
     max-width="500px"
   >
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn fab dark color="primary"
-        v-bind="attrs"
-        v-on="on"
-        @click="openDialog"
-      >
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
+    <template v-slot:activator="{ on:dialog, attrs }">
+      <v-tooltip top>
+        <template v-slot:activator="{ on:tooltip }">
+          <v-btn fab dark color="primary"
+            v-bind="attrs"
+            v-on="{ ...tooltip, ...dialog }"
+            v-blur
+            @click.stop="openDialog"
+          >
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+        </template>
+        <span>Add Coins</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title>
@@ -135,6 +141,7 @@ export default {
     },
     openDialog() {
       this.selectedCoins = this.coinLists[this.selectedCoinList].map(coin => coin.id)
+      this.showDialog = true
     },
     remove(item) {
       this.selectedCoins = this.selectedCoins.filter(coinId => coinId !== item.id)
