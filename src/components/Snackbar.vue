@@ -6,7 +6,7 @@
         color="red"
     >
         <span class="font-weight-bold">
-            Missing or invalid CoinMarketCap API Key
+            {{ snackbarMessage }}
         </span>
         <template v-slot:action="{ attrs }">
             <v-btn
@@ -26,8 +26,12 @@ import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "Snackbar",
+  props: ['msg'],
   computed: {
-    ...mapState(["showSnackbar"]),
+    ...mapState([
+      "showSnackbar",
+      "snackbarMessage"
+    ]),
     isShowing: {
       get() {
         return this.showSnackbar;

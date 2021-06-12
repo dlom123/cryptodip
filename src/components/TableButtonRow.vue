@@ -99,21 +99,7 @@
             </v-text-field>
         </v-col>
         <v-col align="right">
-            <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        fab dark outlined color="green"
-                        class="mr-6"
-                        v-bind="attrs"
-                        v-on="on"
-                        :disabled="coinLists[selectedCoinList].length === 0"
-                        @click="getCurrentPrices"
-                    >
-                        <v-icon>mdi-refresh</v-icon>
-                    </v-btn>
-                </template>
-                <span>Refresh Current Price</span>
-            </v-tooltip>
+            <span class="mr-6"><RefreshPricesButton /></span>
             <AddCoinsDialog />
         </v-col>
     </v-row>
@@ -123,6 +109,7 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 import AddCoinsDialog from '@/components/AddCoinsDialog.vue'
 import InfoTooltip from '@/components/InfoTooltip.vue'
+import RefreshPricesButton from '@/components/RefreshPricesButton.vue'
 import { formatDollars } from '@/utils/functions'
 import config from '@/config'
 
@@ -130,10 +117,10 @@ export default {
   name: 'TableButtonRow',
   components: {
     AddCoinsDialog,
-    InfoTooltip
+    InfoTooltip,
+    RefreshPricesButton
   },
   data: () => ({
-    showAddCoinsDialog: false,
     tooltipText: {
         yolo: "The amount available to spend on a single coin"
     }

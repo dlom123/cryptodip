@@ -22,18 +22,24 @@
             class="pa-0"
         >
             <v-list-item
-                ref="actionListItem"
-                v-for="(menuItem, i) in menuItems"
-                :key="i"
                 class="coin-action-menu-item"
-                @click.stop="onClickAction(menuItem)"
+                @click.stop="onClickDipAlert"
             >
                 <v-list-item-content>
-                    <v-list-item-title v-text="menuItem.title"></v-list-item-title>
+                    <v-list-item-title>Dip Alert</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-list-item
+                class="coin-action-menu-item"
+                @click.stop="onClickDelete"
+            >
+                <v-list-item-content>
+                    <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
         </v-list>
         <DipAlertDialog
+            :reRender=dialogKey
             :showDialog=showDipAlertDialog
             :closeDialog=closeDialog
             :coin=coin
@@ -54,10 +60,7 @@ export default {
         DipAlertDialog
     },
     data: () => ({
-        menuItems: [
-            // { title: 'Dip Alert', action: 'alert' },
-            { title: 'Delete', action: 'delete' }
-        ],
+        dialogKey: null,
         showDipAlertDialog: false,
         showMenu: false
     }),
@@ -68,16 +71,14 @@ export default {
         closeDialog() {
             this.showDipAlertDialog = false
         },
-        onClickAction(menuItem) {
+        onClickDelete() {
             this.showMenu = false
-            switch (menuItem.action) {
-                case 'alert':
-                    this.showDipAlertDialog = true
-                    break
-                case 'delete':
-                    this.deleteCoin(this.coin)
-                    break
-            }
+            this.deleteCoin(this.coin)
+        },
+        onClickDipAlert() {
+            this.dialogKey = Math.random()
+            this.showMenu = false
+            this.showDipAlertDialog = true
         }
     }
 }
