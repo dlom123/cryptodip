@@ -30,6 +30,7 @@
               :items-per-page="Math.max(allCoins.length, coinLists[selectedCoinList].length)"
               :options="tableOptions"
               :custom-filter="coinFilter"
+              :item-class="itemRowClass"
               class="elevation-2"
               @update:options="onUpdateTable"
             >
@@ -222,6 +223,7 @@
                 </template>
               </template>
               <template v-slot:item.badges="{ item }">
+                <v-col class="pa-0">
                   <InfoTooltip
                     v-if="item.badges && item.badges.includes('bang')"
                     icon="mdi-currency-usd"
@@ -246,6 +248,21 @@
                     position="top"
                     :text="tooltipText['badges']['moon']"
                   />
+                </v-col>
+                <v-col v-if="coinHasAlert(item)" class="pa-0">
+                  <v-chip
+                    small
+                  >
+                    <v-icon small left>mdi-alarm</v-icon>
+                    {{ getAlertDisplayValues(item) }}
+                    <v-icon
+                      small
+                      right
+                      color="red"
+                      @click="onClickRemoveAlert(item)"
+                    >mdi-close-circle</v-icon>
+                  </v-chip>
+                </v-col>
               </template>
               <template v-slot:item.menu="{ item }">
                 <v-col class="pa-0 col-menu">
@@ -274,8 +291,9 @@ import CoinActionMenu from '@/components/CoinActionMenu.vue'
 import CoinChart from '@/components/CoinChart.vue'
 import InfoTooltip from '@/components/InfoTooltip.vue'
 import TableButtonRow from '@/components/TableButtonRow.vue'
-import { formatDollars, formatNumber } from '@/utils/functions'
+import { formatDollars, formatNumber, formatPercentage } from '@/utils/functions'
 import config from '@/config'
+import { tooltipText } from '@/utils/constants'
 
 export default {
   name: 'Home',
@@ -298,21 +316,7 @@ export default {
       { text: "", value: "menu", sortable: false, filterable: false, align: "center", width: 70 },
     ],
     showOnlyDips: false,
-    tooltipText: {
-      badges: {
-        "bang": "Best Bang for the Buck",
-        "dipper": "Big Dipper",
-        "moon": "To the Moon!"
-      },
-      costAverage: "Your average price paid per coin",
-      costAverageBlank: "Fill in HODLs and YOLO'd to calculate cost average",
-      costAverageDiff: "Current Price relative to your Cost Average",
-      costAverageDiffBlank: "Missing Cost Average",
-      currentPrice: "Use the Refresh Current Price button above to update this (prices in USD)",
-      currentPriceBlank: "Refresh Current Prices to see this",
-      spent: "The amount you have spent on this coin in total",
-      qty: "The amount of this coin that you have in total"
-    }
+    tooltipText
   }),
   computed: {
     ...mapState([
@@ -337,6 +341,7 @@ export default {
     ]),
     ...mapMutations([
       'addCoinList',
+      'removeCoinAlert',
       'setCoins',
       'setTableOptions',
       'updateCoin',
@@ -347,14 +352,48 @@ export default {
         && (value.toLowerCase().indexOf(search.toLowerCase()) !== -1
           || item.symbol.toLowerCase().indexOf(search.toLowerCase()) !== -1)
     },
+    coinHasAlert(coin) {
+      return (Object.prototype.hasOwnProperty.call(coin.alerts, 'currentPrice') && coin.alerts.currentPrice)
+        || (Object.prototype.hasOwnProperty.call(coin.alerts, 'buyTheDip') && coin.alerts.buyTheDip)
+    },
     formatDollars,
     formatNumber,
+    formatPercentage,
+    getAlertDisplayValues(coin) {
+      let s = ""
+      if (coin.alerts.currentPrice) {
+        s += formatDollars(coin.alerts.currentPrice)
+        if (coin.alerts.buyTheDip) {
+          s += "/"
+        }
+      }
+      if (coin.alerts.buyTheDip) {
+        s += formatPercentage(coin.alerts.buyTheDip)
+      }
+
+      return s
+    },
     getCoinPageUrl(coin) {
       return `${config['CMC']['coinPageBaseUrl']}/${coin.name.toLowerCase().split().join('-')}`
     },
     getYoloCostAverageDiffPct(coin) {
       const diff = ((this.yoloCostAverage(coin) - coin.costAverage) / coin.costAverage * 100).toFixed(2)
       return diff > 0 ? `+${diff}%` : `${diff}%`
+    },
+    itemRowClass(coin) {
+      const styles = []
+      // apply styles for "alert triggered"
+      if (
+        (Object.prototype.hasOwnProperty.call(coin.alerts, 'buyTheDip')
+        && coin.costAverageDiff > coin.alerts.buyTheDip)
+        ||
+        (Object.prototype.hasOwnProperty.call(coin.alerts, 'currentPrice')
+        && coin.currentPrice < coin.alerts.currentPrice)
+      ) {
+        styles.push('alert-triggered')
+      }
+
+      return styles
     },
     onChangeQty(value, id) {
       const n = parseFloat(value.replace(',', ''))
@@ -372,6 +411,9 @@ export default {
     },
     onClickClearList() {
       this.setCoins([])
+    },
+    onClickRemoveAlert(coin) {
+      this.removeCoinAlert({ coinId: coin.id })
     },
     onUpdateTable(options) {
       this.setTableOptions(options)

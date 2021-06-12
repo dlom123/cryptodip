@@ -17,6 +17,18 @@ export default {
     removeCoin: (state, payload) => {
         state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].filter(coin => coin.id !== payload.id)
     },
+    removeCoinAlert: (state, payload) => {
+        state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
+            if (coin.id === payload.coinId) {
+                const updatedCoin = {
+                    ...coin,
+                    alerts: {}
+                }
+                return updatedCoin
+            }
+            return coin
+        })
+    },
     removeCoinList: (state, payload) => {
         Vue.delete(state.coinLists, payload)
     },
@@ -28,6 +40,20 @@ export default {
     },
     setCmcApi: (state, payload) => {
         state.cmcApi = payload
+    },
+    setCoinAlerts: (state, payload) => {
+        state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
+            if (coin.id === payload.coinId) {
+                const updatedCoin = {
+                    ...coin,
+                    alerts: {
+                        ...payload.alerts
+                    }
+                }
+                return updatedCoin
+            }
+            return coin
+        })
     },
     setCoins: (state, payload) => {
         state.coinLists[state.selectedCoinList] = payload
@@ -43,6 +69,9 @@ export default {
     },
     setShowSnackbar: (state, payload) => {
         state.showSnackbar = payload
+    },
+    setSnackbarMessage: (state, payload) => {
+        state.snackbarMessage = payload
     },
     setTableOptions: (state, payload) => {
         state.tableOptions = payload
@@ -60,6 +89,7 @@ export default {
         let moonCoin = undefined  // "To the Moon!"
 
         state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
+            coin.alerts = { ...coin.alerts }
             coin.badges = []
 
             let updatedCoin = {

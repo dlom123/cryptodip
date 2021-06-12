@@ -1,5 +1,8 @@
 import config from '@/config'
 
+const MSG_MISSING_KEY = 'Missing or invalid CoinMarketCap API Key'
+const MSG_TOO_MANY_REQUESTS = 'CoinMarketCap API request limit reached'
+
 export default {
   addCoins: ({ commit, state }, coinIds) => {
     commit('mergeCoins', coinIds)
@@ -59,9 +62,11 @@ export default {
       }
     }
   },
-  getCurrentPrices: async ({ commit, state }) => {
+  getCurrentPrices: async ({ commit, dispatch, state }, payload) => {
     const searchParams = new URLSearchParams()
-    const coinIds = state.coinLists[state.selectedCoinList].map(coin => coin['id'])
+    const coinIds = payload && Object.prototype.hasOwnProperty.call(payload, 'length') && payload.length > 0
+      ? payload
+      : state.coinLists[state.selectedCoinList].map(coin => coin['id'])
     searchParams.append('coinIds', coinIds)
 
     const headers = {}
@@ -97,14 +102,17 @@ export default {
         }
       })
 
+      await dispatch('getCmcApiInfo', state.cmcApi.key)
       commit('setCoins', updatedCoins)
       updatedCoins.forEach(updatedCoin => {
         commit('updateCoin', updatedCoin)
       })
-    } else {
-      if (response.status === 401) {
-        commit('setShowSnackbar', true)
-      }
+    } else if (response.status === 401) {
+      commit('setSnackbarMessage', MSG_MISSING_KEY)
+      commit('setShowSnackbar', true)
+    } else if (response.status === 429) {
+      commit('setSnackbarMessage', MSG_TOO_MANY_REQUESTS)
+      commit('setShowSnackbar', true)
     }
   },
   syncCoins: async ({ commit, dispatch, state }) => {
@@ -123,12 +131,14 @@ export default {
     if (response.ok) {
       var allCoins = await response.json()
       // update API usage data
-      await dispatch('getCmcApiInfo')
+      await dispatch('getCmcApiInfo', state.cmcApi.key)
       commit('setAllCoins', allCoins)
-    } else {
-      if (response.status === 401) {
-        commit('setShowSnackbar', true)
-      }
+    } else if (response.status === 401) {
+      commit('setSnackbarMessage', MSG_MISSING_KEY)
+      commit('setShowSnackbar', true)
+    } else if (response.status === 429) {
+      commit('setSnackbarMessage', MSG_TOO_MANY_REQUESTS)
+      commit('setShowSnackbar', true)
     }
   }
 }

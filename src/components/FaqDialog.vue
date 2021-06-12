@@ -143,6 +143,24 @@
                                 <v-expansion-panel class="mb-2">
                                     <v-expansion-panel-header color="primary">
                                         <span class="text-h6 white--text">
+                                            How accurate are the prices?
+                                        </span>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-col class="pt-5">
+                                            <p>
+                                                Displayed prices are approximate.
+                                            </p>
+                                            <p>
+                                                Hovering over the Current Price for a coin will display the exact amount as
+                                                retrieved from CoinMarketCap.
+                                            </p>
+                                        </v-col>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel class="mb-2">
+                                    <v-expansion-panel-header color="primary">
+                                        <span class="text-h6 white--text">
                                             What is the YOLO input for?
                                         </span>
                                     </v-expansion-panel-header>
@@ -165,17 +183,28 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            Everything is stored in your browser's Local Storage. The only data that is ever
-                                            transmitted over the network is the list of available coins and their current
-                                            prices, which both come from
-                                            <a
-                                                title="CoinMarketCap"
-                                                href="https://coinmarketcap.com/"
-                                                target="_blank"
-                                            >CoinMarketCap</a>.
-                                            Your personal coin information is never sent over the network. Clear your Local
-                                            Storage and it's like you were never here!
+                                        <v-col class="pt-5 pb-0">
+                                            <p>Everything is stored in your browser's Local Storage.</p>
+                                            <p>Data transmitted over the network include:
+                                                <ul>
+                                                    <li>CoinMarketCap API key, if entered into the app's API bar.<sup><em>*</em></sup></li>
+                                                    <li>List of available coins and their prices (from
+                                                        <a
+                                                            title="CoinMarketCap"
+                                                            href="https://coinmarketcap.com/"
+                                                            target="_blank"
+                                                        >CoinMarketCap</a>)
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                            <p>
+                                            Your personal coin information is never sent over the network. Clear your browser's
+                                            Local Storage manually or by using the Forget Me button and it's like you were never
+                                            here!</p>
+                                            <p>
+                                                <em><sup>*</sup> The API bar only appears on self-hosted instances of CryptoDip
+                                                when no CoinMarketCap API key has been supplied on the server-side.</em>
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>

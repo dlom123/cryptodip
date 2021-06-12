@@ -73,9 +73,13 @@ export default {
     },
     apiResetDay() {
       if (
-        !this.cmcApi.key ||
-        !Object.prototype.hasOwnProperty.call(
+        !this.cmcApi.key
+        || !Object.prototype.hasOwnProperty.call(
           this.cmcApi,
+          "plan"
+        )
+        || !Object.prototype.hasOwnProperty.call(
+          this.cmcApi.plan,
           "credit_limit_daily_reset"
         )
       ) {
@@ -87,9 +91,13 @@ export default {
     },
     apiResetMonth() {
       if (
-        !this.cmcApi.key ||
-        !Object.prototype.hasOwnProperty.call(
+        !this.cmcApi.key
+        || !Object.prototype.hasOwnProperty.call(
           this.cmcApi,
+          "plan"
+        )
+        || !Object.prototype.hasOwnProperty.call(
+          this.cmcApi.plan,
           "credit_limit_monthly_reset"
         )
       ) {
