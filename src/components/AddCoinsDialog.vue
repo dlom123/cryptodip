@@ -22,16 +22,23 @@
     <v-card>
       <v-card-title>
         <span class="headline">Add Coins</span>
-        <v-btn
-          fab dark outlined
-          x-small
-          right
-          color="green"
-          class="ml-4"
-          @click="syncCoins"
-        >
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
+        <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                fab dark outlined
+                x-small
+                right
+                color="green"
+                class="ml-4"
+                v-bind="attrs"
+                v-on="on"
+                @click="syncCoins"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>Refresh Coin List</span>
+        </v-tooltip>
         <v-btn text plain x-small absolute right @click="closeDialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
