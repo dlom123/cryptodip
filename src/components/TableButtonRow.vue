@@ -167,16 +167,24 @@ export default {
             .split(/:| /)
         const filename = `cryptodip_${this.selectedCoinList.toLowerCase()}_${year}${month}${date}${hour}${minute}${second}.csv`
 
-        let csv = "Id,Coin Name,Symbol,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip\n"
+        let csv = "Id,Coin Name,Symbol,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip"
+        csv += ",Alert Current Price,Alert Buy The Dip\n"
         this.coinLists[this.selectedCoinList].forEach(coin => {
             const qty = coin.qty ? coin.qty : ""
             const spent = coin.spent ? coin.spent : ""
             const costAverage = coin.costAverage ? coin.costAverage : ""
             const currentPrice = coin.currentPrice ? coin.currentPrice : ""
             const costAverageDiff = coin.costAverageDiff ? coin.costAverageDiff : ""
+            const alertCurrentPrice = Object.prototype.hasOwnProperty.call(coin.alerts, 'currentPrice')
+                && typeof coin.alerts.currentPrice !== 'undefined'
+                    ? coin.alerts.currentPrice : ""
+            const alertBuyTheDip = Object.prototype.hasOwnProperty.call(coin.alerts, 'buyTheDip')
+                && typeof coin.alerts.buyTheDip !== 'undefined'
+                    ? coin.alerts.buyTheDip : ""
 
             csv += `${coin.id},${coin.name},${coin.symbol},${qty},${spent}`
-            csv += `,${costAverage},${currentPrice},${costAverageDiff}\n`
+            csv += `,${costAverage},${currentPrice},${costAverageDiff}`
+            csv += `,${alertCurrentPrice},${alertBuyTheDip}\n`
         })
 
         const anchor = document.createElement('a')
@@ -199,6 +207,10 @@ export default {
                 icon: `${config['CMC']['coinImgBaseUrl']}/${cols[0]}.png`,
                 qty: cols[3] ? parseFloat(cols[3]) : undefined,
                 spent: cols[4] ? parseFloat(cols[4]) : undefined,
+                alerts: {
+                    buyTheDip: parseFloat(cols[8]),
+                    currentPrice: parseFloat(cols[9])
+                }
             }
             if (csvCoin.qty && csvCoin.spent) {
                 csvCoin['costAverage'] = csvCoin.spent / csvCoin.qty
