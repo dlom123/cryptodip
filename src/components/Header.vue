@@ -9,6 +9,9 @@
                 <p class="ml-11 text--secondary">See the dip. Buy the dip.</p>
             </v-col>
             <v-spacer></v-spacer>
+            <v-col v-if="nowApiKey" align="end">
+                <DonateButton />
+            </v-col>
             <v-col align="end">
                 <FaqDialog />
                 <IconLegendDialog />
@@ -36,18 +39,21 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
+import DonateButton from '@/components/DonateButton'
 import FaqDialog from '@/components/FaqDialog'
 import IconLegendDialog from '@/components/IconLegendDialog'
 
 export default {
     name: 'Header',
     components: {
+        DonateButton,
         FaqDialog,
         IconLegendDialog
     },
     computed: {
         ...mapState([
-            'hasBackEndApiKey'
+            'hasBackEndApiKey',
+            'nowApiKey'
         ])
     },
     methods: {

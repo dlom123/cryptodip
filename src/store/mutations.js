@@ -61,6 +61,9 @@ export default {
     setHasBackEndApiKey: (state, payload) => {
         state.hasBackEndApiKey = payload
     },
+    setNowApiKey: (state, payload) => {
+        state.nowApiKey = payload
+    },
     setSearchValue: (state, payload) => {
         state.searchValue = payload
     },

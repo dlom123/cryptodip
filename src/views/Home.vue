@@ -381,13 +381,17 @@ export default {
       return diff > 0 ? `+${diff}%` : `${diff}%`
     },
     itemRowClass(coin) {
-      const styles = []
+      let styles = []
       // apply styles for "alert triggered"
       if (
         (Object.prototype.hasOwnProperty.call(coin.alerts, 'buyTheDip')
+        && !(typeof coin.alerts.buyTheDip === 'undefined')
+        && coin.alerts.buyTheDip !== null
         && coin.costAverageDiff > coin.alerts.buyTheDip)
         ||
         (Object.prototype.hasOwnProperty.call(coin.alerts, 'currentPrice')
+        && !(typeof coin.alerts.currentPrice === 'undefined')
+        && coin.alerts.currentPrice !== null
         && coin.currentPrice < coin.alerts.currentPrice)
       ) {
         styles.push('alert-triggered')

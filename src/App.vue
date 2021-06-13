@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import Footer from '@/components/Footer.vue'
 import Header from '@/components/Header.vue'
 import Snackbar from '@/components/Snackbar.vue'
@@ -44,10 +44,14 @@ export default {
   methods: {
     ...mapActions([
       'checkBackEndApiKey'
+    ]),
+    ...mapMutations([
+      'setNowApiKey'
     ])
   },
   created() {
     this.checkBackEndApiKey()
+    this.setNowApiKey(process.env.VUE_APP_NOW_API_KEY)
   }
 }
 </script>
