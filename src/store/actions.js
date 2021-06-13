@@ -31,35 +31,31 @@ export default {
       })
     }
   },
-  getCmcApiInfo: async ({ commit }, apiKey) => {
-    if (!apiKey) {
-      commit('setCmcApi', {})
+  getCmcApiInfo: async ({ commit, state }) => {
+    const headers = {}
+    if (state.cmcApi.key) {
+      // if a CMC API key has been entered, pass it along to the back-end as a custom header
+      headers['X-CMC-API-Key'] = state.cmcApi.key
+    }
+    const response = await fetch(
+      `${config['endpoints']['info']}`,
+      {
+        headers
+      }
+    )
+    if (!response.ok) {
+      commit('setCmcApi', {
+        key: state.cmcApi.key,
+        isValid: false
+      })
     } else {
-      const headers = {}
-      if (apiKey) {
-        // if a CMC API key has been entered, pass it along to the back-end as a custom header
-        headers['X-CMC-API-Key'] = apiKey
-      }
-      const response = await fetch(
-        `${config['endpoints']['info']}`,
-        {
-          headers
-        }
-      )
-      if (!response.ok) {
-        commit('setCmcApi', {
-          key: apiKey,
-          isValid: false
-        })
-      } else {
-        var data = await response.json()
+      var data = await response.json()
 
-        commit('updateCmcApi', {
-          key: apiKey,
-          ...data,
-          isValid: true
-        })
-      }
+      commit('updateCmcApi', {
+        key: state.cmcApi.key,
+        ...data,
+        isValid: true
+      })
     }
   },
   getCurrentPrices: async ({ commit, dispatch, state }, payload) => {
@@ -102,7 +98,10 @@ export default {
         }
       })
 
-      await dispatch('getCmcApiInfo', state.cmcApi.key)
+      if (!state.hasBackEndApiKey) {
+        // only get API usage info if supplying an API key on the front-end
+        await dispatch('getCmcApiInfo')
+      }
       commit('setCoins', updatedCoins)
       updatedCoins.forEach(updatedCoin => {
         commit('updateCoin', updatedCoin)
@@ -130,8 +129,10 @@ export default {
     )
     if (response.ok) {
       var allCoins = await response.json()
-      // update API usage data
-      await dispatch('getCmcApiInfo', state.cmcApi.key)
+      if (!state.hasBackEndApiKey) {
+        // only get API usage info if supplying an API key on the front-end
+        await dispatch('getCmcApiInfo')
+      }
       commit('setAllCoins', allCoins)
     } else if (response.status === 401) {
       commit('setSnackbarMessage', MSG_MISSING_KEY)

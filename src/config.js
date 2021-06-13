@@ -13,6 +13,6 @@ const config = {
         prices: `${APIBaseUrl}/prices`,
         syncCoins: `${APIBaseUrl}/sync_coins`
     }
-};
+}
 
-module.exports = config;
+module.exports = config
