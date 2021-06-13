@@ -49,13 +49,29 @@
         </template>
         <span>{{ apiResetMonth }}</span>
       </v-tooltip>
+      <v-tooltip right>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            fab dark
+            x-small
+            right
+            color="green"
+            v-bind="attrs"
+            v-on="on"
+            @click="getCmcApiInfo"
+          >
+            <v-icon color="white">mdi-refresh</v-icon>
+          </v-btn>
+        </template>
+        <span>Refresh API Usage</span>
+      </v-tooltip>
     </v-col>
   </v-system-bar>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex";
-import { formatNumber } from "@/utils/functions";
+import { mapActions, mapMutations, mapState } from "vuex"
+import { formatNumber } from "@/utils/functions"
 
 export default {
   name: "SystemBar",
@@ -63,7 +79,10 @@ export default {
       showApiKey: false
   }),
   computed: {
-    ...mapState(["cmcApi"]),
+    ...mapState([
+      "cmcApi",
+      "hasBackEndApiKey"
+    ]),
     apiInputColor() {
       return Object.keys(this.cmcApi).length === 0
         ? "white"
@@ -83,11 +102,11 @@ export default {
           "credit_limit_daily_reset"
         )
       ) {
-        return "Enter a CoinMarketCap API key";
+        return "Enter a CoinMarketCap API key"
       }
       return `Resets ${this.cmcApi.plan[
         "credit_limit_daily_reset"
-      ].toLowerCase()}`;
+      ].toLowerCase()}`
     },
     apiResetMonth() {
       if (
@@ -101,46 +120,54 @@ export default {
           "credit_limit_monthly_reset"
         )
       ) {
-        return "Enter a CoinMarketCap API key";
+        return "Enter a CoinMarketCap API key"
       }
       return `Resets ${this.cmcApi.plan[
         "credit_limit_monthly_reset"
-      ].toLowerCase()}`;
+      ].toLowerCase()}`
     },
     apiUsageMinute() {
       if (Object.prototype.hasOwnProperty.call(this.cmcApi, "usage")) {
-        const usage = this.cmcApi.usage["current_minute"];
-        const quota = usage["requests_made"] + usage["requests_left"];
-        return `${formatNumber(usage["requests_made"])}/${formatNumber(quota)}`;
+        const usage = this.cmcApi.usage["current_minute"]
+        const quota = usage["requests_made"] + usage["requests_left"]
+        return `${formatNumber(usage["requests_made"])}/${formatNumber(quota)}`
       }
 
-      return "0/0";
+      return "0/0"
     },
     apiUsageDay() {
       if (Object.prototype.hasOwnProperty.call(this.cmcApi, "usage")) {
-        const usage = this.cmcApi.usage["current_day"];
-        const quota = usage["credits_used"] + usage["credits_left"];
-        return `${formatNumber(usage["credits_used"])}/${formatNumber(quota)}`;
+        const usage = this.cmcApi.usage["current_day"]
+        const quota = usage["credits_used"] + usage["credits_left"]
+        return `${formatNumber(usage["credits_used"])}/${formatNumber(quota)}`
       }
 
-      return "0/0";
+      return "0/0"
     },
     apiUsageMonth() {
       if (Object.prototype.hasOwnProperty.call(this.cmcApi, "usage")) {
-        const usage = this.cmcApi.usage["current_month"];
-        const quota = usage["credits_used"] + usage["credits_left"];
-        return `${formatNumber(usage["credits_used"])}/${formatNumber(quota)}`;
+        const usage = this.cmcApi.usage["current_month"]
+        const quota = usage["credits_used"] + usage["credits_left"]
+        return `${formatNumber(usage["credits_used"])}/${formatNumber(quota)}`
       }
 
-      return "0/0";
+      return "0/0"
     },
   },
   methods: {
-    ...mapActions(["getCmcApiInfo"]),
-    ...mapMutations(["setCmcApi"]),
+    ...mapActions([
+      "getCmcApiInfo"
+    ]),
+    ...mapMutations([
+      "updateCmcApi"
+    ]),
     updateApiKey(newApiKey) {
-      this.getCmcApiInfo(newApiKey);
+      this.updateCmcApi({ key: newApiKey })
+      if (!this.hasBackEndApiKey) {
+        // only get API usage info if supplying an API key on the front-end
+        this.getCmcApiInfo()
+      }
     },
-  },
-};
+  }
+}
 </script>

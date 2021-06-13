@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from "vuex"
 
 export default {
   name: "Snackbar",
@@ -34,15 +34,15 @@ export default {
     ]),
     isShowing: {
       get() {
-        return this.showSnackbar;
+        return this.showSnackbar
       },
       set(newValue) {
-        this.setShowSnackbar(newValue);
+        this.setShowSnackbar(newValue)
       },
     },
   },
   methods: {
     ...mapMutations(["setShowSnackbar"]),
   },
-};
+}
 </script>
