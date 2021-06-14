@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dev": "nodemon app.js",
-    "server": "node app.js"
+    "server": "node app.js",
+    "prod": "NODE_ENV=production node app.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
