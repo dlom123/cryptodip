@@ -6,13 +6,14 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev": "nodemon app.js",
-    "server": "node app.js",
-    "prod": "NODE_ENV=production node app.js"
+    "dev": "NODE_ENV=development nodemon app.js",
+    "server": "NODE_ENV=development node app.js",
+    "prod": "cross-env NODE_ENV=production node app.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
