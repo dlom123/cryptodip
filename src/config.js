@@ -1,5 +1,4 @@
-const APIPort = 3000
-const APIBaseUrl = `http://localhost:${APIPort}/api`
+const APIBaseUrl = process.env.VUE_APP_API_BASE_URL
 
 const config = {
     CMC: {
