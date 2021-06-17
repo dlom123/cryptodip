@@ -124,8 +124,8 @@
                     flat
                     hide-details
                     placeholder="how many hodls?"
-                    style="width: 150px;"
-                    :value="formatNumber(item.qty)"
+                    style="width: 120px;"
+                    :value="formatNumber(item.qty, isFlexible=false, fullPrecision=true)"
                     @change="onChangeQty($event, item.id)"
                   ></v-text-field>
                 </v-col>
@@ -133,7 +133,7 @@
                   v-if="amountToSpend && !isNaN(yoloHodls(item))"
                   class="py-0 pr-0 pl-3 text-caption green--text"
                 >
-                  ({{ formatNumber(yoloHodls(item)) }},
+                  ({{ formatNumber(yoloHodls(item), isFlexible=true) }},
                   {{ `+${formatNumber(yoloHodls(item) - item.qty, isFlexible=true)}` }})
                 </v-col>
               </template>
@@ -145,7 +145,7 @@
                     flat
                     hide-details
                     placeholder="how much yolo'd?"
-                    style="width: 150px"
+                    style="width: 140px"
                     :value="formatDollars(item.spent)"
                     @change="onChangeSpent($event, item.id)"
                   ></v-text-field>
@@ -307,9 +307,9 @@ export default {
   data: () => ({
     headers: [
       { text: "Name", value: "name", width: 230 },
-      { text: "HODLs", value: "qty", filterable: false, width: 180 },
-      { text: "YOLO'd", value: "spent", filterable: false, width: 180 },
-      { text: "Cost Average", value: "costAverage", filterable: false, width: 180 },
+      { text: "HODLs", value: "qty", filterable: false, width: 120 },
+      { text: "YOLO'd", value: "spent", filterable: false, width: 140 },
+      { text: "Cost Average", value: "costAverage", filterable: false, width: 150 },
       { text: "Current Price", value: "currentPrice", filterable: false, width: 140 },
       { text: "Buy The Dip?", value: "costAverageDiff", filterable: false, width: 140 },
       { text: "", value: "badges", sortable: false, filterable: false, width: 80 },
