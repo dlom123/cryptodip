@@ -51,6 +51,8 @@ npm run prod
 
 1. Either enter your CoinMarketCap API key into the API bar along the top of the app, or copy the [`.env-sample`](.env-sample) file to create a `.env` file in the root directory and enter your API key there (requires restarting the server &mdash; the in-app API bar will no longer appear).
 
+---
+
 ## How to Support this Project
 
 ### Donate
