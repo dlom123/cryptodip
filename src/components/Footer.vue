@@ -7,7 +7,7 @@
                 xl="2" offset-xl="2"
             >
                 <span v-if="nowApiKey" class="float-left">
-                    <DonateButton />
+                    <DonateButton :nowApiKey=nowApiKey />
                 </span>
                 <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">

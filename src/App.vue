@@ -51,7 +51,9 @@ export default {
   },
   created() {
     this.checkBackEndApiKey()
-    this.setNowApiKey(process.env.VUE_APP_NOW_API_KEY)
+    if (process.env.VUE_APP_NOW_API_KEY && process.env.VUE_APP_NOW_API_KEY !== 'your_nowpayments_api_key') {
+      this.setNowApiKey(process.env.VUE_APP_NOW_API_KEY)
+    }
   }
 }
 </script>

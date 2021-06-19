@@ -5,7 +5,7 @@
                 v-bind="attrs"
                 v-on="on"
             >
-                <a :href="`https://nowpayments.io/donation?api_key=${NowApiKey}`" target="_blank">
+                <a :href="`https://nowpayments.io/donation?api_key=${nowApiKey}`" target="_blank">
                     <img
                         src="https://nowpayments.io/images/embeds/donation-button-white.svg"
                         alt="Donate to CryptoDip's creator using NOWPayments"
@@ -21,10 +21,6 @@
 <script>
 export default {
     name: 'DonateButton',
-    computed: {
-        NowApiKey() {
-            return process.env.VUE_APP_NOW_API_KEY
-        }
-    }
+    props: ['nowApiKey']
 }
 </script>
