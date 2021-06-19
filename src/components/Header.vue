@@ -47,25 +47,29 @@ export default {
     },
     computed: {
         ...mapState([
-            'hasBackEndApiKey'
+            'hasBackEndApiKey',
+            'nowApiKey'
         ])
     },
     methods: {
         ...mapMutations([
             'addCoinList',
-            'setHasBackEndApiKey'
+            'setHasBackEndApiKey',
+            'setNowApiKey'
         ]),
         onClickForgetMe() {
             // clear app information from localStorage and reset state to initial values
             window.localStorage.removeItem('vuex-cryptodip')
-            // preserve setting for displaying API system bar
-            const hasApiKey = this.hasBackEndApiKey
+            // preserve setting for displaying API system bar and Donate button
+            const hasCmcApiKey = this.hasBackEndApiKey
+            const nowApiKey = this.nowApiKey
             // store reset functionality enabled by vuex-extensions package
             this.$store.reset()
             // restore the default coin list
             this.addCoinList("Dips")
-            // restore setting for displaying API system bar
-            this.setHasBackEndApiKey(hasApiKey)
+            // restore setting for displaying API system bar and Donate button
+            this.setHasBackEndApiKey(hasCmcApiKey)
+            this.setNowApiKey(nowApiKey)
         }
     }
 }
