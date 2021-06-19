@@ -1,4 +1,4 @@
-# CryptoDip
+# <span style="color: #1976d2">Crypto</span><span style="color: #f44336">Dip</span>
 **CryptoDip** is an app for identifying opportunities to lower the average cost of your cryptocurrency hodlings &mdash; aka the "*dips*".
 
 Whether your portfolio is the result of cleverly crafted scientific research and sleepless nights of due diligence, or just hitching a ride on that YOLOmobile that just rolled into town, it's nice to be able to understand and visualize the impact on your hodlings whenever the next Elon tweet goes out or another international cryptocurrency ban occurs and the entire digital economy decides to momentarily take a dive.
