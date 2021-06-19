@@ -35,8 +35,11 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            <strong>CryptoDip</strong> is an app for identifying opportunities to lower the average cost of your cryptocurrency hodlings &mdash; aka the <em>'dips'</em>.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                <strong>CryptoDip</strong> is an app for identifying opportunities to lower the
+                                                average cost of your cryptocurrency hodlings &mdash; aka the <em>'dips'</em>.
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -47,8 +50,10 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            <strong>HODLs</strong> are the total amount that you own of a cryptocurrency.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                <strong>HODLs</strong> are the total amount that you own of a cryptocurrency.
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -59,9 +64,11 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            Remember all those times you sporadically threw money in the direction of the loudest corner of the Internet?
-                                            <strong>YOLO'd</strong> is the total sum of money you have spent on a cryptocurrency over time to acquire those HODLs.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                Remember all those times you sporadically threw money in the direction of the loudest corner of the Internet?
+                                                <strong>YOLO'd</strong> is the total sum of money you have spent on a cryptocurrency over time to acquire those HODLs.
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -72,12 +79,16 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            <strong>Cost Average</strong> is your average cost per coin.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                <strong>Cost Average</strong> is your average cost per coin.
+                                            </p>
                                         </v-col>
-                                        <v-col>
+                                        <v-col class="py-0">
                                             <p class="text-overline">Cost Average</p>
-                                            <code>YOLO'd / HODLs</code>
+                                            <p>
+                                                <code>YOLO'd / HODLs</code>
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -88,14 +99,16 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            <strong>Current Price</strong> is retrieved from 
-                                            <a
-                                                title="CoinMarketCap"
-                                                href="https://coinmarketcap.com/"
-                                                target="_blank"
-                                            >CoinMarketCap</a>
-                                            when the Refresh Current Price button is clicked.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                <strong>Current Price</strong> is retrieved from 
+                                                <a
+                                                    title="CoinMarketCap"
+                                                    href="https://coinmarketcap.com/"
+                                                    target="_blank"
+                                                >CoinMarketCap</a>
+                                                when the Refresh Current Price button is clicked.
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -106,8 +119,8 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            The Current Price is displayed in USD.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>The Current Price is displayed in USD.</p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -118,13 +131,17 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            The <strong>"Buy the Dip?"</strong> percentage reflects the Current Price relative to your Cost Average.
-                                            It could highlight an opportunity to lower your Cost Average.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                The <strong>"Buy the Dip?"</strong> percentage reflects the Current Price relative to your Cost Average.
+                                                It could highlight an opportunity to lower your Cost Average.
+                                            </p>
                                         </v-col>
-                                        <v-col>
+                                        <v-col class="py-0">
                                             <p class="text-overline">"Buy the Dip?"</p>
-                                            <code>(Cost Average - Current Price) / Cost Average</code>
+                                            <p>
+                                                <code>(Cost Average - Current Price) / Cost Average</code>
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -135,8 +152,10 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            You like the coin.
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                You like the coin.
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -147,7 +166,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
+                                        <v-col class="pt-5 pb-0">
                                             <p>
                                                 Displayed prices are approximate.
                                             </p>
@@ -165,7 +184,7 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
+                                        <v-col class="pt-5 pb-0">
                                             <p>The YOLO input allows you to enter how much you currently have available to spend,
                                                 and the impact that the amount could have on a single coin.</p>
                                             <p>Once an amount is entered, the potential effect on each column of any listed coin
@@ -173,6 +192,27 @@
                                             <p>The YOLO input is also used to determine which coin gets the "Best Bang for the
                                                 Buck" badge since the largest Cost Average reduction you can realize depends on
                                                 the amount available to spend on a single coin.</p>
+                                        </v-col>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel class="mb-2">
+                                    <v-expansion-panel-header color="primary">
+                                        <span class="text-h6 white--text">
+                                            What is Dip Alert?
+                                        </span>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                The <strong>Dip Alert</strong> feature allows you to set a desired price or cost
+                                                average percentage (<em>Buy The Dip?</em>) threshold for a coin so that you can
+                                                easily notice when its price moves within your parameters.
+                                            </p>
+                                            <p>
+                                                <em>NOTE</em>: This is not an asynchronous alert (e.g., email, SMS). It is
+                                                simply a visual aid. When a Dip Alert is triggered for any given coin, its entire
+                                                row will be highlighted.
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -187,7 +227,7 @@
                                             <p>Everything is stored in your browser's Local Storage.</p>
                                             <p>Data transmitted over the network include:
                                                 <ul>
-                                                    <li>CoinMarketCap API key, if entered into the app's API bar.<sup><em>*</em></sup></li>
+                                                    <li>CoinMarketCap API key, if entered into the app's API bar.</li>
                                                     <li>List of available coins and their prices (from
                                                         <a
                                                             title="CoinMarketCap"
@@ -201,10 +241,56 @@
                                             Your personal coin information is never sent over the network. Clear your browser's
                                             Local Storage manually or by using the Forget Me button and it's like you were never
                                             here!</p>
-                                            <p>
-                                                <em><sup>*</sup> The API bar only appears on self-hosted instances of CryptoDip
-                                                when no CoinMarketCap API key has been supplied on the server-side.</em>
-                                            </p>
+                                        </v-col>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel class="mb-2">
+                                    <v-expansion-panel-header color="primary">
+                                        <span class="text-h6 white--text">
+                                            How can I support this project?
+                                        </span>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-col class="pt-5 pb-0">
+                                            <ol>
+                                                <li>
+                                                    <p>
+                                                        <strong>Donate</strong>
+                                                    </p>
+                                                    <p>
+                                                        You can use the Donate button to donate to
+                                                        <a href="https://github.com/dlom123" target="_blank">me</a>
+                                                        using a number of different cryptocurrencies. Any donations are
+                                                        greatly appreciated. Thanks!
+                                                    </p>
+                                                    <p>
+                                                        <DonateButton />
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <strong>Contribute</strong>
+                                                    </p>
+                                                    <p>
+                                                        Visit the <a href="https://github.com/dlom123/cryptodip" target="_blank">CryptoDip GitHub</a>
+                                                        to...
+                                                        <ul>
+                                                            <li>contribute code in the form of
+                                                                <a href="https://github.com/dlom123/cryptodip/pulls" target="_blank">Pull Requests</a></li>
+                                                            <li>report bugs in the form of
+                                                                <a href="https://github.com/dlom123/cryptodip/issues" target="_blank">Issues</a></li>
+                                                        </ul>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <strong>Share</strong>
+                                                    </p>
+                                                    <p>
+                                                        Tell others about CryptoDip if you think it could be useful to them!
+                                                    </p>
+                                                </li>
+                                            </ol>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -215,16 +301,18 @@
                                         </span>
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-col class="pt-5">
-                                            <a
-                                                title="Reddit SatoshiStreetBets"
-                                                href="https://www.reddit.com/r/SatoshiStreetBets/"
-                                                target="_blank"
-                                            >No.</a>
+                                        <v-col class="pt-5 pb-0">
+                                            <p>
+                                                <a
+                                                    title="Reddit SatoshiStreetBets"
+                                                    href="https://www.reddit.com/r/SatoshiStreetBets/"
+                                                    target="_blank"
+                                                >No.</a>
+                                            </p>
                                         </v-col>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
-                            </v-expansion-panels>
+                             </v-expansion-panels>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -234,8 +322,13 @@
 </template>
 
 <script>
+import DonateButton from '@/components/DonateButton'
+
 export default {
     name: 'FaqDialog',
+    components: {
+        DonateButton
+    },
     data: () => ({
         expandedPanels: [],
         showFaqDialog: false
