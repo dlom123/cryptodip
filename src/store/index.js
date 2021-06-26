@@ -18,9 +18,13 @@ export default createStore(Vuex.Store, {
   state: {
     allCoins: [],
     amountToSpend: null,
+    autoRefreshApiUsage: false,
     cmcApi: {},
     coinLists: {},
     hasBackEndApiKey: false,
+    guides: {
+      addCoins: true
+    },
     nowApiKey: null,  // for donations via NOWPayments
     searchValue: null,
     selectedCoinList: "Dips",

@@ -38,6 +38,9 @@ export default {
     setAllCoins: (state, payload) => {
         state.allCoins = payload
     },
+    setAutoRefreshApiUsage: (state, payload) => {
+        state.autoRefreshApiUsage = payload
+    },
     setCmcApi: (state, payload) => {
         state.cmcApi = payload
     },
@@ -237,5 +240,11 @@ export default {
                 state.coinLists[state.selectedCoinList].push(coin)
             }
         })
+    },
+    updateGuides: (state, payload) => {
+        state.guides = {
+            ...state.guides,
+            ...payload
+        }
     }
 }

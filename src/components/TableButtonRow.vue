@@ -25,7 +25,7 @@
                             :disabled="coinLists[selectedCoinList].length === 0"
                             small
                             color="blue"
-                            class="pa-0 mr-4 white--text"
+                            class="pa-0 mr-4 white--text float-right"
                             @click="exportCSV"
                         >
                             <v-icon>mdi-file-download</v-icon>
@@ -66,7 +66,7 @@
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="Search"
+                label="Filter"
                 hide-details
                 clearable
                 outlined
@@ -156,7 +156,8 @@ export default {
         'removeCoinList',
         'setSearchValue',
         'setSelectedCoinList',
-        'updateCoins'
+        'updateCoins',
+        'updateGuides'
     ]),
     exportCSV() {
         const [month, date, year] = new Date()
@@ -219,6 +220,7 @@ export default {
         })
         this.updateCoins(coins)
         this.$refs.inputCSV.$refs.input.value = ""
+        this.updateGuides({ 'addCoins': false })
     },
     onChangeAmountToSpend(value) {
         let n = undefined

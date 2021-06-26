@@ -5,7 +5,12 @@
     max-width="500px"
   >
     <template v-slot:activator="{ on:dialog, attrs }">
-      <v-tooltip top>
+      <v-tooltip
+        top
+        :value="guides['addCoins']"
+        :disabled="guides['addCoins']"
+        :color="guides['addCoins'] ? 'green' : ''"
+      >
         <template v-slot:activator="{ on:tooltip }">
           <v-btn fab dark color="primary"
             v-bind="attrs"
@@ -16,28 +21,31 @@
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </template>
-        <span>Add Coins</span>
+        <span v-if="guides['addCoins']">
+          <strong>Add coins to get started!</strong>
+        </span>
+        <span v-else>Add Coins</span>
       </v-tooltip>
     </template>
     <v-card>
       <v-card-title>
         <span class="headline">Add Coins</span>
         <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                fab dark outlined
-                x-small
-                right
-                color="green"
-                class="ml-4"
-                v-bind="attrs"
-                v-on="on"
-                @click="syncCoins"
-              >
-                <v-icon>mdi-refresh</v-icon>
-              </v-btn>
-            </template>
-            <span>Refresh Coin List</span>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab dark outlined
+              x-small
+              right
+              color="green"
+              class="ml-4"
+              v-bind="attrs"
+              v-on="on"
+              @click="syncCoins"
+            >
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+          </template>
+          <span>Refresh Coin List</span>
         </v-tooltip>
         <v-btn text plain x-small absolute right @click="closeDialog">
           <v-icon>mdi-close</v-icon>
@@ -113,7 +121,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex"
+import { mapActions, mapMutations, mapState } from "vuex"
 
 export default {
   name: "AddCoinsDialog",
@@ -125,14 +133,19 @@ export default {
   computed: {
     ...mapState([
       "allCoins",
+      "cmcApi",
       "coinLists",
-      "selectedCoinList"
+      "selectedCoinList",
+      "guides"
     ]),
   },
   methods: {
     ...mapActions([
       'addCoins',
       'syncCoins'
+    ]),
+    ...mapMutations([
+      'updateGuides'
     ]),
     closeDialog() {
       this.showDialog = false
@@ -146,9 +159,20 @@ export default {
       return textOne.indexOf(searchText) > -1
               || textTwo.indexOf(searchText) > -1
     },
+    onClickRefreshCoinList() {
+      this.syncCoins()
+    },
     openDialog() {
+      if (
+        Object.prototype.hasOwnProperty.call(this.cmcApi, "isValid")
+        && this.cmcApi.isValid
+        && this.allCoins.length === 0
+      ) {
+        this.syncCoins()
+      }
       this.selectedCoins = this.coinLists[this.selectedCoinList].map(coin => coin.id)
       this.showDialog = true
+      this.updateGuides({ 'addCoins': false })
     },
     remove(item) {
       this.selectedCoins = this.selectedCoins.filter(coinId => coinId !== item.id)

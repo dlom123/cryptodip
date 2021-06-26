@@ -6,7 +6,7 @@
         <v-row class="mx-0">
           <v-col cols="2" class="pa-0" align-self="center">
             <span class="text-subtitle-2 text--secondary">
-              Showing {{ displayCoins.length }} coin{{ displayCoins.length !== 1 ? 's' : '' }}
+              Showing {{ displayCoins.length }}/{{ coinLists[selectedCoinList].length }} coin{{ coinLists[selectedCoinList].length !== 1 ? 's' : '' }}
             </span>
           </v-col>
           <v-col cols="2" class="px-0 pt-1">
@@ -252,15 +252,11 @@
                 <v-col v-if="coinHasAlert(item)" class="pa-0">
                   <v-chip
                     small
+                    close
+                    @click:close="onClickRemoveAlert(item)"
                   >
                     <v-icon small left>mdi-alarm</v-icon>
                     {{ getAlertDisplayValues(item) }}
-                    <v-icon
-                      small
-                      right
-                      color="red"
-                      @click="onClickRemoveAlert(item)"
-                    >mdi-close-circle</v-icon>
                   </v-chip>
                 </v-col>
               </template>
@@ -374,7 +370,8 @@ export default {
       return s
     },
     getCoinPageUrl(coin) {
-      return `${config['CMC']['coinPageBaseUrl']}/${coin.name.toLowerCase().split().join('-')}`
+      const urlCoinName = coin.name.toLowerCase().split(" ").join("-")
+      return `${config['CMC']['coinPageBaseUrl']}/${urlCoinName}`
     },
     getYoloCostAverageDiffPct(coin) {
       const diff = ((this.yoloCostAverage(coin) - coin.costAverage) / coin.costAverage * 100).toFixed(2)
