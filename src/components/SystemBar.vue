@@ -21,7 +21,10 @@
         @click:append="() => (showApiKey = !showApiKey)"
       ></v-text-field>
     </v-col>
-    <v-col>
+    <v-col
+      cols="6"
+      lg="5"
+    >
       <span class="mr-2 text-h5 white--text font-weight-bold">API Usage</span>
       <v-chip class="api-usage-chip" color="white">
         <v-avatar left class="avatar">60s</v-avatar>
@@ -49,7 +52,7 @@
         </template>
         <span>{{ apiResetMonth }}</span>
       </v-tooltip>
-      <v-tooltip right>
+      <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             fab dark
@@ -58,12 +61,38 @@
             color="green"
             v-bind="attrs"
             v-on="on"
-            @click="getCmcApiInfo"
+            @click="getCmcApiInfo(true)"
           >
             <v-icon color="white">mdi-refresh</v-icon>
           </v-btn>
         </template>
         <span>Refresh API Usage</span>
+      </v-tooltip>
+    </v-col>
+    <v-col
+      cols="2"
+      lg="2"
+      class="px-0 pt-1"
+    >
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <span
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-checkbox
+              dense
+              dark
+              hide-details
+              label="Auto-refresh API Usage"
+              v-model="isAutoRefreshApiUsage"
+            ></v-checkbox>
+          </span>
+        </template>
+        <span>
+          Retrieve usage data with each API call.<br/>
+          Uses 1 additional 60s request with each API call.
+        </span>
       </v-tooltip>
     </v-col>
   </v-system-bar>
@@ -72,14 +101,17 @@
 <script>
 import { mapActions, mapMutations, mapState } from "vuex"
 import { formatNumber } from "@/utils/functions"
+import { tooltipText } from '@/utils/constants'
 
 export default {
   name: "SystemBar",
   data: () => ({
-      showApiKey: false
+      showApiKey: false,
+      tooltipText
   }),
   computed: {
     ...mapState([
+      "autoRefreshApiUsage",
       "cmcApi",
       "hasBackEndApiKey"
     ]),
@@ -153,19 +185,39 @@ export default {
 
       return "0/0"
     },
+    isAutoRefreshApiUsage: {
+      get() {
+        return this.autoRefreshApiUsage
+      },
+      set(newValue) {
+        this.setAutoRefreshApiUsage(newValue)
+      }
+    }
   },
   methods: {
     ...mapActions([
       "getCmcApiInfo"
     ]),
     ...mapMutations([
+      "setAutoRefreshApiUsage",
+      "setCmcApi",
       "updateCmcApi"
     ]),
     updateApiKey(newApiKey) {
-      this.updateCmcApi({ key: newApiKey })
-      if (!this.hasBackEndApiKey) {
-        // only get API usage info if supplying an API key on the front-end
-        this.getCmcApiInfo()
+      const newApiKeyIsBlank = !newApiKey || newApiKey.trim() === ""
+      console.log(newApiKey, newApiKeyIsBlank)
+      if (newApiKeyIsBlank) {
+        this.setCmcApi({})
+      } else {
+        this.updateCmcApi({ key: newApiKey })
+        if (
+          !this.hasBackEndApiKey
+          && !newApiKeyIsBlank
+        ) {
+          // only get API usage info if supplying an API key on the front-end
+
+          this.getCmcApiInfo(true)
+        }
       }
     },
   }

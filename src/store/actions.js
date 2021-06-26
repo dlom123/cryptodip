@@ -31,31 +31,33 @@ export default {
       })
     }
   },
-  getCmcApiInfo: async ({ commit, state }) => {
-    const headers = {}
-    if (state.cmcApi.key) {
-      // if a CMC API key has been entered, pass it along to the back-end as a custom header
-      headers['X-CMC-API-Key'] = state.cmcApi.key
-    }
-    const response = await fetch(
-      `${config['endpoints']['info']}`,
-      {
-        headers
+  getCmcApiInfo: async ({ commit, state }, force=false) => {
+    if (force || state.autoRefreshApiUsage) {
+      const headers = {}
+      if (state.cmcApi.key) {
+        // if a CMC API key has been entered, pass it along to the back-end as a custom header
+        headers['X-CMC-API-Key'] = state.cmcApi.key
       }
-    )
-    if (!response.ok) {
-      commit('setCmcApi', {
-        key: state.cmcApi.key,
-        isValid: false
-      })
-    } else {
-      var data = await response.json()
+      const response = await fetch(
+        `${config['endpoints']['info']}`,
+        {
+          headers
+        }
+      )
+      if (!response.ok) {
+        commit('setCmcApi', {
+          key: state.cmcApi.key,
+          isValid: false
+        })
+      } else {
+        var data = await response.json()
 
-      commit('updateCmcApi', {
-        key: state.cmcApi.key,
-        ...data,
-        isValid: true
-      })
+        commit('updateCmcApi', {
+          key: state.cmcApi.key,
+          ...data,
+          isValid: true
+        })
+      }
     }
   },
   getCurrentPrices: async ({ commit, dispatch, state }, payload) => {
