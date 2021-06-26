@@ -66,7 +66,7 @@
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="Search"
+                label="Filter"
                 hide-details
                 clearable
                 outlined

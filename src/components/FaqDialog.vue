@@ -253,7 +253,7 @@
                                     <v-expansion-panel-content>
                                         <v-col class="pt-5 pb-0">
                                             <ol>
-                                                <li>
+                                                <li v-if="nowApiKey">
                                                     <p>
                                                         <strong>Donate</strong>
                                                     </p>
@@ -264,7 +264,7 @@
                                                         greatly appreciated. Thanks!
                                                     </p>
                                                     <p>
-                                                        <DonateButton />
+                                                        <DonateButton :nowApiKey=nowApiKey />
                                                     </p>
                                                 </li>
                                                 <li>
@@ -322,6 +322,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import DonateButton from '@/components/DonateButton'
 
 export default {
@@ -333,6 +334,11 @@ export default {
         expandedPanels: [],
         showFaqDialog: false
     }),
+    computed: {
+        ...mapState([
+            'nowApiKey'
+        ])
+    },
     methods: {
         openFaqDialog() {
             this.showFaqDialog = true
