@@ -17,6 +17,39 @@
               label="Dips only"
             ></v-checkbox>
           </v-col>
+          <v-col cols="5" class="primary white--text">
+            <v-row>
+              <v-col cols="3" class="pt-2 pl-2 pb-0">
+                <strong>Total YOLO'd</strong> 
+              </v-col>
+              <v-col cols="3" class="pt-2 pl-2 pb-0">
+                <strong>Total Value</strong> 
+              </v-col>
+              <v-col cols="6" class="pt-2 pl-2 pb-0">
+                <strong>Profit</strong> 
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="3" class="pa-1 pl-2 pt-0">
+                <span class="text-subtitle-2">
+                  {{ totalYolod !== null ? formatDollars(totalYolod) : '-' }}
+                </span>
+              </v-col>
+              <v-col cols="3" class="pa-1 pl-2 pt-0">
+                <span class="text-subtitle-2">
+                  {{ totalCurrentValue !== null ? formatDollars(totalCurrentValue) : '-' }}
+                </span>
+              </v-col>
+              <v-col cols="6" class="pa-1 pl-2 pt-0">
+                <span class="text-subtitle-2">
+                  {{ totalProfit !== null ? formatDollars(totalProfit) : '-' }}
+                </span>
+                <span v-if="!Number.isNaN(totalProfitPercentage)" class="text-subtitle-2">
+                  ({{ totalProfit >= 0 ? '+' : '-' }}{{ totalProfitPercentage }})
+                </span>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
         <v-row>
           <v-col>
@@ -108,7 +141,7 @@
                     class="text-decoration-none"
                     tabindex="-1"
                   >
-                    <v-col class="py-8">
+                    <v-col class="py-4">
                       <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
                       <span class="mr-3 text-body-1">{{ item.name }}</span>
                       <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
@@ -329,6 +362,42 @@ export default {
         return this.coinLists[this.selectedCoinList].filter(coin => coin.costAverageDiff > 0)
       }
       return this.coinLists[this.selectedCoinList]
+    },
+    totalYolod() {
+      let total = null
+      if (this.displayCoins.length) {
+        const spentAmounts = this.displayCoins
+          .filter(coin => Object.prototype.hasOwnProperty.call(coin, "spent"))
+          .map(coin => coin.spent)
+        if (spentAmounts.length) {
+          total = spentAmounts.reduce((a, b) => a + b, 0)
+        }
+        return typeof total !== 'undefined' ? total : null
+      }
+      return null
+    },
+    totalCurrentValue() {
+      let total = null
+      if (this.displayCoins.length) {
+        const prices = this.displayCoins
+          .filter(coin => Object.prototype.hasOwnProperty.call(coin, "currentPrice"))
+          .map(coin => coin.qty * coin.currentPrice)
+          .filter(price => !isNaN(price))
+        if (prices.length) {
+          total = prices.reduce((a, b) => a + b, 0)
+        }
+        return !isNaN(total) ? total : null
+      }
+      return null
+    },
+    totalProfit() {
+      return this.totalCurrentValue !== null
+        && this.totalYolod !== null
+          ? this.totalCurrentValue - this.totalYolod
+          : null
+    },
+    totalProfitPercentage() {
+      return formatPercentage(formatNumber((this.totalProfit / this.totalCurrentValue) * 100))
     }
   },
   methods: {
@@ -344,7 +413,7 @@ export default {
     ]),
     coinFilter(value, search, item) {
       return value !== null
-        && search !== null&& typeof value === 'string'
+        && search !== null && typeof value === 'string'
         && (value.toLowerCase().indexOf(search.toLowerCase()) !== -1
           || item.symbol.toLowerCase().indexOf(search.toLowerCase()) !== -1)
     },
