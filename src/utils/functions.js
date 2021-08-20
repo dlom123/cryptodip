@@ -35,7 +35,7 @@ export function formatDollars(n, isFlexible=false) {
 }
 
 export function formatNumber(n, isFlexible=false, fullPrecision=false) {
-    if (typeof n !== 'undefined') {
+    if (typeof n !== 'undefined' && !isNaN(n)) {
         return parseFloat(n).toLocaleString("en-US", {
             'maximumFractionDigits': getNumDecimals(n, isFlexible, fullPrecision)
         })
@@ -44,7 +44,7 @@ export function formatNumber(n, isFlexible=false, fullPrecision=false) {
 }
 
 export function formatPercentage(n) {
-    if (typeof n !== 'undefined') {
+    if (typeof n !== 'undefined' && !isNaN(n)) {
         return `${n.toLocaleString('en-US')}%`
     }
     return n
