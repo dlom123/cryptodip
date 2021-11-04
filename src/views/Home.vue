@@ -6,7 +6,10 @@
         <v-row class="mx-0">
           <v-col cols="2" class="pa-0" align-self="center">
             <span class="text-subtitle-2 text--secondary">
-              Showing {{ displayCoins.length }}/{{ coinLists[selectedCoinList].length }} coin{{ coinLists[selectedCoinList].length !== 1 ? 's' : '' }}
+              Showing {{ displayCoins.length }}/{{
+                coinLists[selectedCoinList].length
+              }}
+              coin{{ coinLists[selectedCoinList].length !== 1 ? "s" : "" }}
             </span>
           </v-col>
           <v-col cols="2" class="px-0 pt-1">
@@ -20,32 +23,40 @@
           <v-col cols="5" class="primary white--text">
             <v-row>
               <v-col cols="3" class="pt-2 pl-2 pb-0">
-                <strong>Total YOLO'd</strong> 
+                <strong>Total YOLO'd</strong>
               </v-col>
               <v-col cols="3" class="pt-2 pl-2 pb-0">
-                <strong>Total Value</strong> 
+                <strong>Total Value</strong>
               </v-col>
               <v-col cols="6" class="pt-2 pl-2 pb-0">
-                <strong>Profit</strong> 
+                <strong>Profit</strong>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="3" class="pa-1 pl-2 pt-0">
                 <span class="text-subtitle-2">
-                  {{ totalYolod !== null ? formatDollars(totalYolod) : '-' }}
+                  {{ totalYolod !== null ? formatDollars(totalYolod) : "-" }}
                 </span>
               </v-col>
               <v-col cols="3" class="pa-1 pl-2 pt-0">
                 <span class="text-subtitle-2">
-                  {{ totalCurrentValue !== null ? formatDollars(totalCurrentValue) : '-' }}
+                  {{
+                    totalCurrentValue !== null
+                      ? formatDollars(totalCurrentValue)
+                      : "-"
+                  }}
                 </span>
               </v-col>
               <v-col cols="6" class="pa-1 pl-2 pt-0">
                 <span class="text-subtitle-2">
-                  {{ totalProfit !== null ? formatDollars(totalProfit) : '-' }}
+                  {{ totalProfit !== null ? formatDollars(totalProfit) : "-" }}
                 </span>
-                <span v-if="!Number.isNaN(totalProfitPercentage)" class="text-subtitle-2">
-                  ({{ totalProfit >= 0 ? '+' : '-' }}{{ totalProfitPercentage }})
+                <span
+                  v-if="!Number.isNaN(totalProfitPercentage)"
+                  class="text-subtitle-2"
+                >
+                  ({{ totalProfit >= 0 ? "+" : "-"
+                  }}{{ totalProfitPercentage }})
                 </span>
               </v-col>
             </v-row>
@@ -56,38 +67,21 @@
             <v-data-table
               hide-default-footer
               disable-pagination
-              :show-expand=false
+              :show-expand="true"
               :headers="headers"
               :items="displayCoins"
               :search="searchValue"
-              :items-per-page="Math.max(allCoins.length, coinLists[selectedCoinList].length)"
+              :items-per-page="
+                Math.max(allCoins.length, coinLists[selectedCoinList].length)
+              "
               :options="tableOptions"
               :custom-filter="coinFilter"
               :item-class="itemRowClass"
               class="elevation-2"
               @update:options="onUpdateTable"
             >
-
               <template v-slot:header.name="{ header }">
                 <span class="header-text">{{ header.text }}</span>
-              </template>
-              <template v-slot:header.qty="{ header }">
-                <span class="mr-1 header-text">{{ header.text }}</span>
-                <InfoTooltip
-                  icon="mdi-help-circle"
-                  icon-color="grey"
-                  position="bottom"
-                  :text="tooltipText['qty']"
-                />
-              </template>
-              <template v-slot:header.spent="{ header }">
-                <span class="mr-1 header-text">{{ header.text }}</span>
-                <InfoTooltip
-                  icon="mdi-help-circle"
-                  icon-color="grey"
-                  position="bottom"
-                  :text="tooltipText['spent']"
-                />
               </template>
               <template v-slot:header.costAverage="{ header }">
                 <span class="mr-1 header-text">{{ header.text }}</span>
@@ -107,6 +101,15 @@
                   :text="tooltipText['currentPrice']"
                 />
               </template>
+              <template v-slot:header.currentValue="{ header }">
+                <span class="mr-1 header-text">{{ header.text }}</span>
+                <InfoTooltip
+                  icon="mdi-help-circle"
+                  icon-color="grey"
+                  position="bottom"
+                  :text="tooltipText['currentValue']"
+                />
+              </template>
               <template v-slot:header.costAverageDiff="{ header }">
                 <span class="mr-1 header-text">{{ header.text }}</span>
                 <InfoTooltip
@@ -116,7 +119,10 @@
                   :text="tooltipText['costAverageDiff']"
                 />
               </template>
-              <template v-if="coinLists[selectedCoinList].length" v-slot:header.menu>
+              <template
+                v-if="coinLists[selectedCoinList].length"
+                v-slot:header.menu
+              >
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -142,76 +148,74 @@
                     tabindex="-1"
                   >
                     <v-col class="py-4">
-                      <v-img :src="item.icon" width="30" class="mr-2 float-left"></v-img>
+                      <v-img
+                        :src="item.icon"
+                        width="30"
+                        class="mr-2 float-left"
+                      ></v-img>
                       <span class="mr-3 text-body-1">{{ item.name }}</span>
-                      <span class="text-subtitle-1 text--secondary text-uppercase">{{ item.symbol }}</span>
+                      <span
+                        class="text-subtitle-1 text--secondary text-uppercase"
+                        >{{ item.symbol }}</span
+                      >
                     </v-col>
                   </a>
                 </v-row>
               </template>
-              <template v-slot:item.qty="{ item }">
-                <v-col class="pa-0">
-                  <v-text-field
-                    solo
-                    dense
-                    flat
-                    hide-details
-                    placeholder="how many hodls?"
-                    style="width: 150px;"
-                    :value="formatNumber(item.qty, isFlexible=false, fullPrecision=true)"
-                    @change="onChangeQty($event, item.id)"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  v-if="amountToSpend && !isNaN(yoloHodls(item))"
-                  class="py-0 pr-0 pl-3 text-caption green--text"
+              <template v-slot:item.currentValue="{ item }">
+                <template
+                  v-if="
+                    !isNaN(item.costAverage) &&
+                    typeof item.costAverage !== 'undefined' &&
+                    typeof item.currentPrice !== 'undefined'
+                  "
                 >
-                  ({{ formatNumber(yoloHodls(item), isFlexible=true) }},
-                  {{ `+${formatNumber(yoloHodls(item) - item.qty, isFlexible=true)}` }})
-                </v-col>
-              </template>
-              <template v-slot:item.spent="{ item }">
-                <v-col class="pa-0">
-                  <v-text-field
-                    solo
-                    dense
-                    flat
-                    hide-details
-                    placeholder="how much yolo'd?"
-                    style="width: 150px"
-                    :value="formatDollars(item.spent)"
-                    @change="onChangeSpent($event, item.id)"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  v-if="amountToSpend && typeof item.spent !== 'undefined'"
-                  class="py-0 pr-0 pl-3 text-caption green--text"
-                >
-                  ({{ formatDollars(yoloYolod(item)) }})
-                </v-col>
+                  <v-col class="pa-0">
+                    {{
+                      formatDollars(
+                        getCoinCurrentValue(item),
+                        (isFlexible = true)
+                      )
+                    }}
+                  </v-col>
+                </template>
               </template>
               <template v-slot:item.costAverage="{ item }">
-                <template v-if="
-                  !isNaN(item.costAverage)
-                  && typeof item.costAverage !== 'undefined'
-                ">
+                <template
+                  v-if="
+                    !isNaN(item.costAverage) &&
+                    typeof item.costAverage !== 'undefined'
+                  "
+                >
                   <v-col class="pa-0">
-                    {{ formatDollars(item.costAverage, isFlexible=true) }}
+                    {{ formatDollars(item.costAverage, (isFlexible = true)) }}
                   </v-col>
                   <v-col
                     v-if="amountToSpend && item.currentPrice"
                     :class="[
-                      'pa-0', 'text-caption',
-                      { 'green--text': item.costAverage > yoloCostAverage(item) },
-                      { 'red--text': item.costAverage < yoloCostAverage(item) }
+                      'pa-0',
+                      'text-caption',
+                      {
+                        'green--text': item.costAverage > yoloCostAverage(item),
+                      },
+                      { 'red--text': item.costAverage < yoloCostAverage(item) },
                     ]"
                   >
                     <span v-if="item.spent > 0">
-                      ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }},
-                       {{ getYoloCostAverageDiffPct(item) }})
+                      ({{
+                        formatDollars(
+                          yoloCostAverage(item),
+                          (isFlexible = true)
+                        )
+                      }}, {{ getYoloCostAverageDiffPct(item) }})
                     </span>
                     <span v-else>
-                      ({{ formatDollars(yoloCostAverage(item), isFlexible=true) }})
+                      ({{
+                        formatDollars(
+                          yoloCostAverage(item),
+                          (isFlexible = true)
+                        )
+                      }})
                     </span>
                   </v-col>
                 </template>
@@ -227,10 +231,9 @@
                 <template v-if="typeof item.currentPrice !== 'undefined'">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <span
-                        v-bind="attrs"
-                        v-on="on"
-                      >{{ formatDollars(item.currentPrice, isFlexible=true) }}</span>
+                      <span v-bind="attrs" v-on="on">{{
+                        formatDollars(item.currentPrice, (isFlexible = true))
+                      }}</span>
                     </template>
                     <span>{{ item.currentPrice }}</span>
                   </v-tooltip>
@@ -245,7 +248,7 @@
               </template>
               <template v-slot:item.costAverageDiff="{ item }">
                 <template v-if="typeof item.costAverageDiff !== 'undefined'">
-                  <BuyTheDip :coin=item />
+                  <BuyTheDip :coin="item" />
                 </template>
                 <template v-else>
                   <InfoTooltip
@@ -283,11 +286,7 @@
                   />
                 </v-col>
                 <v-col v-if="coinHasAlert(item)" class="pa-0">
-                  <v-chip
-                    small
-                    close
-                    @click:close="onClickRemoveAlert(item)"
-                  >
+                  <v-chip small close @click:close="onClickRemoveAlert(item)">
                     <v-icon small left>mdi-alarm</v-icon>
                     {{ getAlertDisplayValues(item) }}
                   </v-chip>
@@ -295,16 +294,15 @@
               </template>
               <template v-slot:item.menu="{ item }">
                 <v-col class="pa-0 col-menu">
-                  <CoinActionMenu :coin=item />
+                  <CoinActionMenu :coin="item" />
                 </v-col>
               </template>
 
               <template v-slot:expanded-item="{ headers, item }">
-                <td :colspan="headers.length">
-                  <CoinChart :coin=item />
+                <td :colspan="headers.length" class="px-0">
+                  <CoinChart :coin="item" />
                 </td>
               </template>
-
             </v-data-table>
           </v-col>
         </v-row>
@@ -314,198 +312,230 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
-import BuyTheDip from '@/components/BuyTheDip.vue'
-import CoinActionMenu from '@/components/CoinActionMenu.vue'
-import CoinChart from '@/components/CoinChart.vue'
-import InfoTooltip from '@/components/InfoTooltip.vue'
-import TableButtonRow from '@/components/TableButtonRow.vue'
-import { formatDollars, formatNumber, formatPercentage } from '@/utils/functions'
-import config from '@/config'
-import { tooltipText } from '@/utils/constants'
+import { mapActions, mapMutations, mapState } from "vuex";
+import BuyTheDip from "@/components/BuyTheDip.vue";
+import CoinActionMenu from "@/components/CoinActionMenu.vue";
+import CoinChart from "@/components/CoinChart.vue";
+import InfoTooltip from "@/components/InfoTooltip.vue";
+import TableButtonRow from "@/components/TableButtonRow.vue";
+import {
+  formatDollars,
+  formatNumber,
+  formatPercentage,
+  yoloHodls,
+  yoloYolod,
+} from "@/utils/functions";
+import config from "@/config";
+import { tooltipText } from "@/utils/constants";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     BuyTheDip,
     CoinActionMenu,
     CoinChart,
     InfoTooltip,
-    TableButtonRow
+    TableButtonRow,
   },
   data: () => ({
     headers: [
       { text: "Name", value: "name", width: 215 },
-      { text: "HODLs", value: "qty", filterable: false, width: 150 },
-      { text: "YOLO'd", value: "spent", filterable: false, width: 150 },
-      { text: "Cost Average", value: "costAverage", filterable: false, width: 140 },
-      { text: "Current Price", value: "currentPrice", filterable: false, width: 140 },
-      { text: "Buy The Dip?", value: "costAverageDiff", filterable: false, width: 140 },
-      { text: "", value: "badges", sortable: false, filterable: false, width: 80 },
-      { text: "", value: "menu", sortable: false, filterable: false, align: "center", width: 70 },
+      {
+        text: "Cost Average",
+        value: "costAverage",
+        filterable: false,
+        width: 140,
+      },
+      {
+        text: "Current Price",
+        value: "currentPrice",
+        filterable: false,
+        width: 140,
+      },
+      { text: "Current Value", value: "currentValue", width: 140 },
+      {
+        text: "Buy The Dip?",
+        value: "costAverageDiff",
+        filterable: false,
+        width: 140,
+      },
+      {
+        text: "",
+        value: "badges",
+        sortable: false,
+        filterable: false,
+        width: 80,
+      },
+      {
+        text: "",
+        value: "menu",
+        sortable: false,
+        filterable: false,
+        align: "center",
+        width: 70,
+      },
     ],
     showOnlyDips: false,
-    tooltipText
+    tooltipText,
   }),
   computed: {
     ...mapState([
-      'allCoins',
-      'amountToSpend',
-      'coinLists',
-      'hasBackEndApiKey',
-      'searchValue',
-      'selectedCoinList',
-      'tableOptions'
+      "allCoins",
+      "amountToSpend",
+      "coinLists",
+      "hasBackEndApiKey",
+      "searchValue",
+      "selectedCoinList",
+      "tableOptions",
     ]),
     displayCoins() {
       if (this.showOnlyDips) {
-        return this.coinLists[this.selectedCoinList].filter(coin => coin.costAverageDiff > 0)
+        return this.coinLists[this.selectedCoinList].filter(
+          (coin) => coin.costAverageDiff > 0
+        );
       }
-      return this.coinLists[this.selectedCoinList]
+      return this.coinLists[this.selectedCoinList];
     },
     totalYolod() {
-      let total = null
+      let total = null;
       if (this.displayCoins.length) {
         const spentAmounts = this.displayCoins
-          .filter(coin => Object.prototype.hasOwnProperty.call(coin, "spent"))
-          .map(coin => coin.spent)
+          .filter((coin) => Object.prototype.hasOwnProperty.call(coin, "spent"))
+          .map((coin) => coin.spent);
         if (spentAmounts.length) {
-          total = spentAmounts.reduce((a, b) => a + b, 0)
+          total = spentAmounts.reduce((a, b) => a + b, 0);
         }
-        return typeof total !== 'undefined' ? total : null
+        return typeof total !== "undefined" ? total : null;
       }
-      return null
+      return null;
     },
     totalCurrentValue() {
-      let total = null
+      let total = null;
       if (this.displayCoins.length) {
         const prices = this.displayCoins
-          .filter(coin => Object.prototype.hasOwnProperty.call(coin, "currentPrice"))
-          .map(coin => coin.qty * coin.currentPrice)
-          .filter(price => !isNaN(price))
+          .filter((coin) =>
+            Object.prototype.hasOwnProperty.call(coin, "currentPrice")
+          )
+          .map((coin) => coin.qty * coin.currentPrice)
+          .filter((price) => !isNaN(price));
         if (prices.length) {
-          total = prices.reduce((a, b) => a + b, 0)
+          total = prices.reduce((a, b) => a + b, 0);
         }
-        return !isNaN(total) ? total : null
+        return !isNaN(total) ? total : null;
       }
-      return null
+      return null;
     },
     totalProfit() {
-      return this.totalCurrentValue !== null
-        && this.totalYolod !== null
-          ? this.totalCurrentValue - this.totalYolod
-          : null
+      return this.totalCurrentValue !== null && this.totalYolod !== null
+        ? this.totalCurrentValue - this.totalYolod
+        : null;
     },
     totalProfitPercentage() {
-      return formatPercentage(formatNumber((this.totalProfit / this.totalCurrentValue) * 100))
-    }
+      return formatPercentage(
+        formatNumber((this.totalProfit / this.totalCurrentValue) * 100)
+      );
+    },
   },
   methods: {
-    ...mapActions([
-      'syncCoins'
-    ]),
+    ...mapActions(["syncCoins"]),
     ...mapMutations([
-      'addCoinList',
-      'removeCoinAlert',
-      'setCoins',
-      'setTableOptions',
-      'updateCoin',
+      "addCoinList",
+      "removeCoinAlert",
+      "setCoins",
+      "setTableOptions",
+      "updateCoin",
     ]),
     coinFilter(value, search, item) {
-      return value !== null
-        && search !== null && typeof value === 'string'
-        && (value.toLowerCase().indexOf(search.toLowerCase()) !== -1
-          || item.symbol.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+      return (
+        value !== null &&
+        search !== null &&
+        typeof value === "string" &&
+        (value.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
+          item.symbol.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+      );
     },
     coinHasAlert(coin) {
-      return (Object.prototype.hasOwnProperty.call(coin.alerts, 'currentPrice') && coin.alerts.currentPrice)
-        || (Object.prototype.hasOwnProperty.call(coin.alerts, 'buyTheDip') && coin.alerts.buyTheDip)
+      return (
+        (Object.prototype.hasOwnProperty.call(coin.alerts, "currentPrice") &&
+          coin.alerts.currentPrice) ||
+        (Object.prototype.hasOwnProperty.call(coin.alerts, "buyTheDip") &&
+          coin.alerts.buyTheDip)
+      );
     },
     formatDollars,
     formatNumber,
     formatPercentage,
     getAlertDisplayValues(coin) {
-      let s = ""
+      let s = "";
       if (coin.alerts.currentPrice) {
-        s += formatDollars(coin.alerts.currentPrice)
+        s += formatDollars(coin.alerts.currentPrice);
         if (coin.alerts.buyTheDip) {
-          s += "/"
+          s += "/";
         }
       }
       if (coin.alerts.buyTheDip) {
-        s += formatPercentage(coin.alerts.buyTheDip)
+        s += formatPercentage(coin.alerts.buyTheDip);
       }
 
-      return s
+      return s;
+    },
+    getCoinCurrentValue(coin) {
+      return coin.qty * coin.currentPrice;
     },
     getCoinPageUrl(coin) {
-      const urlCoinName = coin.name.toLowerCase().split(" ").join("-")
-      return `${config['CMC']['coinPageBaseUrl']}/${urlCoinName}`
+      const urlCoinName = coin.name.toLowerCase().split(" ").join("-");
+      return `${config["CMC"]["coinPageBaseUrl"]}/${urlCoinName}`;
     },
     getYoloCostAverageDiffPct(coin) {
-      const diff = ((this.yoloCostAverage(coin) - coin.costAverage) / coin.costAverage * 100).toFixed(2)
-      return diff > 0 ? `+${diff}%` : `${diff}%`
+      const diff = (
+        ((this.yoloCostAverage(coin) - coin.costAverage) / coin.costAverage) *
+        100
+      ).toFixed(2);
+      return diff > 0 ? `+${diff}%` : `${diff}%`;
     },
     itemRowClass(coin) {
-      let styles = []
+      let styles = [];
       // apply styles for "alert triggered"
       if (
-        (Object.prototype.hasOwnProperty.call(coin.alerts, 'buyTheDip')
-        && !(typeof coin.alerts.buyTheDip === 'undefined')
-        && coin.alerts.buyTheDip !== null
-        && coin.costAverageDiff > coin.alerts.buyTheDip)
-        ||
-        (Object.prototype.hasOwnProperty.call(coin.alerts, 'currentPrice')
-        && !(typeof coin.alerts.currentPrice === 'undefined')
-        && coin.alerts.currentPrice !== null
-        && coin.currentPrice < coin.alerts.currentPrice)
+        (Object.prototype.hasOwnProperty.call(coin.alerts, "buyTheDip") &&
+          !(typeof coin.alerts.buyTheDip === "undefined") &&
+          coin.alerts.buyTheDip !== null &&
+          coin.costAverageDiff > coin.alerts.buyTheDip) ||
+        (Object.prototype.hasOwnProperty.call(coin.alerts, "currentPrice") &&
+          !(typeof coin.alerts.currentPrice === "undefined") &&
+          coin.alerts.currentPrice !== null &&
+          coin.currentPrice < coin.alerts.currentPrice)
       ) {
-        styles.push('alert-triggered')
+        styles.push("alert-triggered");
       }
 
-      return styles
-    },
-    onChangeQty(value, id) {
-      const n = parseFloat(value.replace(',', ''))
-      this.updateCoin({
-        id,
-        qty: isNaN(n) ? undefined : n
-      })
-    },
-    onChangeSpent(value, id) {
-      const n = parseFloat(value.replace(/[$,]/g, ''))
-      this.updateCoin({
-        id,
-        spent: isNaN(n) ? undefined : n
-      })
+      return styles;
     },
     onClickClearList() {
-      this.setCoins([])
+      this.setCoins([]);
     },
     onClickRemoveAlert(coin) {
-      this.removeCoinAlert({ coinId: coin.id })
+      this.removeCoinAlert({ coinId: coin.id });
     },
     onUpdateTable(options) {
-      this.setTableOptions(options)
+      this.setTableOptions(options);
     },
     yoloCostAverage(coin) {
-      return this.yoloYolod(coin) / this.yoloHodls(coin)
+      return (
+        this.yoloYolod(this.amountToSpend, coin) /
+        this.yoloHodls(this.amountToSpend, coin)
+      );
     },
-    yoloHodls(coin) {
-      // Returns what your new quantity of the coin would be based on your amount to spend
-      return (this.amountToSpend / coin.currentPrice) + coin.qty
-    },
-    yoloYolod(coin) {
-      return this.amountToSpend + coin.spent
-    },
+    yoloHodls,
+    yoloYolod,
   },
   created() {
     if (Object.keys(this.coinLists).length === 0) {
-      this.addCoinList("Dips")
+      this.addCoinList("Dips");
     }
     if (this.allCoins.length === 0 && this.hasBackEndApiKey) {
-      this.syncCoins()
+      this.syncCoins();
     }
-  }
-}
+  },
+};
 </script>
