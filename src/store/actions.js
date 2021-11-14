@@ -31,7 +31,7 @@ export default {
       })
     }
   },
-  getCmcApiInfo: async ({ commit, state }, force=false) => {
+  getCmcApiInfo: async ({ commit, state }, force = false) => {
     if (force || state.autoRefreshApiUsage) {
       const headers = {}
       if (state.cmcApi.key) {
@@ -96,6 +96,7 @@ export default {
 
         return {
           ...coin,
+          lastRefreshPrice: coin.currentPrice,
           currentPrice: coinPrice
         }
       })

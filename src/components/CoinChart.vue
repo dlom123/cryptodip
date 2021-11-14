@@ -1,7 +1,34 @@
 <template>
-  <v-container fluid class="px-0">
+  <v-container fluid class="px-0 expansion">
     <v-row no-gutters>
-      <v-col offset="4" cols="2">
+      <v-col offset="1" cols="2">
+        <span class="mr-1 header-text">Location</span>
+        <InfoTooltip
+          icon="mdi-help-circle"
+          icon-color="grey"
+          position="bottom"
+          :text="tooltipText['location']"
+        />
+        <v-col class="pa-0">
+          <v-text-field
+            solo
+            dense
+            flat
+            hide-details
+            placeholder="where hodls?"
+            style="width: 150px"
+            :type="showLocation ? 'text' : 'password'"
+            :value="coin.location"
+            :append-icon="
+              !coin.location ? '' : showLocation ? 'mdi-eye-off' : 'mdi-eye'
+            "
+            @change="onChangeLocation($event, coin.id)"
+            @click:append="() => (showLocation = !showLocation)"
+          ></v-text-field>
+        </v-col>
+      </v-col>
+
+      <v-col cols="2">
         <span class="mr-1 header-text">HODLs</span>
         <InfoTooltip
           icon="mdi-help-circle"
@@ -43,7 +70,7 @@
         </v-col>
       </v-col>
 
-      <v-col cols="6">
+      <v-col>
         <span class="mr-1 header-text">YOLO'd</span>
         <InfoTooltip
           icon="mdi-help-circle"
@@ -96,6 +123,7 @@ export default {
       { text: "HODLs", value: "qty", filterable: false, width: 150 },
       { text: "YOLO'd", value: "spent", filterable: false, width: 150 },
     ],
+    showLocation: false,
     tooltipText,
   }),
   computed: {
@@ -105,6 +133,12 @@ export default {
     ...mapMutations(["updateCoin"]),
     formatDollars,
     formatNumber,
+    onChangeLocation(value, id) {
+      this.updateCoin({
+        id,
+        location: value
+      })
+    },
     onChangeQty(value, id) {
       const n = parseFloat(value.replace(",", ""));
       this.updateCoin({

@@ -67,7 +67,7 @@
             <v-data-table
               hide-default-footer
               disable-pagination
-              :show-expand="true"
+              show-expand
               :headers="headers"
               :items="displayCoins"
               :search="searchValue"
@@ -235,7 +235,19 @@
                         formatDollars(item.currentPrice, (isFlexible = true))
                       }}</span>
                     </template>
-                    <span>{{ item.currentPrice }}</span>
+                    <span>
+                      ${{ item.currentPrice }}
+                      <br />
+                      Last refresh:
+                      {{
+                        item.lastRefreshPrice
+                          ? formatDollars(
+                              item.lastRefreshPrice,
+                              (isFlexible = true)
+                            )
+                          : "n/a"
+                      }}
+                    </span>
                   </v-tooltip>
                 </template>
                 <template v-else>

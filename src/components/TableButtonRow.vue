@@ -1,108 +1,102 @@
 <template>
-    <v-row>
-        <v-col cols="2" align-self="end" class="pr-0">
-            <v-combobox
-                ref="selectCoinList"
-                dense
-                outlined
-                hide-details
-                label="Coin List"
-                append-icon="mdi-trash-can-outline"
-                :items="sortedCoinLists"
-                :value="selectedCoinList"
-                @change="onChangeCoinList"
-                @click:append="onClickDeleteList"
-            ></v-combobox>
-        </v-col>
-        <v-col cols="1" class="pa-0" align="end" align-self="center">
-            <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                    <span
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-btn
-                            :disabled="coinLists[selectedCoinList].length === 0"
-                            small
-                            color="blue"
-                            class="pa-0 mr-4 white--text float-right"
-                            @click="exportCSV"
-                        >
-                            <v-icon>mdi-file-download</v-icon>
-                        </v-btn>
-                    </span>
-                </template>
-                <span>Export CSV</span>
-            </v-tooltip>
-        </v-col>
-        <v-col cols="1" class="pa-0" align-self="center">
-            <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                    <span
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-btn
-                            small
-                            color="white"
-                            class="pa-0 blue--text"
-                            @click="onClickImportCSV"
-                        >
-                            <v-icon>mdi-file-upload</v-icon>
-                        </v-btn>
-                        <v-file-input
-                            ref="inputCSV"
-                            hide-input
-                            hide-details
-                            @change="importCSV"
-                            style="display: none"
-                        ></v-file-input>
-                    </span>
-                </template>
-                <span>Import CSV</span>
-            </v-tooltip>
-        </v-col>
-        <v-col cols="3" align-self="end">
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Filter"
-                hide-details
-                clearable
-                outlined
-                dense
-            ></v-text-field>
-        </v-col>
-        <v-col cols="3" align-self="end">
-            <v-text-field
-                label="YOLO"
-                hide-details
-                clearable
-                outlined
-                dense
-                :background-color="amountToSpend ? 'light-green' : ''"
-                class="text-lighten-2"
-                :value="formatDollars(amountToSpend)"
-                @change="onChangeAmountToSpend"
-                @input="onInputAmountToSpend"
-                @click:clear="onChangeAmountToSpend"
+  <v-row>
+    <v-col cols="2" align-self="end" class="pr-0">
+      <v-combobox
+        ref="selectCoinList"
+        dense
+        outlined
+        hide-details
+        label="Coin List"
+        append-icon="mdi-trash-can-outline"
+        :items="sortedCoinLists"
+        :value="selectedCoinList"
+        @change="onChangeCoinList"
+        @click:append="onClickDeleteList"
+      ></v-combobox>
+    </v-col>
+    <v-col cols="1" class="pa-0" align="end" align-self="center">
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+          <span v-bind="attrs" v-on="on">
+            <v-btn
+              :disabled="coinLists[selectedCoinList].length === 0"
+              small
+              color="blue"
+              class="pa-0 mr-4 white--text float-right"
+              @click="exportCSV"
             >
-                <template v-slot:append-outer>
-                    <InfoTooltip
-                        icon="mdi-help-circle"
-                        icon-color="grey"
-                        position="bottom"
-                        icon-size="large"
-                        :text="tooltipText['yolo']"
-                    />
-                </template>
-            </v-text-field>
-        </v-col>
-        <v-col align="right">
-            <span class="mr-6"><RefreshPricesButton /></span>
-            <AddCoinsDialog />
-        </v-col>
-    </v-row>
+              <v-icon>mdi-file-download</v-icon>
+            </v-btn>
+          </span>
+        </template>
+        <span>Export CSV</span>
+      </v-tooltip>
+    </v-col>
+    <v-col cols="1" class="pa-0" align-self="center">
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+          <span v-bind="attrs" v-on="on">
+            <v-btn
+              small
+              color="white"
+              class="pa-0 blue--text"
+              @click="onClickImportCSV"
+            >
+              <v-icon>mdi-file-upload</v-icon>
+            </v-btn>
+            <v-file-input
+              ref="inputCSV"
+              hide-input
+              hide-details
+              @change="importCSV"
+              style="display: none"
+            ></v-file-input>
+          </span>
+        </template>
+        <span>Import CSV</span>
+      </v-tooltip>
+    </v-col>
+    <v-col cols="3" align-self="end">
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Filter"
+        hide-details
+        clearable
+        outlined
+        dense
+      ></v-text-field>
+    </v-col>
+    <v-col cols="3" align-self="end">
+      <v-text-field
+        label="YOLO"
+        hide-details
+        clearable
+        outlined
+        dense
+        :background-color="amountToSpend ? 'light-green' : ''"
+        class="text-lighten-2"
+        :value="formatDollars(amountToSpend)"
+        @change="onChangeAmountToSpend"
+        @input="onInputAmountToSpend"
+        @click:clear="onChangeAmountToSpend"
+      >
+        <template v-slot:append-outer>
+          <InfoTooltip
+            icon="mdi-help-circle"
+            icon-color="grey"
+            position="bottom"
+            icon-size="large"
+            :text="tooltipText['yolo']"
+          />
+        </template>
+      </v-text-field>
+    </v-col>
+    <v-col align="right">
+      <span class="mr-6"><RefreshPricesButton /></span>
+      <AddCoinsDialog />
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -168,9 +162,10 @@ export default {
             .split(/:| /)
         const filename = `cryptodip_${this.selectedCoinList.toLowerCase()}_${year}${month}${date}${hour}${minute}${second}.csv`
 
-        let csv = "Id,Coin Name,Symbol,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip"
+        let csv = "Id,Coin Name,Symbol,Location,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip"
         csv += ",Alert Current Price,Alert Buy The Dip\n"
         this.coinLists[this.selectedCoinList].forEach(coin => {
+            const location = coin.location ? coin.location : ""
             const qty = coin.qty ? coin.qty : ""
             const spent = coin.spent ? coin.spent : ""
             const costAverage = coin.costAverage ? coin.costAverage : ""
@@ -183,7 +178,7 @@ export default {
                 && typeof coin.alerts.buyTheDip !== 'undefined'
                     ? coin.alerts.buyTheDip : ""
 
-            csv += `${coin.id},${coin.name},${coin.symbol},${qty},${spent}`
+            csv += `${coin.id},${coin.name},${coin.symbol},${location},${qty},${spent}`
             csv += `,${costAverage},${currentPrice},${costAverageDiff}`
             csv += `,${alertCurrentPrice},${alertBuyTheDip}\n`
         })
@@ -206,11 +201,12 @@ export default {
                 name: cols[1],
                 symbol: cols[2],
                 icon: `${config['CMC']['coinImgBaseUrl']}/${cols[0]}.png`,
-                qty: cols[3] ? parseFloat(cols[3]) : undefined,
-                spent: cols[4] ? parseFloat(cols[4]) : undefined,
+                location: cols[3],
+                qty: cols[4] ? parseFloat(cols[4]) : undefined,
+                spent: cols[5] ? parseFloat(cols[5]) : undefined,
                 alerts: {
-                    buyTheDip: parseFloat(cols[8]),
-                    currentPrice: parseFloat(cols[9])
+                    buyTheDip: parseFloat(cols[9]),
+                    currentPrice: parseFloat(cols[10])
                 }
             }
             if (csvCoin.qty && csvCoin.spent) {
