@@ -55,8 +55,7 @@
                   v-if="!Number.isNaN(totalProfitPercentage)"
                   class="text-subtitle-2"
                 >
-                  ({{ totalProfit >= 0 ? "+" : "-"
-                  }}{{ totalProfitPercentage }})
+                  ({{ totalProfit >= 0 ? "+" : "" }}{{ totalProfitPercentage }})
                 </span>
               </v-col>
             </v-row>

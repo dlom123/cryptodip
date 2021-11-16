@@ -165,7 +165,7 @@ export default {
         let csv = "Id,Coin Name,Symbol,Location,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip"
         csv += ",Alert Current Price,Alert Buy The Dip\n"
         this.coinLists[this.selectedCoinList].forEach(coin => {
-            const location = coin.location ? coin.location : ""
+            const location = coin.location ? coin.location.replace(",", "/") : ""
             const qty = coin.qty ? coin.qty : ""
             const spent = coin.spent ? coin.spent : ""
             const costAverage = coin.costAverage ? coin.costAverage : ""
