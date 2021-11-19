@@ -10,6 +10,8 @@ export const tooltipText = {
     costAverageDiffBlank: "Missing Cost Average",
     currentPrice: "Use the Refresh Current Price button above to update this (prices in USD)",
     currentPriceBlank: "Refresh Current Prices to see this",
+    currentValue: "Value of your HODLs based on Current Price",
+    location: "The place where the coins are being stored",
     spent: "The amount you have spent on this coin in total",
     qty: "The amount of this coin that you have in total"
 }

@@ -205,7 +205,6 @@ export default {
     ]),
     updateApiKey(newApiKey) {
       const newApiKeyIsBlank = !newApiKey || newApiKey.trim() === ""
-      console.log(newApiKey, newApiKeyIsBlank)
       if (newApiKeyIsBlank) {
         this.setCmcApi({})
       } else {

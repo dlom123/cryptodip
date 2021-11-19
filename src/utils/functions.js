@@ -49,3 +49,12 @@ export function formatPercentage(n) {
     }
     return n
 }
+
+export function yoloHodls(amount, coin) {
+    // Returns what your new quantity of the coin would be based on your amount to spend
+    return amount / coin.currentPrice + coin.qty;
+}
+
+export function yoloYolod(amount, coin) {
+    return amount + coin.spent;
+}

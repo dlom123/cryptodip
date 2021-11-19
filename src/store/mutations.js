@@ -7,7 +7,7 @@ export default {
     mergeCoins: (state, coinIds) => {
         const coins = state.coinLists[state.selectedCoinList]
         const keepCoins = coins.filter(coin => coinIds.includes(coin.id))
-        const newCoinIds = coinIds.filter(coinId => 
+        const newCoinIds = coinIds.filter(coinId =>
             !coins.map(coin => coin.id).includes(coinId))
         const newCoins = state.allCoins
             .filter(coin => newCoinIds.includes(coin.id))
@@ -104,11 +104,11 @@ export default {
             if (coin.id === payload.id) {
                 let costAverage = undefined
                 let newQty = Object.prototype.hasOwnProperty.call(payload, 'qty')
-                                ? payload.qty
-                                : coin.qty
+                    ? payload.qty
+                    : coin.qty
                 let newSpent = Object.prototype.hasOwnProperty.call(payload, 'spent')
-                                ? payload.spent
-                                : coin.spent
+                    ? payload.spent
+                    : coin.spent
                 if (typeof newQty !== 'undefined' && typeof newSpent !== 'undefined') {
                     costAverage = newQty <= 0 ? undefined : newSpent / newQty
                 }
@@ -122,7 +122,7 @@ export default {
                     ...coin,
                     ...payload,
                     costAverage,
-                    costAverageDiff
+                    costAverageDiff,
                 }
             }
 
@@ -131,7 +131,7 @@ export default {
                 // "Best Bang for the Buck" badge
                 const bangPercent = (
                     (updatedCoin.costAverage - (updatedCoin.spent + state.amountToSpend)
-                    / ((state.amountToSpend / updatedCoin.currentPrice) + updatedCoin.qty))
+                        / ((state.amountToSpend / updatedCoin.currentPrice) + updatedCoin.qty))
                     / updatedCoin.costAverage
                 )
                 if (
