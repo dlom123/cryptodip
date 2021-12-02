@@ -124,6 +124,24 @@
                             </v-text-field>
                         </v-col>
                     </v-row>
+                    <v-row no-gutters class="pt-3">
+                        <v-col>Notes</v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="pt-0 pb-0">
+                            <v-textarea
+                                ref="inputNotes"
+                                outlined
+                                clearable
+                                no-resize
+                                rows="3"
+                                counter
+                                :rules="rules"
+                                :value="alertNotes"
+                                @click:clear="onClearNotes"
+                            ></v-textarea>
+                        </v-col>
+                    </v-row>
                 </v-container>
             </v-card-text>
             <v-card-actions>
@@ -180,7 +198,9 @@ export default {
     data: () => ({
         alertCurrentPrice: null,
         alertBuyTheDip: null,
+        alertNotes: '',
         currentPriceValue: null,
+        rules: [this.validateNotes],
         tooltipText
     }),
     computed: {
@@ -219,7 +239,16 @@ export default {
             }
             this.alertCurrentPrice = isNaN(n) ? undefined : n
         },
+        onClearNotes() {
+            console.log('yoyoooo')
+            this.alertNotes = ''
+            console.log(this.$refs.inputNotes.value)
+        },
         onClickSave() {
+            if (this.$refs.inputNotes.value) {
+                console.log(this.$refs.inputNotes.value)
+                return false
+            }
             this.setCoinAlerts({
                 coinId: this.coin.id,
                 alerts: {
@@ -232,6 +261,9 @@ export default {
         resetInputs() {
             this.alertBuyTheDip = this.coin.alerts.buyTheDip
             this.alertCurrentPrice = this.coin.alerts.currentPrice
+        },
+        validateNotes(v) {
+            return v.length <= 150 || 'Max 150 characters'
         }
     },
     watch: {
