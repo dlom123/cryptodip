@@ -139,7 +139,6 @@ export default {
                         typeof bangCoin === 'undefined'
                         || bangPercent > bangCoin.bangPercent
                     )
-                    && updatedCoin.costAverageDiff > 0
                 ) {
                     bangCoin = {
                         id: updatedCoin.id,
