@@ -58,18 +58,21 @@
     </v-col>
     <v-col cols="3" align-self="end">
       <v-text-field
+        ref="inputFilter"
         v-model="search"
         append-icon="mdi-magnify"
-        label="Filter"
+        label="Filter (/)"
         hide-details
         clearable
         outlined
         dense
+        @focus="$event.target.select()"
       ></v-text-field>
     </v-col>
     <v-col cols="3" align-self="end">
       <v-text-field
-        label="YOLO"
+        ref="inputYOLO"
+        label="YOLO (y)"
         hide-details
         clearable
         outlined
@@ -80,6 +83,7 @@
         @change="onChangeAmountToSpend"
         @input="onInputAmountToSpend"
         @click:clear="onChangeAmountToSpend"
+        @focus="$event.target.select()"
       >
         <template v-slot:append-outer>
           <InfoTooltip
@@ -115,6 +119,7 @@ export default {
     RefreshPricesButton
   },
   data: () => ({
+    focused: [],
     tooltipText: {
         yolo: "The amount available to spend on a single coin"
     }
@@ -190,6 +195,30 @@ export default {
         anchor.click()
     },
     formatDollars,
+    handleKeypress(e) {
+      this.focused = Object.values(this.$refs).filter(r => r?.isFocused)
+      if (!this.focused.length) {
+        let targetInput = null
+        switch (e.key) {
+          case '/':
+            // focus Filter input
+            e.preventDefault()
+            targetInput = this.$refs.inputFilter
+            break
+          case 'y':
+            // focus YOLO input
+            e.preventDefault()
+            targetInput = this.$refs.inputYOLO
+            break
+        }
+        if (targetInput) {
+          targetInput?.focus()
+        }
+      } else if (e.key === 'Escape' || e.key === 'Enter') {
+        // allow the Escape and Enter keys to blur any registered input
+        this.focused[0].blur()
+      }
+    },
     async importCSV(f) {
         const text = await f.text()
         const lines = text.trim().split('\n')
@@ -230,12 +259,14 @@ export default {
     onChangeCoinList(item) {
         const existingItem = Object.keys(this.coinLists).includes(item)
         if (!existingItem) {
-            this.addCoinList(item)
-            this.setSelectedCoinList(item)
-            this.$refs.selectCoinList.blur()
+          this.addCoinList(item)
+          this.setSelectedCoinList(item)
         } else {
-            this.setSelectedCoinList(item)
+          this.setSelectedCoinList(item)
         }
+        this.$nextTick(() => {
+          this.$refs.selectCoinList.blur()
+        })
     },
     onClickDeleteList() {
         this.removeCoinList(this.selectedCoinList)
@@ -255,6 +286,9 @@ export default {
             this.onChangeAmountToSpend(value)
         }
     }
-  }
+  },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeypress);
+  },
 }
 </script>

@@ -5,11 +5,7 @@
     <v-main>
       <v-container fluid class="pa-0">
         <v-row no-gutters>
-          <v-col
-            cols="12"
-            lg="10" offset-lg="1"
-            xl="8" offset-xl="2"
-          >
+          <v-col cols="12" lg="10" offset-lg="1" xl="8" offset-xl="2">
             <Header />
             <router-view />
           </v-col>
