@@ -19,12 +19,12 @@
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </template>
-    <span>Refresh Current Price</span>
+    <span>Refresh Current Price (r)</span>
   </v-tooltip>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'RefreshPricesButton',
@@ -47,7 +47,11 @@ export default {
   computed: {
     ...mapState([
       'coinLists',
+      'focused',
       'selectedCoinList'
+    ]),
+    ...mapMutations([
+      'setFocused'
     ])
   },
   methods: {
@@ -65,9 +69,8 @@ export default {
       }, 300)
     },
     handleKeypress(e) {
-      this.focused = Object.values(this.$refs).filter(r => r?.isFocused)
       if (
-        !this.focused.length
+        !this.focused
         && !this.isCtrl // don't hijack ctrl key combos
         && !this.isAlt // don't hijack alt key combos
       ) {

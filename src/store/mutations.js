@@ -61,6 +61,9 @@ export default {
     setCoins: (state, payload) => {
         state.coinLists[state.selectedCoinList] = payload
     },
+    setFocused: (state, payload) => {
+        state.focused = payload
+    },
     setHasBackEndApiKey: (state, payload) => {
         state.hasBackEndApiKey = payload
     },

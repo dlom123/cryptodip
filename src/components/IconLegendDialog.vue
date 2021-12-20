@@ -1,85 +1,69 @@
 <template>
-    <v-dialog
-        v-model="showIconLegendDialog"
-        max-width="800px"
-    >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn text color="primary"
-                v-bind="attrs"
-                v-on="on"
-                @click="openIconLegendDialog"
-            >
-                Legend
-            </v-btn>
+  <v-dialog v-model="showIconLegendDialog" max-width="800px">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn
+        text
+        color="primary"
+        v-bind="attrs"
+        v-on="on"
+        @click="openIconLegendDialog"
+      >
+        Legend
+      </v-btn>
+    </template>
+    <v-card max-width="800px">
+      <v-card-title class="pa-0">
+        <v-col class="pa-4 primary white--text text-h4 font-weight-medium">
+          Buttons
+        </v-col>
+      </v-card-title>
+      <v-divider class="mx-4"></v-divider>
+      <v-list three-line>
+        <template v-for="(item, i) in legendItems['buttons']">
+          <v-divider v-if="item.divider" :key="i"></v-divider>
+
+          <v-list-item v-else :key="item.title">
+            <v-list-item-avatar>
+              <v-icon x-large :color="item.color">{{ item.name }}</v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-html="item.title"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="item.description"
+                class="text-wrap"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </template>
-        <v-card max-width="800px">
-            <v-card-title class="pa-0">
-                <v-col class="pa-4 primary white--text text-h4 font-weight-medium">
-                    Buttons
-                </v-col>
-            </v-card-title>
-            <v-divider class="mx-4"></v-divider>
-            <v-list three-line>
-                <template v-for="(item, i) in legendItems['buttons']">
-                    <v-divider
-                        v-if="item.divider"
-                        :key="i"
-                        :inset="item.inset"
-                    ></v-divider>
+      </v-list>
 
-                    <v-list-item
-                        v-else
-                        :key="item.title"
-                    >
-                        <v-list-item-avatar>
-                            <v-icon
-                                x-large
-                                :color="item.color"
-                            >{{ item.name }}</v-icon>
-                        </v-list-item-avatar>
+      <v-divider class="mx-4"></v-divider>
 
-                        <v-list-item-content>
-                            <v-list-item-title v-html="item.title"></v-list-item-title>
-                            <v-list-item-subtitle v-html="item.description" class="text-wrap"></v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                </template>
-            </v-list>
+      <v-col class="pa-4 primary white--text text-h4 font-weight-medium">
+        Icons
+      </v-col>
+      <v-list three-line>
+        <template v-for="(item, i) in legendItems['icons']">
+          <v-divider v-if="item.divider" :key="i"></v-divider>
 
-            <v-divider class="mx-4"></v-divider>
+          <v-list-item v-else :key="item.title">
+            <v-list-item-avatar>
+              <v-icon x-large :color="item.color">{{ item.name }}</v-icon>
+            </v-list-item-avatar>
 
-                <v-col class="pa-4 primary white--text text-h4 font-weight-medium">
-                    Icons
-                </v-col>
-            <v-list three-line>
-                <template v-for="(item, i) in legendItems['icons']">
-                    <v-divider
-                        v-if="item.divider"
-                        :key="i"
-                        :inset="item.inset"
-                    ></v-divider>
-
-                    <v-list-item
-                        v-else
-                        :key="item.title"
-                    >
-                        <v-list-item-avatar>
-                            <v-icon
-                                x-large
-                                :color="item.color"
-                            >{{ item.name }}</v-icon>
-                        </v-list-item-avatar>
-
-                        <v-list-item-content>
-                            <v-list-item-title v-html="item.title"></v-list-item-title>
-                            <v-list-item-subtitle v-html="item.description" class="text-wrap"></v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                </template>
-            </v-list>
-
-        </v-card>
-    </v-dialog>
+            <v-list-item-content>
+              <v-list-item-title v-html="item.title"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="item.description"
+                class="text-wrap"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

@@ -119,7 +119,6 @@ export default {
     RefreshPricesButton
   },
   data: () => ({
-    focused: [],
     tooltipText: {
         yolo: "The amount available to spend on a single coin"
     }
@@ -128,6 +127,7 @@ export default {
     ...mapState([
       'amountToSpend',
       'coinLists',
+      'focused',
       'searchValue',
       'selectedCoinList'
     ]),
@@ -153,6 +153,7 @@ export default {
     ...mapMutations([
         'addCoinList',
         'removeCoinList',
+        'setFocused',
         'setSearchValue',
         'setSelectedCoinList',
         'updateCoins',
@@ -196,27 +197,39 @@ export default {
     },
     formatDollars,
     handleKeypress(e) {
-      this.focused = Object.values(this.$refs).filter(r => r?.isFocused)
-      if (!this.focused.length) {
-        let targetInput = null
+      console.log(e.key)
+      if (!this.focused) {
+        let target = null
         switch (e.key) {
           case '/':
             // focus Filter input
             e.preventDefault()
-            targetInput = this.$refs.inputFilter
+            target = this.$refs.inputFilter
+            break
+          case 'j':
+            // select next coin list
+            e.preventDefault()
+            target = this.$refs.selectCoinList
+            break
+          case 'k':
+            // select previous coin list
+            e.preventDefault()
+            target = this.$refs.selectCoinList
             break
           case 'y':
             // focus YOLO input
             e.preventDefault()
-            targetInput = this.$refs.inputYOLO
+            target = this.$refs.inputYOLO
             break
         }
-        if (targetInput) {
-          targetInput?.focus()
+        if (target) {
+          target?.focus()
+          this.setFocused(target)
         }
       } else if (e.key === 'Escape' || e.key === 'Enter') {
         // allow the Escape and Enter keys to blur any registered input
-        this.focused[0].blur()
+        this.focused.blur()
+        this.setFocused(null)
       }
     },
     async importCSV(f) {
