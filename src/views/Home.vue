@@ -171,10 +171,9 @@
                 >
                   <v-col class="pa-0">
                     {{
-                      formatDollars(
-                        getCoinCurrentValue(item),
-                        { isFlexible: true }
-                      )
+                      formatDollars(getCoinCurrentValue(item), {
+                        isFlexible: true,
+                      })
                     }}
                   </v-col>
                 </template>
@@ -202,18 +201,16 @@
                   >
                     <span v-if="item.spent > 0">
                       ({{
-                        formatDollars(
-                          yoloCostAverage(item),
-                          { isFlexible: true }
-                        )
+                        formatDollars(yoloCostAverage(item), {
+                          isFlexible: true,
+                        })
                       }}, {{ getYoloCostAverageDiffPct(item) }})
                     </span>
                     <span v-else>
                       ({{
-                        formatDollars(
-                          yoloCostAverage(item),
-                          { isFlexible: true }
-                        )
+                        formatDollars(yoloCostAverage(item), {
+                          isFlexible: true,
+                        })
                       }})
                     </span>
                   </v-col>
@@ -240,10 +237,9 @@
                       Last refresh:
                       {{
                         item.lastRefreshPrice
-                          ? formatDollars(
-                              item.lastRefreshPrice,
-                              { isFlexible: true }
-                            )
+                          ? formatDollars(item.lastRefreshPrice, {
+                              isFlexible: true,
+                            })
                           : "n/a"
                       }}
                     </span>
@@ -299,6 +295,9 @@
                 <v-col v-if="coinHasAlert(item)" class="pa-0">
                   <v-chip small close @click:close="onClickRemoveAlert(item)">
                     <v-icon small left>mdi-alarm</v-icon>
+                    <v-icon v-if="item.alerts.notes" small left
+                      >mdi-note-text-outline</v-icon
+                    >
                     {{ getAlertDisplayValues(item) }}
                   </v-chip>
                 </v-col>
