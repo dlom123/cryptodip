@@ -22,9 +22,10 @@ function getNumDecimals(n, isFlexible=false, fullPrecision=false) {
     }
 }
 
-export function formatDollars(n, isFlexible=false) {
+export function formatDollars(n, options = {}) {
+    const { isFlexible, fullPrecision } = options
     if (typeof n !== 'undefined' && n !== null) {
-        const numDecimals = getNumDecimals(n, isFlexible)
+        const numDecimals = getNumDecimals(n, isFlexible, fullPrecision)
         return n.toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD',

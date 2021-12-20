@@ -173,7 +173,7 @@
                     {{
                       formatDollars(
                         getCoinCurrentValue(item),
-                        (isFlexible = true)
+                        { isFlexible: true }
                       )
                     }}
                   </v-col>
@@ -187,7 +187,7 @@
                   "
                 >
                   <v-col class="pa-0">
-                    {{ formatDollars(item.costAverage, (isFlexible = true)) }}
+                    {{ formatDollars(item.costAverage, { isFlexible: true }) }}
                   </v-col>
                   <v-col
                     v-if="amountToSpend && item.currentPrice"
@@ -204,7 +204,7 @@
                       ({{
                         formatDollars(
                           yoloCostAverage(item),
-                          (isFlexible = true)
+                          { isFlexible: true }
                         )
                       }}, {{ getYoloCostAverageDiffPct(item) }})
                     </span>
@@ -212,7 +212,7 @@
                       ({{
                         formatDollars(
                           yoloCostAverage(item),
-                          (isFlexible = true)
+                          { isFlexible: true }
                         )
                       }})
                     </span>
@@ -231,7 +231,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">{{
-                        formatDollars(item.currentPrice, (isFlexible = true))
+                        formatDollars(item.currentPrice, { isFlexible: true })
                       }}</span>
                     </template>
                     <span>
@@ -242,7 +242,7 @@
                         item.lastRefreshPrice
                           ? formatDollars(
                               item.lastRefreshPrice,
-                              (isFlexible = true)
+                              { isFlexible: true }
                             )
                           : "n/a"
                       }}

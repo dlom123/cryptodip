@@ -160,7 +160,8 @@ export default {
         const [hour, minute, second] = new Date()
             .toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             .split(/:| /)
-        const filename = `cryptodip_${this.selectedCoinList.toLowerCase()}_${year}${month}${date}${hour}${minute}${second}.csv`
+        const listName = this.selectedCoinList.toLowerCase().replace(" ", "-");
+        const filename = `cryptodip_${listName}_${year}${month}${date}${hour}${minute}${second}.csv`;
 
         let csv = "Id,Coin Name,Symbol,Location,HODLs,YOLOd,Cost Average,Current Price,Buy The Dip"
         csv += ",Alert Current Price,Alert Buy The Dip\n"
