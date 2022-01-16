@@ -64,6 +64,7 @@
         <v-row>
           <v-col>
             <v-data-table
+              id="coins-data-table"
               hide-default-footer
               disable-pagination
               show-expand
@@ -75,6 +76,7 @@
               "
               :options="tableOptions"
               :custom-filter="coinFilter"
+              :custom-sort="coinSort"
               :item-class="itemRowClass"
               class="elevation-2"
               @update:options="onUpdateTable"
@@ -267,6 +269,19 @@
               </template>
               <template v-slot:item.badges="{ item }">
                 <v-col class="pa-0">
+                  <span
+                    v-if="item.isPinned"
+                    class="clickable"
+                    @click="() => unpin(item)"
+                  >
+                    <InfoTooltip
+                      icon="mdi-pin-off-outline"
+                      icon-size="x-large"
+                      icon-color="grey"
+                      position="top"
+                      :text="tooltipText['pinned']"
+                    />
+                  </span>
                   <InfoTooltip
                     v-if="item.badges && item.badges.includes('bang')"
                     icon="mdi-currency-usd"
@@ -399,12 +414,19 @@ export default {
       "tableOptions",
     ]),
     displayCoins() {
-      if (this.showOnlyDips) {
-        return this.coinLists[this.selectedCoinList].filter(
-          (coin) => coin.costAverageDiff > 0
-        );
-      }
-      return this.coinLists[this.selectedCoinList];
+      const pinnedCoins = []
+      const unpinnedCoins = []
+
+      this.coinLists[this.selectedCoinList].forEach(c => {
+        if (!this.showOnlyDips || (this.showOnlyDips && c.costAverageDiff > 0)) {
+          if (c.isPinned) {
+            pinnedCoins.push(c)
+          } else {
+            unpinnedCoins.push(c)
+          }
+        }
+      })
+      return [...pinnedCoins, ...unpinnedCoins]
     },
     totalYolod() {
       let total = null;
@@ -472,6 +494,37 @@ export default {
           coin.alerts.buyTheDip)
       );
     },
+    coinSort(items, groupBy, sortDesc) {
+      const pinnedCoins = []
+      const unpinnedCoins = []
+      const gb = groupBy[0] // not using multi-field sorting
+      const desc = sortDesc[0] // not using multi-field sorting
+
+      items.forEach(c => {
+        if (c.isPinned) {
+          pinnedCoins.push(c)
+        } else {
+          unpinnedCoins.push(c)
+        }
+      })
+
+      const sortedPinnedCoins = pinnedCoins.sort((a, b) => {
+        return (
+          desc
+            ? (a[gb] > b[gb] ? -1 : 1)
+            : (a[gb] < b[gb] ? -1 : 1)
+        )
+      })
+      const sortedUnpinnedCoins = unpinnedCoins.sort((a, b) => {
+        return (
+          desc
+            ? (a[gb] > b[gb] ? -1 : 1)
+            : (a[gb] < b[gb] ? -1 : 1)
+        )
+      })
+
+      return [...sortedPinnedCoins, ...sortedUnpinnedCoins]
+    },
     formatDollars,
     formatNumber,
     formatPercentage,
@@ -505,6 +558,7 @@ export default {
     },
     itemRowClass(coin) {
       let styles = [];
+
       // apply styles for "alert triggered"
       if (
         (Object.prototype.hasOwnProperty.call(coin.alerts, "buyTheDip") &&
@@ -529,6 +583,12 @@ export default {
     },
     onUpdateTable(options) {
       this.setTableOptions(options);
+    },
+    unpin(coin) {
+      this.updateCoin({
+        ...coin,
+        isPinned: false
+      })
     },
     yoloCostAverage(coin) {
       return (

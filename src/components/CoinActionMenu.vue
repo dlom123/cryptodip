@@ -1,54 +1,41 @@
 <template>
-    <v-menu
-        bottom
-        left
-        v-model="showMenu"
-    >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                x-small
-                text
-                plain
-                tabindex="-1"
-                v-bind="attrs"
-                v-on="on"
-            >
-                <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-        </template>
+  <v-menu bottom left v-model="showMenu">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn x-small text plain tabindex="-1" v-bind="attrs" v-on="on">
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
+    </template>
 
-        <v-list
-            dense
-            class="pa-0"
-        >
-            <v-list-item
-                class="coin-action-menu-item"
-                @click.stop="onClickDipAlert"
-            >
-                <v-list-item-content>
-                    <v-list-item-title>Dip Alert</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-                class="coin-action-menu-item"
-                @click.stop="onClickDelete"
-            >
-                <v-list-item-content>
-                    <v-list-item-title>Delete</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list>
-        <DipAlertDialog
-            :reRender=dialogKey
-            :showDialog=showDipAlertDialog
-            :closeDialog=closeDialog
-            :coin=coin
-        />
-    </v-menu>
+    <v-list dense class="pa-0">
+      <v-list-item class="coin-action-menu-item" @click.stop="onClickPin">
+        <v-list-item-content>
+          <v-list-item-title>{{
+            coin.isPinned ? "Unpin" : "Pin to top"
+          }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item class="coin-action-menu-item" @click.stop="onClickDipAlert">
+        <v-list-item-content>
+          <v-list-item-title>Dip Alert</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item class="coin-action-menu-item" @click.stop="onClickDelete">
+        <v-list-item-content>
+          <v-list-item-title>Delete</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <DipAlertDialog
+      :reRender="dialogKey"
+      :showDialog="showDipAlertDialog"
+      :closeDialog="closeDialog"
+      :coin="coin"
+    />
+  </v-menu>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import DipAlertDialog from '@/components/DipAlertDialog.vue'
 
 export default {
@@ -68,6 +55,9 @@ export default {
         ...mapActions([
             'deleteCoin'
         ]),
+        ...mapMutations([
+          'updateCoin'
+        ]),
         closeDialog() {
             this.showDipAlertDialog = false
         },
@@ -79,7 +69,14 @@ export default {
             this.dialogKey = Math.random()
             this.showMenu = false
             this.showDipAlertDialog = true
-        }
+        },
+        onClickPin() {
+            this.showMenu = false
+            this.updateCoin({
+              id: this.coin.id,
+              isPinned: !this.coin.isPinned
+            })
+        },
     }
 }
 </script>

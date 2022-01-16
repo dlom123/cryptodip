@@ -97,6 +97,7 @@ export default {
         state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
             coin.alerts = { ...coin.alerts }
             coin.badges = []
+            coin.isPinned = !!coin.isPinned
 
             let updatedCoin = {
                 ...coin
