@@ -1,20 +1,21 @@
 <template>
-    <v-tooltip
-        :top="tooltipPositionTop"
-        :right="tooltipPositionRight"
-        :bottom="tooltipPositionBottom"
-        :left="tooltipPositionLeft"
-    >
-        <template v-slot:activator="{ on, attrs }">
-            <v-icon
-                :size="iconSize || 'small'"
-                :color="iconColor"
-                v-bind="attrs"
-                v-on="on"
-            >{{ icon }}</v-icon>
-        </template>
-        <span>{{ text }}</span>
-    </v-tooltip>
+  <v-tooltip
+    :top="tooltipPositionTop"
+    :right="tooltipPositionRight"
+    :bottom="tooltipPositionBottom"
+    :left="tooltipPositionLeft"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-icon
+        :size="iconSize || 'small'"
+        :color="iconColor"
+        v-bind="attrs"
+        v-on="on"
+        >{{ icon }}</v-icon
+      >
+    </template>
+    <span>{{ text }}</span>
+  </v-tooltip>
 </template>
 
 <script>
