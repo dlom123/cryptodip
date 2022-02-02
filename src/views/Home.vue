@@ -173,11 +173,18 @@
                 >
                   <v-col class="pa-0">
                     {{
-                      formatDollars(getCoinCurrentValue(item), {
+                      formatDollars(item.currentValue, {
                         isFlexible: true,
                       })
                     }}
                   </v-col>
+                </template>
+                <template v-else>
+                  <InfoTooltip
+                    icon="mdi-help"
+                    position="top"
+                    :text="tooltipText['currentValueBlank']"
+                  />
                 </template>
               </template>
               <template v-slot:item.costAverage="{ item }">
@@ -377,7 +384,12 @@ export default {
         filterable: false,
         width: 140,
       },
-      { text: "Current Value", value: "currentValue", width: 140 },
+      {
+        text: "Current Value",
+        value: "currentValue",
+        filterable: false,
+        width: 140
+      },
       {
         text: "Buy The Dip?",
         value: "costAverageDiff",
@@ -541,9 +553,6 @@ export default {
       }
 
       return s;
-    },
-    getCoinCurrentValue(coin) {
-      return coin.qty * coin.currentPrice;
     },
     getCoinPageUrl(coin) {
       const urlCoinName = coin.name.toLowerCase().split(" ").join("-");
