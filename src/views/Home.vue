@@ -464,7 +464,7 @@ export default {
     },
     totalProfitPercentage() {
       return formatPercentage(
-        formatNumber((this.totalProfit / this.totalCurrentValue) * 100)
+        formatNumber((this.totalProfit / this.totalYolod) * 100)
       );
     },
   },
