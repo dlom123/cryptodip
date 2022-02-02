@@ -115,8 +115,13 @@ export default {
                 }
 
                 let costAverageDiff = undefined
-                if (typeof costAverage !== 'undefined' && typeof coin.currentPrice !== 'undefined') {
-                    costAverageDiff = costAverage <= 0 ? undefined : (costAverage - coin.currentPrice) / costAverage * 100
+                let currentValue = undefined
+                if (typeof coin.currentPrice !== 'undefined') {
+                    currentValue = newQty * coin.currentPrice
+
+                    if (typeof costAverage !== 'undefined') {
+                        costAverageDiff = costAverage <= 0 ? undefined : (costAverage - coin.currentPrice) / costAverage * 100
+                    }
                 }
 
                 updatedCoin = {
@@ -124,6 +129,7 @@ export default {
                     ...payload,
                     costAverage,
                     costAverageDiff,
+                    currentValue
                 }
             }
 
