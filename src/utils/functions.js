@@ -1,4 +1,4 @@
-function getNumDecimals(n, isFlexible=false, fullPrecision=false) {
+function getNumDecimals(n, isFlexible = false, fullPrecision = false) {
     const nSplit = n.toString().replace(/[$,]/g, '').split(".")
     if (fullPrecision && nSplit.length > 1) {
         // return the original full precision decimal length, if requested
@@ -6,7 +6,7 @@ function getNumDecimals(n, isFlexible=false, fullPrecision=false) {
     }
     let numDecimals = 2
     if (typeof n !== 'undefined' && n !== null) {
-        if (n < 1.0) {
+        if (n < 1.0 && n > 0.0) {
             const nSplit = n.toString().replace(/[$,]/g, '').split(".")
             numDecimals = n < 1.0 ? 4 : 2
             if (isFlexible && nSplit.length > 1) {
@@ -22,9 +22,10 @@ function getNumDecimals(n, isFlexible=false, fullPrecision=false) {
     }
 }
 
-export function formatDollars(n, isFlexible=false) {
+export function formatDollars(n, options = {}) {
+    const { isFlexible, fullPrecision } = options
     if (typeof n !== 'undefined' && n !== null) {
-        const numDecimals = getNumDecimals(n, isFlexible)
+        const numDecimals = getNumDecimals(n, isFlexible, fullPrecision)
         return n.toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD',
@@ -34,7 +35,7 @@ export function formatDollars(n, isFlexible=false) {
     return n
 }
 
-export function formatNumber(n, isFlexible=false, fullPrecision=false) {
+export function formatNumber(n, isFlexible = false, fullPrecision = false) {
     if (typeof n !== 'undefined' && !isNaN(n)) {
         return parseFloat(n).toLocaleString("en-US", {
             'maximumFractionDigits': getNumDecimals(n, isFlexible, fullPrecision)

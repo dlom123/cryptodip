@@ -86,7 +86,7 @@
             hide-details
             placeholder="how much yolo'd?"
             style="width: 150px"
-            :value="formatDollars(coin.spent)"
+            :value="formatDollars(coin.spent, { fullPrecision: true })"
             @change="onChangeSpent($event, coin.id)"
           ></v-text-field>
         </v-col>

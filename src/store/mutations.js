@@ -97,6 +97,7 @@ export default {
         state.coinLists[state.selectedCoinList] = state.coinLists[state.selectedCoinList].map(coin => {
             coin.alerts = { ...coin.alerts }
             coin.badges = []
+            coin.isPinned = !!coin.isPinned
 
             let updatedCoin = {
                 ...coin
@@ -114,8 +115,13 @@ export default {
                 }
 
                 let costAverageDiff = undefined
-                if (typeof costAverage !== 'undefined' && typeof coin.currentPrice !== 'undefined') {
-                    costAverageDiff = costAverage <= 0 ? undefined : (costAverage - coin.currentPrice) / costAverage * 100
+                let currentValue = undefined
+                if (typeof coin.currentPrice !== 'undefined') {
+                    currentValue = newQty * coin.currentPrice
+
+                    if (typeof costAverage !== 'undefined') {
+                        costAverageDiff = costAverage <= 0 ? undefined : (costAverage - coin.currentPrice) / costAverage * 100
+                    }
                 }
 
                 updatedCoin = {
@@ -123,6 +129,7 @@ export default {
                     ...payload,
                     costAverage,
                     costAverageDiff,
+                    currentValue
                 }
             }
 
@@ -139,7 +146,6 @@ export default {
                         typeof bangCoin === 'undefined'
                         || bangPercent > bangCoin.bangPercent
                     )
-                    && updatedCoin.costAverageDiff > 0
                 ) {
                     bangCoin = {
                         id: updatedCoin.id,

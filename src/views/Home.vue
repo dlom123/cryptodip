@@ -64,6 +64,7 @@
         <v-row>
           <v-col>
             <v-data-table
+              id="coins-data-table"
               hide-default-footer
               disable-pagination
               show-expand
@@ -75,6 +76,7 @@
               "
               :options="tableOptions"
               :custom-filter="coinFilter"
+              :custom-sort="coinSort"
               :item-class="itemRowClass"
               class="elevation-2"
               @update:options="onUpdateTable"
@@ -171,12 +173,18 @@
                 >
                   <v-col class="pa-0">
                     {{
-                      formatDollars(
-                        getCoinCurrentValue(item),
-                        (isFlexible = true)
-                      )
+                      formatDollars(item.currentValue, {
+                        isFlexible: true,
+                      })
                     }}
                   </v-col>
+                </template>
+                <template v-else>
+                  <InfoTooltip
+                    icon="mdi-help"
+                    position="top"
+                    :text="tooltipText['currentValueBlank']"
+                  />
                 </template>
               </template>
               <template v-slot:item.costAverage="{ item }">
@@ -187,7 +195,7 @@
                   "
                 >
                   <v-col class="pa-0">
-                    {{ formatDollars(item.costAverage, (isFlexible = true)) }}
+                    {{ formatDollars(item.costAverage, { isFlexible: true }) }}
                   </v-col>
                   <v-col
                     v-if="amountToSpend && item.currentPrice"
@@ -202,18 +210,16 @@
                   >
                     <span v-if="item.spent > 0">
                       ({{
-                        formatDollars(
-                          yoloCostAverage(item),
-                          (isFlexible = true)
-                        )
+                        formatDollars(yoloCostAverage(item), {
+                          isFlexible: true,
+                        })
                       }}, {{ getYoloCostAverageDiffPct(item) }})
                     </span>
                     <span v-else>
                       ({{
-                        formatDollars(
-                          yoloCostAverage(item),
-                          (isFlexible = true)
-                        )
+                        formatDollars(yoloCostAverage(item), {
+                          isFlexible: true,
+                        })
                       }})
                     </span>
                   </v-col>
@@ -231,7 +237,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">{{
-                        formatDollars(item.currentPrice, (isFlexible = true))
+                        formatDollars(item.currentPrice, { isFlexible: true })
                       }}</span>
                     </template>
                     <span>
@@ -240,10 +246,9 @@
                       Last refresh:
                       {{
                         item.lastRefreshPrice
-                          ? formatDollars(
-                              item.lastRefreshPrice,
-                              (isFlexible = true)
-                            )
+                          ? formatDollars(item.lastRefreshPrice, {
+                              isFlexible: true,
+                            })
                           : "n/a"
                       }}
                     </span>
@@ -271,6 +276,19 @@
               </template>
               <template v-slot:item.badges="{ item }">
                 <v-col class="pa-0">
+                  <span
+                    v-if="item.isPinned"
+                    class="clickable"
+                    @click="() => unpin(item)"
+                  >
+                    <InfoTooltip
+                      icon="mdi-pin-off-outline"
+                      icon-size="x-large"
+                      icon-color="grey"
+                      position="top"
+                      :text="tooltipText['pinned']"
+                    />
+                  </span>
                   <InfoTooltip
                     v-if="item.badges && item.badges.includes('bang')"
                     icon="mdi-currency-usd"
@@ -299,6 +317,9 @@
                 <v-col v-if="coinHasAlert(item)" class="pa-0">
                   <v-chip small close @click:close="onClickRemoveAlert(item)">
                     <v-icon small left>mdi-alarm</v-icon>
+                    <v-icon v-if="item.alerts.notes" small left
+                      >mdi-note-text-outline</v-icon
+                    >
                     {{ getAlertDisplayValues(item) }}
                   </v-chip>
                 </v-col>
@@ -363,7 +384,12 @@ export default {
         filterable: false,
         width: 140,
       },
-      { text: "Current Value", value: "currentValue", width: 140 },
+      {
+        text: "Current Value",
+        value: "currentValue",
+        filterable: false,
+        width: 140
+      },
       {
         text: "Buy The Dip?",
         value: "costAverageDiff",
@@ -400,12 +426,19 @@ export default {
       "tableOptions",
     ]),
     displayCoins() {
-      if (this.showOnlyDips) {
-        return this.coinLists[this.selectedCoinList].filter(
-          (coin) => coin.costAverageDiff > 0
-        );
-      }
-      return this.coinLists[this.selectedCoinList];
+      const pinnedCoins = []
+      const unpinnedCoins = []
+
+      this.coinLists[this.selectedCoinList].forEach(c => {
+        if (!this.showOnlyDips || (this.showOnlyDips && c.costAverageDiff > 0)) {
+          if (c.isPinned) {
+            pinnedCoins.push(c)
+          } else {
+            unpinnedCoins.push(c)
+          }
+        }
+      })
+      return [...pinnedCoins, ...unpinnedCoins]
     },
     totalYolod() {
       let total = null;
@@ -443,7 +476,7 @@ export default {
     },
     totalProfitPercentage() {
       return formatPercentage(
-        formatNumber((this.totalProfit / this.totalCurrentValue) * 100)
+        formatNumber((this.totalProfit / this.totalYolod) * 100)
       );
     },
   },
@@ -473,6 +506,37 @@ export default {
           coin.alerts.buyTheDip)
       );
     },
+    coinSort(items, groupBy, sortDesc) {
+      const pinnedCoins = []
+      const unpinnedCoins = []
+      const gb = groupBy[0] // not using multi-field sorting
+      const desc = sortDesc[0] // not using multi-field sorting
+
+      items.forEach(c => {
+        if (c.isPinned) {
+          pinnedCoins.push(c)
+        } else {
+          unpinnedCoins.push(c)
+        }
+      })
+
+      const sortedPinnedCoins = pinnedCoins.sort((a, b) => {
+        return (
+          desc
+            ? (a[gb] > b[gb] ? -1 : 1)
+            : (a[gb] < b[gb] ? -1 : 1)
+        )
+      })
+      const sortedUnpinnedCoins = unpinnedCoins.sort((a, b) => {
+        return (
+          desc
+            ? (a[gb] > b[gb] ? -1 : 1)
+            : (a[gb] < b[gb] ? -1 : 1)
+        )
+      })
+
+      return [...sortedPinnedCoins, ...sortedUnpinnedCoins]
+    },
     formatDollars,
     formatNumber,
     formatPercentage,
@@ -490,9 +554,6 @@ export default {
 
       return s;
     },
-    getCoinCurrentValue(coin) {
-      return coin.qty * coin.currentPrice;
-    },
     getCoinPageUrl(coin) {
       const urlCoinName = coin.name.toLowerCase().split(" ").join("-");
       return `${config["CMC"]["coinPageBaseUrl"]}/${urlCoinName}`;
@@ -506,6 +567,7 @@ export default {
     },
     itemRowClass(coin) {
       let styles = [];
+
       // apply styles for "alert triggered"
       if (
         (Object.prototype.hasOwnProperty.call(coin.alerts, "buyTheDip") &&
@@ -530,6 +592,12 @@ export default {
     },
     onUpdateTable(options) {
       this.setTableOptions(options);
+    },
+    unpin(coin) {
+      this.updateCoin({
+        ...coin,
+        isPinned: false
+      })
     },
     yoloCostAverage(coin) {
       return (
