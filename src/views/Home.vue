@@ -60,6 +60,9 @@
               </v-col>
             </v-row>
           </v-col>
+          <v-col cols="3">
+            <ChartsDialog />
+          </v-col>
         </v-row>
         <v-row>
           <v-col>
@@ -346,6 +349,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
 import BuyTheDip from "@/components/BuyTheDip.vue";
+import ChartsDialog from "@/components/ChartsDialog.vue";
 import CoinActionMenu from "@/components/CoinActionMenu.vue";
 import CoinChart from "@/components/CoinChart.vue";
 import InfoTooltip from "@/components/InfoTooltip.vue";
@@ -354,6 +358,7 @@ import {
   formatDollars,
   formatNumber,
   formatPercentage,
+  getTotalCurrentValue,
   yoloHodls,
   yoloYolod,
 } from "@/utils/functions";
@@ -364,6 +369,7 @@ export default {
   name: "Home",
   components: {
     BuyTheDip,
+    ChartsDialog,
     CoinActionMenu,
     CoinChart,
     InfoTooltip,
@@ -440,6 +446,9 @@ export default {
       })
       return [...pinnedCoins, ...unpinnedCoins]
     },
+    totalCurrentValue() {
+      return this.getTotalCurrentValue(this.displayCoins)
+    },
     totalYolod() {
       let total = null;
       if (this.displayCoins.length) {
@@ -450,22 +459,6 @@ export default {
           total = spentAmounts.reduce((a, b) => a + b, 0);
         }
         return typeof total !== "undefined" ? total : null;
-      }
-      return null;
-    },
-    totalCurrentValue() {
-      let total = null;
-      if (this.displayCoins.length) {
-        const prices = this.displayCoins
-          .filter((coin) =>
-            Object.prototype.hasOwnProperty.call(coin, "currentPrice")
-          )
-          .map((coin) => coin.qty * coin.currentPrice)
-          .filter((price) => !isNaN(price));
-        if (prices.length) {
-          total = prices.reduce((a, b) => a + b, 0);
-        }
-        return !isNaN(total) ? total : null;
       }
       return null;
     },
@@ -558,6 +551,7 @@ export default {
       const urlCoinName = coin.name.toLowerCase().split(" ").join("-");
       return `${config["CMC"]["coinPageBaseUrl"]}/${urlCoinName}`;
     },
+    getTotalCurrentValue,
     getYoloCostAverageDiffPct(coin) {
       const diff = (
         ((this.yoloCostAverage(coin) - coin.costAverage) / coin.costAverage) *

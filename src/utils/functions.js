@@ -51,6 +51,23 @@ export function formatPercentage(n) {
     return n
 }
 
+export function getTotalCurrentValue(coins) {
+    let total = null;
+    if (coins.length) {
+        const prices = coins
+            .filter((coin) =>
+                Object.prototype.hasOwnProperty.call(coin, "currentPrice")
+            )
+            .map((coin) => coin.qty * coin.currentPrice)
+            .filter((price) => !isNaN(price));
+        if (prices.length) {
+            total = prices.reduce((a, b) => a + b, 0);
+        }
+        return !isNaN(total) ? total : null;
+    }
+    return null;
+}
+
 export function yoloHodls(amount, coin) {
     // Returns what your new quantity of the coin would be based on your amount to spend
     return amount / coin.currentPrice + coin.qty;
