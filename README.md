@@ -5,6 +5,8 @@ Whether your portfolio is the result of cleverly crafted scientific research and
 
 CryptoDip is made to be very simple. There's no need to connect any exchange accounts or wallets, and your personal data is never sent over the network. Just enter your hodlings and catch the dip that you almost missed out on. Yeah...the one that could be happening right now!
 
+![CryptoDip screenshot](https://github.com/dlom123/cryptodip/blob/main/public/img/screenshot.png?raw=true)
+
 ---
 
 ## Accessing CryptoDip
